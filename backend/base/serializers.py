@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .model import (
+from .models import (
     Project,
     Folder,
     Note,
@@ -31,7 +31,7 @@ class ProjectCreateSerializer(serializers.ModelSerializer):
         fields=['name','description','is_public']
 
 class FolderSerializer(serializers.ModelSerializer):
-    project= ProjectSerializer
+    project= ProjectSerializer(read_only=True)
     
     class Meta:
         model = Folder
