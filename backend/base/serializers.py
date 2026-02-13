@@ -75,5 +75,14 @@ class FollowLinkCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model= FollowLink
         fields = ['project']
-        
-
+    def validate(self,data):
+        user=self.context['request'].user 
+        project = data["project"]
+        if FollowLink.objects.filter(user=user, project=project).exists():
+            raise serializers.ValidationError("Already following.")
+        return data 
+    def create(self,validated_data):
+        return FollowLink.objects.create(
+            user=self.context['request'].user,
+            **validated_data
+        )

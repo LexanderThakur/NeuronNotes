@@ -12,7 +12,7 @@ def create_token(user):
 
     payload={
         'user_id':user.id,
-        'exp':datetime.utcnow() + timedelta(minutes=30),
+        'exp':datetime.utcnow() + timedelta(days=30),
         'iat':datetime.utcnow()
 
     }

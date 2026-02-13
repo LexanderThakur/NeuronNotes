@@ -50,3 +50,35 @@ def my_projects(request):
     serializer = ProjectSerializer(qs,many=True)
     return Response({"message":serializer.data},status = 200)
 
+@api_view(["GET","PATCH","DELETE"])
+def project(request,project_id):
+    if request.method == "GET":
+        serializer= ProjectSerializer(Project.objects.get(id=project_id))
+        return Response({"message":serializer.data})
+    if request.method=="DELETE":
+        obj= Project.objects.get(id=project_id)
+        if obj : obj.delete()
+        return Response({"message":"success"},status=200)
+
+    pass
+
+
+
+@api_view(["POST","DELETE"])
+def follow(request,project_id):
+    if request.method == "POST":
+
+        serializer=FollowLinkCreateSerializer(
+            data= {"project":project_id},
+            context={"request":request}
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message":"successfully followed"},status=201)
+    
+    FollowLink.objects.filter(user=request.user,project=project_id).delete()
+    return Response({"message": "Unfollowed"},status=200)
+
+
+
+
