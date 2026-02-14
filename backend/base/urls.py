@@ -5,5 +5,7 @@ urlpatterns=[
     path("projects/my/",project_views.my_projects),
     path("projects/<int:project_id>/",project_views.project),
     path("projects/<int:project_id>/follow/",project_views.follow),
+    path("projects/<int:project_id>/followers/",project_views.followers),
+
 
 ]
