@@ -39,3 +39,15 @@ def folders(request,project_id):
     serializer.save(project_id=project_id)
     return Response({"message":"folder created successfully"},status=201)
 
+
+
+
+@api_view(['PATCH',"DELETE"])
+def folder(request,folder_id):
+    if request.method=='DELETE':
+        obj= Folder.objects.get(id=folder_id)
+        if obj : obj.delete()
+        return Response({"message":"deleted folder successfully"},status=200)
+    
+    pass
+

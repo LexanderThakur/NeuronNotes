@@ -22,7 +22,7 @@ class Note(models.Model):
     content= models.TextField()
     folder = models.ForeignKey(Folder,null=True,blank=True,on_delete=models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
-
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
 class NoteLink(models.Model):
     owner= models.ForeignKey(User,on_delete=models.CASCADE)
     note= models.ForeignKey(Note,on_delete=models.CASCADE)
