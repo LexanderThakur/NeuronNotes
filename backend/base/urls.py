@@ -14,7 +14,8 @@ urlpatterns=[
 
 
     # notes related
-    path("projects/<int:project_id>/notes/",note_views.notes)
+    path("projects/<int:project_id>/notes/",note_views.notes),
+    path("notes/<int:note_id>/",note_views.note),
 
 
 
