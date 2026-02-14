@@ -41,6 +41,9 @@ class FolderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Folder
         fields= ['name','project','parent']
+        extra_kwargs = {
+            'project': {'required': False}
+        }
 
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
