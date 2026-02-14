@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Box, TextField, Button, Typography, Paper } from "@mui/material";
 const api = "http://localhost:8000";
-function Auth() {
+function Auth({ setLogin, setUserEmail }) {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  async function authenticate({ setLogin }) {
+  async function authenticate() {
     let endpoint = isLogin ? "/auth/login/" : "/auth/register/";
 
     try {
@@ -23,6 +23,12 @@ function Auth() {
       const data = await response.json();
       localStorage.setItem("token", data.token);
       console.log(data);
+
+      if (!response.ok) {
+        return;
+      }
+
+      setUserEmail(email);
       setEmail("");
       setPassword("");
       me();
