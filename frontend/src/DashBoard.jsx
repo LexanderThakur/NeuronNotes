@@ -1,6 +1,9 @@
 import { Box, Typography, Avatar, Button, Divider } from "@mui/material";
-
+import CreateProject from "./CreateProject";
+import { useState } from "react";
 function Dashboard({ userEmail = "user@email.com", children }) {
+  const [page, setPage] = useState("Create Project");
+
   return (
     <Box sx={{ display: "flex", height: "100vh", bgcolor: "#f6f7fb" }}>
       {/* Sidebar */}
@@ -39,6 +42,7 @@ function Dashboard({ userEmail = "user@email.com", children }) {
             <Button
               key={item}
               fullWidth
+              onClick={() => setPage(item)}
               sx={{
                 color: "#2b2b2b",
                 justifyContent: "flex-start",
@@ -90,12 +94,14 @@ function Dashboard({ userEmail = "user@email.com", children }) {
         sx={{
           flexGrow: 1,
           p: 4,
-          bgcolor: "#a7aab3",
+          bgcolor: "#ebecee",
           borderRadius: 6,
           m: 2,
+          margin: 0,
         }}
       >
-        {children}
+        {page === "Create Project" && <CreateProject />}
+        {/* {children} */}
       </Box>
     </Box>
   );
