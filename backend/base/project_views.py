@@ -33,10 +33,15 @@ from rest_framework.permissions import IsAuthenticated,AllowAny
 
 @api_view(["POST","GET"])
 def projects(request):
-    if request=="GET":
-        qs = Project.objects.exclude(owner=request.user,is_public=False)
-        serializer = ProjectSerializer(qs,many=True)
-        return Response({"message":serializer.data},status = 200)
+    if request.method == "GET":
+        qs = Project.objects.filter(is_public=True)\
+            .exclude(followlink__user=request.user)\
+            .exclude(owner=request.user)\
+            .distinct()
+
+        serializer = ProjectSerializer(qs, many=True)
+        return Response({"message": serializer.data}, status=200)
+
     
     # give , name , des, is_public
     serializer= ProjectCreateSerializer(data=request.data)

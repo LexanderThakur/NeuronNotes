@@ -3,16 +3,15 @@ import Paper from "@mui/material/Paper";
 
 function FollowCard({ name, description, owner }) {
   return (
-    // <Box sx={{ height: "100%", width: "100%", p: 2 }}>
     <Paper
       elevation={0}
       sx={{
-        width: 260,
+        width: 250,
         borderRadius: 3,
-        p: 2.2,
+        p: 2,
         display: "flex",
         flexDirection: "column",
-        gap: 1.3,
+        gap: 1,
         backgroundColor: "#fffffa",
         border: "1px solid #e6e6e6",
         fontFamily:
@@ -55,7 +54,6 @@ function FollowCard({ name, description, owner }) {
         by: {owner}
       </Typography>
     </Paper>
-    // </Box>
   );
 }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -8,13 +8,22 @@ import {
   MenuItem,
 } from "@mui/material";
 
+const api = "http://localhost:8000";
+
 function CreateProject() {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [visibility, setVisibility] = useState("public");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => setSuccess(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
 
-  function handleCreate() {
+  async function handleCreate() {
     if (!name.trim()) {
       setError("Project name required");
       return;
@@ -32,8 +41,38 @@ function CreateProject() {
       visibility,
     });
 
-    // later:
-    // API call here
+    try {
+      const response = await fetch(api + "/projects/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          name: name,
+          description: desc,
+          is_public: visibility === "public" ? true : false,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.message || "Failed to create project");
+        setSuccess("");
+        return;
+      }
+
+      setSuccess("Project created successfully!");
+      setError("");
+
+      // ✅ reset form
+      setName("");
+      setDesc("");
+      setVisibility("public");
+    } catch (error) {
+      setError("Network error. Try again.");
+      setSuccess("");
+    }
   }
 
   return (
@@ -107,6 +146,18 @@ function CreateProject() {
         </TextField>
 
         {/* Hidden Error Area */}
+        {success && (
+          <Typography
+            sx={{
+              color: "#3EC300",
+              mt: 2,
+              fontSize: 14,
+              fontWeight: 500,
+            }}
+          >
+            {success}
+          </Typography>
+        )}
         {error && (
           <Typography
             sx={{

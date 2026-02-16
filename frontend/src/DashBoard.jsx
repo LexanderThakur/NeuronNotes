@@ -17,6 +17,7 @@ function Dashboard({ userEmail = "user@email.com", children }) {
           flexDirection: "column",
           justifyContent: "space-between",
           p: 2,
+          flexShrink: 0,
 
           //   borderTopRightRadius: 24,
           //   borderBottomRightRadius: 24,
