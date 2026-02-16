@@ -1,6 +1,7 @@
 import { Box, Typography, Avatar, Button, Divider } from "@mui/material";
 import CreateProject from "./CreateProject";
 import { useState } from "react";
+import FollowCardC from "./FollowCardC";
 function Dashboard({ userEmail = "user@email.com", children }) {
   const [page, setPage] = useState("Create Project");
 
@@ -102,6 +103,7 @@ function Dashboard({ userEmail = "user@email.com", children }) {
       >
         {page === "Create Project" && <CreateProject />}
         {/* {children} */}
+        {page === "Browse" && <FollowCardC />}
       </Box>
     </Box>
   );

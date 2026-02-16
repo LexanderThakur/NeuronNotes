@@ -4,13 +4,16 @@ import Auth from "./Auth";
 import { useState } from "react";
 import Dashboard from "./DashBoard";
 import CreateProject from "./CreateProject";
+import FollowCard from "./FollowCard";
+import FollowCardC from "./FollowCardC";
 function App() {
   const [login, setLogin] = useState(false);
   const [userEmail, setUserEmail] = useState("user@email.com");
 
-  // return <Auth setLogin={setLogin} />;
   return (
     <>
+      {/* <FollowCardC /> */}
+
       {!login && <Auth setLogin={setLogin} setUserEmail={setUserEmail} />}
 
       {login && <Dashboard userEmail={userEmail} />}
