@@ -3,7 +3,33 @@ import { useEffect, useState } from "react";
 
 const api = "http://localhost:8000";
 
-function VaultCard({ name, description, owner, action }) {
+function VaultCard({ id, name, description, owner, action, refresh }) {
+  async function delete_unfollow() {
+    let endpoint =
+      action === "Manage"
+        ? "/projects/" + id + "/"
+        : "/projects/" + id + "/follow/";
+
+    try {
+      const response = await fetch(api + endpoint, {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        console.log(data);
+        return;
+      }
+      console.log(data);
+      refresh();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Paper
       elevation={0}
@@ -13,7 +39,7 @@ function VaultCard({ name, description, owner, action }) {
         p: 2,
         display: "flex",
         flexDirection: "column",
-        gap: 1,
+        gap: 1.5,
         border: "1px solid #e6e6e6",
         backgroundColor: "#fffffa",
       }}
@@ -26,16 +52,43 @@ function VaultCard({ name, description, owner, action }) {
         {description}
       </Typography>
 
-      <Button
-        variant="outlined"
-        sx={{
-          borderRadius: 2,
-          textTransform: "none",
-          width: "50%",
-        }}
-      >
-        {action}
-      </Button>
+      {/* Buttons container */}
+      <Box sx={{ display: "flex", gap: 1 }}>
+        <Button
+          variant="outlined"
+          fullWidth
+          sx={{
+            borderRadius: 2,
+            textTransform: "none",
+            transition: "all 0.2s ease",
+            "&:hover": {
+              transform: "scale(1.09)",
+            },
+          }}
+        >
+          {action}
+        </Button>
+
+        <Button
+          variant="outlined"
+          fullWidth
+          sx={{
+            borderRadius: 2,
+            textTransform: "none",
+            borderColor: "#FF312E",
+            color: "#FF312E",
+            transition: "all 0.2s ease",
+            "&:hover": {
+              borderColor: "#FF312E",
+              backgroundColor: "rgba(255,49,46,0.05)",
+              transform: "scale(1.09)",
+            },
+          }}
+          onClick={() => delete_unfollow()}
+        >
+          {action === "Manage" ? "Delete" : "Unfollow"}
+        </Button>
+      </Box>
 
       <Typography variant="caption" color="text.secondary">
         by: {owner}
@@ -87,11 +140,13 @@ function VaultPage() {
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, mb: 4 }}>
         {myProjects.map((p) => (
           <VaultCard
+            id={p.id}
             key={p.id}
             name={p.name}
             description={p.description}
             owner={p.owner.email}
             action="Manage"
+            refresh={fetchVault}
           />
         ))}
       </Box>
@@ -106,11 +161,13 @@ function VaultPage() {
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
         {following.map((p) => (
           <VaultCard
+            id={p.id}
             key={p.id}
             name={p.name}
             description={p.description}
             owner={p.owner.email}
             action="View"
+            refresh={fetchVault}
           />
         ))}
       </Box>

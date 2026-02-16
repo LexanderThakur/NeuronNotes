@@ -67,9 +67,11 @@ function FollowCard({ id, name, description, owner }) {
           backgroundColor: isFollowing ? "#3EC300" : "transparent",
           borderColor: isFollowing ? "#3EC300" : "#1976d2",
           color: isFollowing ? "#fff" : "#1976d2",
+          transition: "all 0.2s ease",
           "&:hover": {
             backgroundColor: isFollowing ? "#34a800" : "rgba(25,118,210,0.04)",
             borderColor: isFollowing ? "#34a800" : "#1565c0",
+            transform: "scale(1.09)",
           },
         }}
       >
