@@ -7,6 +7,7 @@ urlpatterns=[
     path("projects/<int:project_id>/",project_views.project),
     path("projects/<int:project_id>/follow/",project_views.follow),
     path("projects/<int:project_id>/followers/",project_views.followers),
+    path("projects/following/",project_views.following),
 
     # folder related
     path('projects/<int:project_id>/folders/',folder_views.folders),

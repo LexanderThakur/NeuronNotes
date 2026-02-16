@@ -2,6 +2,7 @@ import { Box, Typography, Avatar, Button, Divider } from "@mui/material";
 import CreateProject from "./CreateProject";
 import { useState } from "react";
 import FollowCardC from "./FollowCardC";
+import VaultPage from "./ValutPage";
 function Dashboard({ userEmail = "user@email.com", children }) {
   const [page, setPage] = useState("Create Project");
 
@@ -98,13 +99,14 @@ function Dashboard({ userEmail = "user@email.com", children }) {
           p: 4,
           bgcolor: "#ebecee",
           borderRadius: 6,
-          m: 2,
-          margin: 0,
+          overflowY: "auto",
+          minHeight: 0,
         }}
       >
         {page === "Create Project" && <CreateProject />}
         {/* {children} */}
         {page === "Browse" && <FollowCardC />}
+        {page === "Your Vault" && <VaultPage />}
       </Box>
     </Box>
   );

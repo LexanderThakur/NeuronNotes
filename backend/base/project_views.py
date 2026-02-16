@@ -94,3 +94,8 @@ def followers(request,project_id):
     return Response({"message":serializer.data},status=200)
 
 
+@api_view(["GET"])
+def following(request):
+    qs = FollowLink.objects.filter(user=request.user)
+    serializer= FollowLinkSerializer(qs,many=True)
+    return Response({"message":serializer.data},status=200)
