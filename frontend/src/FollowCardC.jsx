@@ -48,6 +48,7 @@ function FollowCardC() {
     >
       {projects.map((project) => (
         <FollowCard
+          id={project.id}
           name={project.name}
           description={project.description}
           owner={project.owner.email}

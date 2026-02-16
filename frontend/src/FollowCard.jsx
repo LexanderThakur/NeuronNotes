@@ -1,7 +1,36 @@
-import { Box, Typography, Button } from "@mui/material";
-import Paper from "@mui/material/Paper";
+import { useState } from "react";
+import { Typography, Button, Paper } from "@mui/material";
 
-function FollowCard({ name, description, owner }) {
+const api = "http://localhost:8000";
+
+function FollowCard({ id, name, description, owner }) {
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  async function follow(id) {
+    if (isFollowing) {
+      return;
+    }
+    try {
+      const response = await fetch(api + "/projects/" + id + "/follow/", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log(data);
+        return;
+      }
+
+      setIsFollowing(true); // ✅ update UI
+    } catch (error) {
+      alert(error);
+    }
+  }
+
   return (
     <Paper
       elevation={0}
@@ -22,32 +51,29 @@ function FollowCard({ name, description, owner }) {
         {name}
       </Typography>
 
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={
-          {
-            // display: "-webkit-box",
-            // WebkitLineClamp: 2,
-            // WebkitBoxOrient: "vertical",
-            // overflow: "hidden",
-          }
-        }
-      >
+      <Typography variant="body2" color="text.secondary">
         {description}
       </Typography>
 
       <Button
-        variant="outlined"
+        variant={isFollowing ? "contained" : "outlined"}
+        onClick={() => follow(id)}
         sx={{
           borderRadius: 2,
           textTransform: "none",
           px: 3,
           fontWeight: 500,
           width: "40%",
+          backgroundColor: isFollowing ? "#3EC300" : "transparent",
+          borderColor: isFollowing ? "#3EC300" : "#1976d2",
+          color: isFollowing ? "#fff" : "#1976d2",
+          "&:hover": {
+            backgroundColor: isFollowing ? "#34a800" : "rgba(25,118,210,0.04)",
+            borderColor: isFollowing ? "#34a800" : "#1565c0",
+          },
         }}
       >
-        Follow
+        {isFollowing ? "Following" : "Follow"}
       </Button>
 
       <Typography variant="caption" color="text.secondary">
