@@ -89,3 +89,8 @@ class FollowLinkCreateSerializer(serializers.ModelSerializer):
             user=self.context['request'].user,
             **validated_data
         )
+
+class NoteMetaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = ["id", "name", "folder", "created_at"]

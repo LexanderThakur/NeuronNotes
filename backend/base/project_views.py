@@ -13,7 +13,8 @@ from .serializers import (
     NoteLinkSerializer,
     NoteLinkCreateSerializer,
     FollowLinkSerializer,
-    FollowLinkCreateSerializer
+    FollowLinkCreateSerializer,
+    NoteMetaSerializer,
 
 )
 from .models import ( 
@@ -115,10 +116,10 @@ def manage_project(request, project_id):
             Folder.objects.filter(project=project),
             many=True
         ).data,
-        "notes": NoteSerializer(
-            Note.objects.filter(project=project),
-            many=True
-        ).data,
+        "notes": NoteMetaSerializer(
+                Note.objects.filter(project=project),
+                many=True
+                ).data,
     }
 
     return Response({"message": data})

@@ -42,9 +42,16 @@ function build_tree(folders, notes) {
       }
     }
   }
-  return {
-    folders: rootFolders,
-    notes: rootNotes,
-  };
+  const items = [];
+
+  for (let i = 0; i < rootFolders.length; i++) {
+    items.push(rootFolders[i]);
+  }
+
+  for (let i = 0; i < rootNotes.length; i++) {
+    items.push(rootNotes[i]);
+  }
+
+  return { items: items };
 }
 export default build_tree;

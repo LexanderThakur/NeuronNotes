@@ -34,7 +34,7 @@ function ProjectManager({ projectId, goBack }) {
   if (!data || !treeData) return <div>Loading...</div>;
 
   return (
-    <Box sx={{ display: "flex", height: "100%" }}>
+    <Box sx={{ display: "flex", height: "100vh" }}>
       <ProjectSidebar
         projectName={data.project.name}
         treeData={treeData}
@@ -42,7 +42,7 @@ function ProjectManager({ projectId, goBack }) {
       />
 
       {/* Editor area (empty for now) */}
-      <Box sx={{ flexGrow: 1, p: 3 }}>
+      <Box sx={{ flexGrow: 1, p: 3, bgcolor: "#ebecee" }}>
         <Typography variant="h5">{data.project.name}</Typography>
       </Box>
     </Box>

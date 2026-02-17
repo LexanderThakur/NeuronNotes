@@ -1,4 +1,9 @@
 import { useState } from "react";
+import { Box, Typography } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import FolderIcon from "@mui/icons-material/Folder";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 function FolderNode({ folder }) {
   const [open, setOpen] = useState(false);
@@ -8,21 +13,63 @@ function FolderNode({ folder }) {
   }
 
   return (
-    <div style={{ marginLeft: "16px" }}>
-      <div onClick={toggleFolder}>{folder.name}</div>
+    <Box sx={{ ml: 1 }}>
+      {/* Folder header */}
+      <Box
+        onClick={toggleFolder}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          cursor: "pointer",
+          borderRadius: 1,
+          px: 1,
+          py: 0.5,
+          "&:hover": {
+            backgroundColor: "#f3f3f3",
+          },
+        }}
+      >
+        {open ? (
+          <ExpandMoreIcon fontSize="small" />
+        ) : (
+          <ChevronRightIcon fontSize="small" />
+        )}
 
+        <FolderIcon sx={{ mx: 0.5 }} fontSize="small" />
+
+        <Typography variant="body2">{folder.name}</Typography>
+      </Box>
+
+      {/* Folder contents */}
       {open && (
-        <div>
-          {folder.notes.map(function (note) {
-            return <div key={note.id}>{note.name}</div>;
-          })}
+        <Box sx={{ ml: 3 }}>
+          {folder.notes.map((note) => (
+            <Box
+              key={note.id}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                px: 1,
+                py: 0.5,
+                borderRadius: 1,
+                cursor: "pointer",
+                "&:hover": {
+                  backgroundColor: "#f5f5f5",
+                },
+              }}
+            >
+              <DescriptionIcon fontSize="small" sx={{ mr: 1 }} />
 
-          {folder.children.map(function (child) {
-            return <FolderNode key={child.id} folder={child} />;
-          })}
-        </div>
+              <Typography variant="body2">{note.name}</Typography>
+            </Box>
+          ))}
+
+          {folder.children.map((child) => (
+            <FolderNode key={child.id} folder={child} />
+          ))}
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }
 

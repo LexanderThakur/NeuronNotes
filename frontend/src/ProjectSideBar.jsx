@@ -1,6 +1,7 @@
 import { Box, Typography, Button, Divider } from "@mui/material";
 import FolderNode from "./FolderNode";
-
+import FolderIcon from "@mui/icons-material/Folder";
+import DescriptionIcon from "@mui/icons-material/Description";
 function ProjectSidebar({ projectName, treeData, goBack }) {
   return (
     <Box
@@ -13,6 +14,7 @@ function ProjectSidebar({ projectName, treeData, goBack }) {
         p: 2,
         flexShrink: 0,
         boxShadow: "4px 0 20px rgba(0,0,0,0.08)",
+        overflowY: "auto",
       }}
     >
       {/* Top Section */}
@@ -37,32 +39,35 @@ function ProjectSidebar({ projectName, treeData, goBack }) {
 
         <Divider sx={{ mb: 2 }} />
 
-        {/* Folders */}
-        <Typography variant="subtitle2">Folders</Typography>
+        <Box>
+          {treeData.items.map(function (item) {
+            // Folder case
+            if (item.children !== undefined) {
+              return <FolderNode key={"folder-" + item.id} folder={item} />;
+            }
 
-        {treeData.folders.map(function (folder) {
-          return <FolderNode key={folder.id} folder={folder} />;
-        })}
-
-        <Divider sx={{ my: 2 }} />
-
-        {/* Root Notes */}
-        <Typography variant="subtitle2">Notes</Typography>
-
-        {treeData.notes.map(function (note) {
-          return <Typography key={note.id}>📝 {note.name}</Typography>;
-        })}
-      </Box>
-
-      {/* Bottom Buttons (future CRUD) */}
-      <Box>
-        <Divider sx={{ mb: 2 }} />
-
-        <Button fullWidth>+ New Folder</Button>
-
-        <Button fullWidth sx={{ mt: 1 }}>
-          + New Note
-        </Button>
+            // Note case
+            return (
+              <Box
+                key={"note-" + item.id}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  px: 1,
+                  py: 0.5,
+                  borderRadius: 1,
+                  cursor: "pointer",
+                  "&:hover": {
+                    backgroundColor: "#f3f3f3",
+                  },
+                }}
+              >
+                <DescriptionIcon fontSize="small" sx={{ mr: 1 }} />
+                <Typography sx={{ ml: 1 }}>{item.name}</Typography>
+              </Box>
+            );
+          })}
+        </Box>
       </Box>
     </Box>
   );
