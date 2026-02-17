@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.response import Response
-
+from django.shortcuts import get_object_or_404
 
 from .serializers import (
     UserSerializer,
@@ -99,3 +99,26 @@ def following(request):
     qs = FollowLink.objects.filter(user=request.user)
     serializer= FollowLinkSerializer(qs,many=True)
     return Response({"message":serializer.data},status=200)
+
+
+@api_view(["GET"])
+def manage_project(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+
+    if project.owner != request.user and not project.is_public:
+        return Response({"error": "Forbidden"}, status=403)
+
+
+    data = {
+        "project": ProjectSerializer(project).data,
+        "folders": FolderSerializer(
+            Folder.objects.filter(project=project),
+            many=True
+        ).data,
+        "notes": NoteSerializer(
+            Note.objects.filter(project=project),
+            many=True
+        ).data,
+    }
+
+    return Response({"message": data})

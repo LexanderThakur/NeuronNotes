@@ -31,7 +31,7 @@ class ProjectCreateSerializer(serializers.ModelSerializer):
         fields=['name','description','is_public']
 
 class FolderSerializer(serializers.ModelSerializer):
-    project= ProjectSerializer(read_only=True)
+    project = serializers.PrimaryKeyRelatedField(read_only=True)
     
     class Meta:
         model = Folder
