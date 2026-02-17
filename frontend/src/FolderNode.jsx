@@ -9,12 +9,12 @@ function FolderNode({ folder }) {
 
   return (
     <div style={{ marginLeft: "16px" }}>
-      <div onClick={toggleFolder}>📁 {folder.name}</div>
+      <div onClick={toggleFolder}>{folder.name}</div>
 
       {open && (
         <div>
           {folder.notes.map(function (note) {
-            return <div key={note.id}>📝 {note.name}</div>;
+            return <div key={note.id}>{note.name}</div>;
           })}
 
           {folder.children.map(function (child) {

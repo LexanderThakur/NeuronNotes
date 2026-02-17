@@ -5,15 +5,8 @@ import FollowCardC from "./FollowCardC";
 import VaultPage from "./ValutPage";
 import ControlBar from "./ControlBar";
 import ProjectManager from "./ProjectManager";
-function Dashboard({ userEmail = "user@email.com", children }) {
+function Dashboard({ userEmail = "user@email.com", children, open_project }) {
   const [page, setPage] = useState("Create Project");
-  const [activeProject, setActiveProject] = useState(null);
-  const [mode, setMode] = useState("dashboard");
-
-  function open_project(project_id) {
-    setActiveProject(project_id);
-    setMode("project");
-  }
 
   return (
     <Box sx={{ display: "flex", height: "100vh", bgcolor: "#f6f7fb" }}>
@@ -32,15 +25,9 @@ function Dashboard({ userEmail = "user@email.com", children }) {
           minHeight: 0,
         }}
       >
-        {mode === "dashboard" && (
-          <>
-            {page === "Create Project" && <CreateProject />}
-            {page === "Browse" && <FollowCardC />}
-            {page === "Your Vault" && <VaultPage open_project={open_project} />}
-          </>
-        )}
-
-        {mode === "project" && <ProjectManager projectId={activeProject} />}
+        {page === "Create Project" && <CreateProject />}
+        {page === "Browse" && <FollowCardC />}
+        {page === "Your Vault" && <VaultPage open_project={open_project} />}
       </Box>
     </Box>
   );

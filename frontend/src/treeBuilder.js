@@ -1,5 +1,3 @@
-import { ChildCare } from "@mui/icons-material";
-
 function build_tree(folders, notes) {
   const folderMap = {};
   const rootNotes = [];
@@ -25,7 +23,7 @@ function build_tree(folders, notes) {
     if (note.folder === null) {
       rootNotes.push(note);
     } else {
-      folderobj = folderMap[note.folder];
+      const folderobj = folderMap[note.folder];
       if (folderobj) {
         folderobj.notes.push(note);
       }
@@ -39,7 +37,7 @@ function build_tree(folders, notes) {
       rootFolders.push(folder);
     } else {
       const parent = folderMap[folder.parent];
-      if (paernt) {
+      if (parent) {
         parent.children.push(folder);
       }
     }

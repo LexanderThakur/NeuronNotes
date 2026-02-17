@@ -4,10 +4,11 @@ import { Box, Typography } from "@mui/material";
 
 import build_tree from "./treeBuilder";
 import FolderNode from "./FolderNode";
-function ProjectManager({ projectId }) {
-  const [data, setData] = useState(null);
+import ProjectSidebar from "./ProjectSideBar";
 
-  let treeData = null;
+function ProjectManager({ projectId, goBack }) {
+  const [data, setData] = useState(null);
+  const [treeData, setTreeData] = useState(null);
 
   useEffect(() => {
     async function fetchProject() {
@@ -19,9 +20,9 @@ function ProjectManager({ projectId }) {
         });
 
         const json = await response.json();
+
         setData(json.message);
-        console.log(json.message);
-        treeData = build_tree(json.message.folders, json.message.notes);
+        setTreeData(build_tree(json.message.folders, json.message.notes));
       } catch (err) {
         console.log(err);
       }
@@ -30,20 +31,20 @@ function ProjectManager({ projectId }) {
     fetchProject();
   }, [projectId]);
 
-  if (!data) return <div>Loading...</div>;
+  if (!data || !treeData) return <div>Loading...</div>;
 
   return (
-    <Box>
-      <Typography variant="h5">{data.project.name}</Typography>
-      <Typography variant="h6">Folders</Typography>
-      {data.folders.map((f) => (
-        <div key={f.id}>{f.name}</div>
-      ))}
+    <Box sx={{ display: "flex", height: "100%" }}>
+      <ProjectSidebar
+        projectName={data.project.name}
+        treeData={treeData}
+        goBack={goBack}
+      />
 
-      <Typography variant="h6">Notes</Typography>
-      {data.notes.map((n) => (
-        <div key={n.id}>{n.name}</div>
-      ))}
+      {/* Editor area (empty for now) */}
+      <Box sx={{ flexGrow: 1, p: 3 }}>
+        <Typography variant="h5">{data.project.name}</Typography>
+      </Box>
     </Box>
   );
 }
