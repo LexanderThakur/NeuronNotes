@@ -13,6 +13,8 @@ import {
   DialogActions,
 } from "@mui/material";
 
+import { fetch_project, create_folder_api } from "./api/project_api";
+
 function ProjectManager({ projectId, goBack }) {
   const [data, setData] = useState(null);
   const [treeData, setTreeData] = useState(null);
@@ -28,33 +30,21 @@ function ProjectManager({ projectId, goBack }) {
   }
 
   async function create_folder() {
-    if (newFolderName === "") {
-      alert("new Folder name must not be empty");
+    if (!newFolderName) {
+      alert("Folder name required");
       return;
     }
+
     try {
-      const response = await fetch(api + `/projects/${projectId}/folders/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify({
-          name: newFolderName,
-          project: projectId,
-          parent: parentFolderId,
-        }),
-      });
-      const data = await response.json();
-      console.log(data);
-      if (!response.ok) {
-        alert("error creating folder");
-      }
+      await create_folder_api(projectId, newFolderName, parentFolderId);
+
       await fetchProject();
     } catch (error) {
       console.log(error);
+      alert("Error creating folder");
     }
   }
+
   function createNote(folderId) {
     console.log("Create note inside:", folderId);
 
@@ -84,16 +74,10 @@ function ProjectManager({ projectId, goBack }) {
   }
   async function fetchProject() {
     try {
-      const response = await fetch(api + `/projects/manage/${projectId}/`, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
+      const projectData = await fetch_project(projectId);
 
-      const json = await response.json();
-
-      setData(json.message);
-      setTreeData(build_tree(json.message.folders, json.message.notes));
+      setData(projectData);
+      setTreeData(build_tree(projectData.folders, projectData.notes));
     } catch (err) {
       console.log(err);
     }
