@@ -2,7 +2,7 @@ import { Box, Typography, Button, Divider } from "@mui/material";
 import FolderNode from "./FolderNode";
 import FolderIcon from "@mui/icons-material/Folder";
 import DescriptionIcon from "@mui/icons-material/Description";
-function ProjectSidebar({ projectName, treeData, goBack }) {
+function ProjectSidebar({ projectName, treeData, goBack, render_note }) {
   return (
     <Box
       sx={{
@@ -43,13 +43,20 @@ function ProjectSidebar({ projectName, treeData, goBack }) {
           {treeData.items.map(function (item) {
             // Folder case
             if (item.children !== undefined) {
-              return <FolderNode key={"folder-" + item.id} folder={item} />;
+              return (
+                <FolderNode
+                  key={"folder-" + item.id}
+                  folder={item}
+                  render_note={render_note}
+                />
+              );
             }
 
             // Note case
             return (
               <Box
                 key={"note-" + item.id}
+                onClick={() => render_note(item.id)}
                 sx={{
                   display: "flex",
                   alignItems: "center",

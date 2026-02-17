@@ -5,7 +5,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import FolderIcon from "@mui/icons-material/Folder";
 import DescriptionIcon from "@mui/icons-material/Description";
 
-function FolderNode({ folder }) {
+function FolderNode({ folder, render_note }) {
   const [open, setOpen] = useState(false);
 
   function toggleFolder() {
@@ -45,7 +45,10 @@ function FolderNode({ folder }) {
         <Box sx={{ ml: 3 }}>
           {folder.notes.map((note) => (
             <Box
-              key={note.id}
+              key={"note-" + note.id}
+              onClick={() => {
+                render_note(note.id);
+              }}
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -65,7 +68,7 @@ function FolderNode({ folder }) {
           ))}
 
           {folder.children.map((child) => (
-            <FolderNode key={child.id} folder={child} />
+            <FolderNode key={"folder-" + child.id} folder={child} />
           ))}
         </Box>
       )}
