@@ -3,7 +3,15 @@ import { useEffect, useState } from "react";
 
 const api = "http://localhost:8000";
 
-function VaultCard({ id, name, description, owner, action, refresh }) {
+function VaultCard({
+  id,
+  name,
+  description,
+  owner,
+  action,
+  refresh,
+  open_project,
+}) {
   async function delete_unfollow() {
     let endpoint =
       action === "Manage"
@@ -65,6 +73,7 @@ function VaultCard({ id, name, description, owner, action, refresh }) {
               transform: "scale(1.09)",
             },
           }}
+          onClick={() => open_project(id)}
         >
           {action}
         </Button>
@@ -97,7 +106,7 @@ function VaultCard({ id, name, description, owner, action, refresh }) {
   );
 }
 
-function VaultPage() {
+function VaultPage({ open_project }) {
   const [myProjects, setMyProjects] = useState([]);
   const [following, setFollowing] = useState([]);
 
@@ -147,6 +156,7 @@ function VaultPage() {
             owner={p.owner.email}
             action="Manage"
             refresh={fetchVault}
+            open_project={open_project}
           />
         ))}
       </Box>
