@@ -2,7 +2,17 @@ import { Box, Typography, Button, Divider } from "@mui/material";
 import FolderNode from "./FolderNode";
 import FolderIcon from "@mui/icons-material/Folder";
 import DescriptionIcon from "@mui/icons-material/Description";
-function ProjectSidebar({ projectName, treeData, goBack, render_note }) {
+import AddIcon from "@mui/icons-material/Add";
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
+
+function ProjectSidebar({
+  projectName,
+  treeData,
+  goBack,
+  render_note,
+  show_create_dialog,
+  createNote,
+}) {
   return (
     <Box
       sx={{
@@ -33,9 +43,30 @@ function ProjectSidebar({ projectName, treeData, goBack, render_note }) {
         </Button>
 
         {/* Project Name */}
-        <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-          {projectName}
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: 2,
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            {projectName}
+          </Typography>
+
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <AddIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => createNote(null)}
+            />
+
+            <CreateNewFolderIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => show_create_dialog(null)}
+            />
+          </Box>
+        </Box>
 
         <Divider sx={{ mb: 2 }} />
 
@@ -48,6 +79,8 @@ function ProjectSidebar({ projectName, treeData, goBack, render_note }) {
                   key={"folder-" + item.id}
                   folder={item}
                   render_note={render_note}
+                  show_create_dialog={show_create_dialog}
+                  createNote={createNote}
                 />
               );
             }

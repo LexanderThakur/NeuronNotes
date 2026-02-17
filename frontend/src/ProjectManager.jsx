@@ -5,6 +5,13 @@ import { Box, Typography, TextField, Button } from "@mui/material";
 import build_tree from "./treeBuilder";
 import FolderNode from "./FolderNode";
 import ProjectSidebar from "./ProjectSideBar";
+import CreateDialog from "./CreateDialog";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 
 function ProjectManager({ projectId, goBack }) {
   const [data, setData] = useState(null);
@@ -12,6 +19,48 @@ function ProjectManager({ projectId, goBack }) {
   const [content, setContent] = useState("");
   const [active, setActive] = useState(null);
   const [title, setTitle] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [newFolderName, setNewFolderName] = useState("");
+  const [parentFolderId, setParentFolderId] = useState(null);
+  function show_create_dialog(folderId) {
+    setParentFolderId(folderId);
+    setOpen(true);
+  }
+
+  async function create_folder() {
+    if (newFolderName === "") {
+      alert("new Folder name must not be empty");
+      return;
+    }
+    try {
+      const response = await fetch(api + `/projects/${projectId}/folders/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          name: newFolderName,
+          project: projectId,
+          parent: parentFolderId,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+      if (!response.ok) {
+        alert("error creating folder");
+      }
+      await fetchProject();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  function createNote(folderId) {
+    console.log("Create note inside:", folderId);
+
+    // Later:
+    // POST /notes/
+  }
 
   async function render_note(note_id) {
     try {
@@ -33,25 +82,23 @@ function ProjectManager({ projectId, goBack }) {
       console.log(error);
     }
   }
+  async function fetchProject() {
+    try {
+      const response = await fetch(api + `/projects/manage/${projectId}/`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
 
-  useEffect(() => {
-    async function fetchProject() {
-      try {
-        const response = await fetch(api + `/projects/manage/${projectId}/`, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        });
+      const json = await response.json();
 
-        const json = await response.json();
-
-        setData(json.message);
-        setTreeData(build_tree(json.message.folders, json.message.notes));
-      } catch (err) {
-        console.log(err);
-      }
+      setData(json.message);
+      setTreeData(build_tree(json.message.folders, json.message.notes));
+    } catch (err) {
+      console.log(err);
     }
-
+  }
+  useEffect(() => {
     fetchProject();
   }, [projectId]);
 
@@ -64,9 +111,23 @@ function ProjectManager({ projectId, goBack }) {
         treeData={treeData}
         goBack={goBack}
         render_note={render_note}
+        show_create_dialog={show_create_dialog}
+        createNote={createNote}
+      />
+      <CreateDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        value={newFolderName}
+        setValue={setNewFolderName}
+        onSave={async () => {
+          console.log("Create folder:", newFolderName, parentFolderId);
+          create_folder();
+          setOpen(false);
+          setNewFolderName("");
+        }}
       />
 
-      {/* Editor area (empty for now) */}
+      {/* Editor area */}
       <Box
         sx={{
           flexGrow: 1,
@@ -142,7 +203,9 @@ function ProjectManager({ projectId, goBack }) {
 
               <Button variant="outlined">Refresh</Button>
 
-              <Button variant="contained">Save</Button>
+              <Button variant="contained" sx={{ backgroundColor: "#3EC300" }}>
+                Save
+              </Button>
             </Box>
           </>
         ) : (
