@@ -3,13 +3,40 @@ import CreateProject from "./CreateProject";
 import { useState } from "react";
 import FollowCardC from "./FollowCardC";
 import VaultPage from "./ValutPage";
+import ControlBar from "./ControlBar";
 function Dashboard({ userEmail = "user@email.com", children }) {
   const [page, setPage] = useState("Create Project");
 
   return (
     <Box sx={{ display: "flex", height: "100vh", bgcolor: "#f6f7fb" }}>
       {/* Sidebar */}
+
+      <ControlBar userEmail={userEmail} setPage={setPage} />
+
+      {/* Main Content */}
       <Box
+        sx={{
+          flexGrow: 1,
+          p: 4,
+          bgcolor: "#ebecee",
+          borderRadius: 6,
+          overflowY: "auto",
+          minHeight: 0,
+        }}
+      >
+        {page === "Create Project" && <CreateProject />}
+        {/* {children} */}
+        {page === "Browse" && <FollowCardC />}
+        {page === "Your Vault" && <VaultPage />}
+      </Box>
+    </Box>
+  );
+}
+
+export default Dashboard;
+
+{
+  /* <Box
         sx={{
           width: 240,
           bgcolor: "#FFFFFA",
@@ -20,15 +47,14 @@ function Dashboard({ userEmail = "user@email.com", children }) {
           p: 2,
           flexShrink: 0,
 
-          //   borderTopRightRadius: 24,
-          //   borderBottomRightRadius: 24,
+    
 
           boxShadow: "4px 0 20px rgba(0,0,0,0.08)",
         }}
       >
-        {/* Top Section */}
+     
         <Box>
-          {/* Logo */}
+         
           <Typography
             variant="h6"
             sx={{
@@ -40,7 +66,7 @@ function Dashboard({ userEmail = "user@email.com", children }) {
             LOGO
           </Typography>
 
-          {/* Menu Buttons */}
+         
           {["Create Project", "Browse", "Your Vault"].map((item) => (
             <Button
               key={item}
@@ -68,7 +94,7 @@ function Dashboard({ userEmail = "user@email.com", children }) {
           ))}
         </Box>
 
-        {/* Bottom User Section */}
+  
         <Box>
           <Divider sx={{ bgcolor: "rgba(0,0,0,0.08)", mb: 2 }} />
 
@@ -90,26 +116,5 @@ function Dashboard({ userEmail = "user@email.com", children }) {
             </Typography>
           </Box>
         </Box>
-      </Box>
-
-      {/* Main Content */}
-      <Box
-        sx={{
-          flexGrow: 1,
-          p: 4,
-          bgcolor: "#ebecee",
-          borderRadius: 6,
-          overflowY: "auto",
-          minHeight: 0,
-        }}
-      >
-        {page === "Create Project" && <CreateProject />}
-        {/* {children} */}
-        {page === "Browse" && <FollowCardC />}
-        {page === "Your Vault" && <VaultPage />}
-      </Box>
-    </Box>
-  );
+      </Box> */
 }
-
-export default Dashboard;
