@@ -28,6 +28,34 @@ function ProjectManager({ projectId, goBack }) {
     setParentFolderId(folderId);
     setOpen(true);
   }
+  async function save_note() {
+    try {
+      const response = await fetch(`${api}/notes/${active}/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          name: title,
+          content: content,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        console.log(data);
+        return;
+      }
+      await fetchProject();
+      alert("Note Saved Successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function delete_note() {
+    try {
+    } catch (error) {}
+  }
 
   async function create_folder() {
     if (!newFolderName) {
@@ -210,7 +238,13 @@ function ProjectManager({ projectId, goBack }) {
 
               <Button variant="outlined">Refresh</Button>
 
-              <Button variant="contained" sx={{ backgroundColor: "#3EC300" }}>
+              <Button
+                onClick={() => {
+                  save_note();
+                }}
+                variant="contained"
+                sx={{ backgroundColor: "#3EC300" }}
+              >
                 Save
               </Button>
             </Box>
