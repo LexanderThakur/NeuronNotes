@@ -73,7 +73,13 @@ function VaultCard({
               transform: "scale(1.09)",
             },
           }}
-          onClick={() => open_project(id)}
+          onClick={() => {
+            if (action === "Manage") {
+              open_project(id);
+            } else {
+              open_project(id, "View");
+            }
+          }}
         >
           {action}
         </Button>
@@ -178,6 +184,7 @@ function VaultPage({ open_project }) {
             owner={p.owner.email}
             action="View"
             refresh={fetchVault}
+            open_project={open_project}
           />
         ))}
       </Box>

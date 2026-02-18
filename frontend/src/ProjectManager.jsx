@@ -15,7 +15,8 @@ import {
 
 import { fetch_project, create_folder_api } from "./api/project_api";
 
-function ProjectManager({ projectId, goBack }) {
+function ProjectManager({ projectId, goBack, access }) {
+  const view_only = access === "View";
   const [data, setData] = useState(null);
   const [treeData, setTreeData] = useState(null);
   const [content, setContent] = useState("");
@@ -165,6 +166,7 @@ function ProjectManager({ projectId, goBack }) {
         show_create_dialog={show_create_dialog}
         createNote={createNote}
         fetchProject={fetchProject}
+        view_only={view_only}
       />
       <CreateDialog
         open={open}
@@ -240,37 +242,39 @@ function ProjectManager({ projectId, goBack }) {
             </Box>
 
             {/* Floating action bar */}
-            <Box
-              sx={{
-                position: "fixed",
-                bottom: 24,
-                right: 32,
-                display: "flex",
-                gap: 1.5,
-              }}
-            >
-              <Button
-                onClick={() => delete_note()}
-                variant="outlined"
-                color="error"
-              >
-                Delete
-              </Button>
-
-              <Button onClick={() => render_note(active)} variant="outlined">
-                Refresh
-              </Button>
-
-              <Button
-                onClick={() => {
-                  save_note();
+            {!view_only && (
+              <Box
+                sx={{
+                  position: "fixed",
+                  bottom: 24,
+                  right: 32,
+                  display: "flex",
+                  gap: 1.5,
                 }}
-                variant="contained"
-                sx={{ backgroundColor: "#3EC300" }}
               >
-                Save
-              </Button>
-            </Box>
+                <Button
+                  onClick={() => delete_note()}
+                  variant="outlined"
+                  color="error"
+                >
+                  Delete
+                </Button>
+
+                <Button onClick={() => render_note(active)} variant="outlined">
+                  Refresh
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    save_note();
+                  }}
+                  variant="contained"
+                  sx={{ backgroundColor: "#3EC300" }}
+                >
+                  Save
+                </Button>
+              </Box>
+            )}
           </>
         ) : (
           <Box

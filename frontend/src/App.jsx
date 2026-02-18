@@ -12,9 +12,11 @@ function App() {
   const [userEmail, setUserEmail] = useState("user@email.com");
   const [activeProject, setActiveProject] = useState(null);
   const [mode, setMode] = useState("dashboard");
+  const [projectAccess, setProjectAccess] = useState("Manage");
 
-  function open_project(project_id) {
+  function open_project(project_id, access = "Manage") {
     setActiveProject(project_id);
+    setProjectAccess(access);
     setMode("project");
   }
   return (
@@ -33,6 +35,7 @@ function App() {
             setMode("dashboard");
             setActiveProject(null);
           }}
+          access={projectAccess}
         />
       )}
     </>

@@ -13,6 +13,7 @@ function ProjectSidebar({
   show_create_dialog,
   createNote,
   fetchProject,
+  view_only,
 }) {
   return (
     <Box
@@ -55,18 +56,19 @@ function ProjectSidebar({
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
             {projectName}
           </Typography>
+          {!view_only && (
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <AddIcon
+                sx={{ cursor: "pointer" }}
+                onClick={() => createNote(null)}
+              />
 
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <AddIcon
-              sx={{ cursor: "pointer" }}
-              onClick={() => createNote(null)}
-            />
-
-            <CreateNewFolderIcon
-              sx={{ cursor: "pointer" }}
-              onClick={() => show_create_dialog(null)}
-            />
-          </Box>
+              <CreateNewFolderIcon
+                sx={{ cursor: "pointer" }}
+                onClick={() => show_create_dialog(null)}
+              />
+            </Box>
+          )}
         </Box>
 
         <Divider sx={{ mb: 2 }} />
@@ -83,6 +85,7 @@ function ProjectSidebar({
                   show_create_dialog={show_create_dialog}
                   createNote={createNote}
                   fetchProject={fetchProject}
+                  view_only={view_only}
                 />
               );
             }

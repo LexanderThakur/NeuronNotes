@@ -14,6 +14,7 @@ function FolderNode({
   createNote,
   show_create_dialog,
   fetchProject,
+  view_only,
 }) {
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -78,30 +79,32 @@ function FolderNode({
         </Box>
 
         {/* Action icons */}
-        <Box sx={{ display: "flex", gap: 0.5 }}>
-          <AddIcon
-            fontSize="small"
-            sx={{ cursor: "pointer" }}
-            onClick={(e) => {
-              e.stopPropagation();
-              createNote(folder.id);
-            }}
-          />
+        {!view_only && (
+          <Box sx={{ display: "flex", gap: 0.5 }}>
+            <AddIcon
+              fontSize="small"
+              sx={{ cursor: "pointer" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                createNote(folder.id);
+              }}
+            />
 
-          <CreateNewFolderIcon
-            fontSize="small"
-            sx={{ cursor: "pointer" }}
-            onClick={(e) => {
-              e.stopPropagation();
-              show_create_dialog(folder.id);
-            }}
-          />
-          <DeleteForeverRoundedIcon
-            fontSize="small"
-            sx={{ cursor: "pointer" }}
-            onClick={() => setOpenDelete(true)}
-          ></DeleteForeverRoundedIcon>
-        </Box>
+            <CreateNewFolderIcon
+              fontSize="small"
+              sx={{ cursor: "pointer" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                show_create_dialog(folder.id);
+              }}
+            />
+            <DeleteForeverRoundedIcon
+              fontSize="small"
+              sx={{ cursor: "pointer" }}
+              onClick={() => setOpenDelete(true)}
+            ></DeleteForeverRoundedIcon>
+          </Box>
+        )}
       </Box>
 
       {/* Folder contents */}
