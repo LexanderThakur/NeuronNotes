@@ -54,7 +54,21 @@ function ProjectManager({ projectId, goBack }) {
   }
   async function delete_note() {
     try {
-    } catch (error) {}
+      const response = await fetch(`${api}/notes/${active}/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        console.log(data);
+        return;
+      }
+      await fetchProject();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function create_folder() {
@@ -232,7 +246,11 @@ function ProjectManager({ projectId, goBack }) {
                 gap: 1.5,
               }}
             >
-              <Button variant="outlined" color="error">
+              <Button
+                onClick={() => delete_note()}
+                variant="outlined"
+                color="error"
+              >
                 Delete
               </Button>
 
