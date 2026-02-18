@@ -66,6 +66,8 @@ function ProjectManager({ projectId, goBack }) {
         return;
       }
       await fetchProject();
+      setActive(null);
+      setContent("");
     } catch (error) {
       console.log(error);
     }
@@ -254,7 +256,9 @@ function ProjectManager({ projectId, goBack }) {
                 Delete
               </Button>
 
-              <Button variant="outlined">Refresh</Button>
+              <Button onClick={() => render_note(active)} variant="outlined">
+                Refresh
+              </Button>
 
               <Button
                 onClick={() => {
