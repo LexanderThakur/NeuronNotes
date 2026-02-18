@@ -19,7 +19,7 @@ class Folder(models.Model):
 
 class Note(models.Model):
     name= models.CharField(max_length=255)
-    content= models.TextField()
+    content= models.TextField(blank=True)
     folder = models.ForeignKey(Folder,null=True,blank=True,on_delete=models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)

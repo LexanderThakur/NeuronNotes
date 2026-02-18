@@ -45,11 +45,34 @@ function ProjectManager({ projectId, goBack }) {
     }
   }
 
-  function createNote(folderId) {
+  async function createNote(folderId) {
     console.log("Create note inside:", folderId);
 
-    // Later:
-    // POST /notes/
+    try {
+      const response = await fetch(api + "/projects/" + projectId + "/notes/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          name: "Untitled ",
+          content: "",
+          folder: folderId,
+          project: projectId,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log(data);
+        return;
+      }
+      await fetchProject();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function render_note(note_id) {
