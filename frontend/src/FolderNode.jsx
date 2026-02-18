@@ -2,13 +2,41 @@ import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import FolderIcon from "@mui/icons-material/Folder";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import DescriptionIcon from "@mui/icons-material/Description";
 import AddIcon from "@mui/icons-material/Add";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-
-function FolderNode({ folder, render_note, createNote, show_create_dialog }) {
+import DeleteDialog from "./DeleteDialog";
+const api = "http://localhost:8000";
+function FolderNode({
+  folder,
+  render_note,
+  createNote,
+  show_create_dialog,
+  fetchProject,
+}) {
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  async function delete_folder(folder_id) {
+    try {
+      const response = await fetch(`${api}/folders/${folder_id}/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        console.log(data);
+        return;
+      }
+      await fetchProject();
+    } catch (error) {
+      console.log("error");
+    }
+  }
 
   function toggleFolder() {
     setOpen(!open);
@@ -16,6 +44,14 @@ function FolderNode({ folder, render_note, createNote, show_create_dialog }) {
 
   return (
     <Box sx={{ ml: 1 }}>
+      <DeleteDialog
+        open={openDelete}
+        setOpenDelete={setOpenDelete}
+        onSave={() => {
+          delete_folder(folder.id);
+          setOpenDelete(false);
+        }}
+      ></DeleteDialog>
       {/* Folder header */}
       <Box
         onClick={toggleFolder}
@@ -37,8 +73,6 @@ function FolderNode({ folder, render_note, createNote, show_create_dialog }) {
           ) : (
             <ChevronRightIcon fontSize="small" />
           )}
-
-          <FolderIcon fontSize="small" sx={{ mx: 0.5 }} />
 
           <Typography variant="body2">{folder.name}</Typography>
         </Box>
@@ -62,6 +96,11 @@ function FolderNode({ folder, render_note, createNote, show_create_dialog }) {
               show_create_dialog(folder.id);
             }}
           />
+          <DeleteForeverRoundedIcon
+            fontSize="small"
+            sx={{ cursor: "pointer" }}
+            onClick={() => setOpenDelete(true)}
+          ></DeleteForeverRoundedIcon>
         </Box>
       </Box>
 
@@ -82,8 +121,6 @@ function FolderNode({ folder, render_note, createNote, show_create_dialog }) {
                 "&:hover": { backgroundColor: "#f5f5f5" },
               }}
             >
-              <DescriptionIcon fontSize="small" sx={{ mr: 1 }} />
-
               <Typography variant="body2">{note.name}</Typography>
             </Box>
           ))}

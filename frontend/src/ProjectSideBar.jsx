@@ -12,6 +12,7 @@ function ProjectSidebar({
   render_note,
   show_create_dialog,
   createNote,
+  fetchProject,
 }) {
   return (
     <Box
@@ -81,6 +82,7 @@ function ProjectSidebar({
                   render_note={render_note}
                   show_create_dialog={show_create_dialog}
                   createNote={createNote}
+                  fetchProject={fetchProject}
                 />
               );
             }
@@ -102,7 +104,6 @@ function ProjectSidebar({
                   },
                 }}
               >
-                <DescriptionIcon fontSize="small" sx={{ mr: 1 }} />
                 <Typography sx={{ ml: 1 }}>{item.name}</Typography>
               </Box>
             );

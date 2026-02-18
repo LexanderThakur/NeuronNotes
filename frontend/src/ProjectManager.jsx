@@ -164,6 +164,7 @@ function ProjectManager({ projectId, goBack }) {
         render_note={render_note}
         show_create_dialog={show_create_dialog}
         createNote={createNote}
+        fetchProject={fetchProject}
       />
       <CreateDialog
         open={open}

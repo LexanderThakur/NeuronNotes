@@ -23,7 +23,11 @@ function CreateDialog({ open, onClose, value, setValue, onSave }) {
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
 
-        <Button variant="contained" onClick={onSave}>
+        <Button
+          sx={{ backgroundColor: "#3EC300" }}
+          variant="contained"
+          onClick={onSave}
+        >
           Save
         </Button>
       </DialogActions>
