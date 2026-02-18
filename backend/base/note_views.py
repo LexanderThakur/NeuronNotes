@@ -39,6 +39,8 @@ def notes(request,project_id):
         serializer=NoteSerializer(qs,many=True)
         return Response({"message":serializer.data},status=200)
 
+    if request.user != Project.objects.get(id=project_id).owner:
+        return Response({"message":"unauthorized"},status=403)
     serializer=NoteCreateSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     serializer.save(project_id=project_id)
@@ -51,6 +53,9 @@ def note(request,note_id):
     if request.method=="GET":
         serializer= NoteSerializer(obj)
         return Response({"message":serializer.data})
+
+    if request.user != obj.project.owner:
+        return Response({"message":"unauthorized"},status=403)
     if request.method=="DELETE":
         
         obj.delete()

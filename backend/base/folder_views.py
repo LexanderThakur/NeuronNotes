@@ -32,7 +32,9 @@ def folders(request,project_id):
         qs= Folder.objects.filter(project=project_id)
         serializer= FolderSerializer(qs,many=True)
         return Response({"message":serializer.data},status=200)
-    
+    obj= Project.objects.get(id=project_id)
+    if request.user!= obj.owner:
+        return Response({"message":"unauthorized"},status=403)
     
     serializer= FolderCreateSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
@@ -46,6 +48,8 @@ def folders(request,project_id):
 def folder(request,folder_id):
     if request.method=='DELETE':
         obj= Folder.objects.get(id=folder_id)
+        if request.user != obj.project.owner:
+            return Response({"message":"unauthorized"},status=403)
         if obj : obj.delete()
         return Response({"message":"deleted folder successfully"},status=200)
     

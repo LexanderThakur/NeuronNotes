@@ -61,8 +61,11 @@ def project(request,project_id):
     if request.method == "GET":
         serializer= ProjectSerializer(Project.objects.get(id=project_id))
         return Response({"message":serializer.data})
+    obj= Project.objects.get(id=project_id)
+    if request.user!= obj.owner:
+        return Response({"message":"unauthorized"},status=403)
     if request.method=="DELETE":
-        obj= Project.objects.get(id=project_id)
+        
         if obj : obj.delete()
         return Response({"message":"success"},status=200)
 
