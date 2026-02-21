@@ -1,11 +1,12 @@
 const api = "http://localhost:8000";
 import { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
-
+import Markdown from "react-markdown";
 import build_tree from "./treeBuilder";
 import FolderNode from "./FolderNode";
 import ProjectSidebar from "./ProjectSideBar";
 import CreateDialog from "./CreateDialog";
+import MilkdownEditor from "./MilkdownEditor";
 import {
   Dialog,
   DialogTitle,
@@ -19,7 +20,7 @@ function ProjectManager({ projectId, goBack, access }) {
   const view_only = access === "View";
   const [data, setData] = useState(null);
   const [treeData, setTreeData] = useState(null);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState("Select a note to start writing");
   const [active, setActive] = useState(null);
   const [title, setTitle] = useState(null);
   const [open, setOpen] = useState(false);
@@ -188,7 +189,7 @@ function ProjectManager({ projectId, goBack, access }) {
           display: "flex",
           flexDirection: "column",
           height: "100%",
-          bgcolor: "#fafafa",
+          bgcolor: "#ffffff",
         }}
       >
         {active ? (
@@ -220,24 +221,38 @@ function ProjectManager({ projectId, goBack, access }) {
             </Box>
 
             {/* Editor */}
-            <Box sx={{ flexGrow: 1, px: 4, pb: 3 }}>
-              <TextField
-                multiline
-                fullWidth
-                minRows={30}
+            <Box
+              sx={{
+                flex: 1,
+                px: 4,
+                pb: 3,
+                display: "flex",
+                flexDirection: "column",
+
+                "& .milkdown": {
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                },
+
+                "& .milkdown .editor": {
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                },
+
+                "& .ProseMirror": {
+                  flex: 1,
+                  minHeight: "100vh",
+                  overflowY: "auto",
+                  bgcolor: "#ffffff",
+                },
+              }}
+            >
+              <MilkdownEditor
+                key={active}
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
-                variant="standard"
-                placeholder="Start writing..."
-                InputProps={{
-                  disableUnderline: true,
-                }}
-                sx={{
-                  "& textarea": {
-                    fontSize: 16,
-                    lineHeight: 1.6,
-                  },
-                }}
+                onChange={setContent}
               />
             </Box>
 
@@ -260,9 +275,9 @@ function ProjectManager({ projectId, goBack, access }) {
                   Delete
                 </Button>
 
-                <Button onClick={() => render_note(active)} variant="outlined">
+                {/* <Button onClick={() => render_note(active)} variant="outlined">
                   Refresh
-                </Button>
+                </Button> */}
 
                 <Button
                   onClick={() => {
@@ -286,7 +301,7 @@ function ProjectManager({ projectId, goBack, access }) {
               color: "#888",
             }}
           >
-            <Typography variant="h6">Select a note to start writing</Typography>
+            <Typography variant="h6">Select Note to start writing</Typography>
           </Box>
         )}
       </Box>

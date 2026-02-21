@@ -1,7 +1,5 @@
 import { Box, Typography, Button, Divider } from "@mui/material";
 import FolderNode from "./FolderNode";
-import FolderIcon from "@mui/icons-material/Folder";
-import DescriptionIcon from "@mui/icons-material/Description";
 import AddIcon from "@mui/icons-material/Add";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 
@@ -18,18 +16,18 @@ function ProjectSidebar({
   return (
     <Box
       sx={{
-        width: 240,
-        bgcolor: "#FFFFFA",
+        width: 270,
+        // bgcolor: "#EDCBB1",
+        bgcolor: "#F0DCCA",
+        borderRight: "1px solid #e2e8f0",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
         p: 2,
         flexShrink: 0,
-        boxShadow: "4px 0 20px rgba(0,0,0,0.08)",
         overflowY: "auto",
+        height: "500vh",
       }}
     >
-      {/* Top Section */}
       <Box>
         {/* Back Button */}
         <Button
@@ -39,12 +37,21 @@ function ProjectSidebar({
             justifyContent: "flex-start",
             mb: 2,
             textTransform: "none",
+            fontWeight: 500,
+            borderRadius: 2,
+            color: "#475569",
+            transition: "all .18s ease",
+            "&:hover": {
+              backgroundColor: "#eef2ff",
+              color: "#4f46e5",
+              transform: "translateX(-2px)",
+            },
           }}
         >
           ← Back
         </Button>
 
-        {/* Project Name */}
+        {/* Project Header */}
         <Box
           sx={{
             display: "flex",
@@ -53,29 +60,53 @@ function ProjectSidebar({
             mb: 2,
           }}
         >
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 700,
+              letterSpacing: ".3px",
+              color: "#0f172a",
+            }}
+          >
             {projectName}
           </Typography>
+
           {!view_only && (
             <Box sx={{ display: "flex", gap: 1 }}>
               <AddIcon
-                sx={{ cursor: "pointer" }}
+                sx={{
+                  cursor: "pointer",
+                  color: "#64748b",
+                  transition: "all .2s ease",
+                  "&:hover": {
+                    color: "#4f46e5",
+                    transform: "scale(1.15)",
+                  },
+                }}
                 onClick={() => createNote(null)}
               />
 
               <CreateNewFolderIcon
-                sx={{ cursor: "pointer" }}
+                sx={{
+                  cursor: "pointer",
+                  color: "#64748b",
+                  transition: "all .2s ease",
+                  "&:hover": {
+                    color: "#4f46e5",
+                    transform: "scale(1.15)",
+                  },
+                }}
                 onClick={() => show_create_dialog(null)}
               />
             </Box>
           )}
         </Box>
 
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 2, borderColor: "#e2e8f0" }} />
 
+        {/* Tree Items */}
         <Box>
           {treeData.items.map(function (item) {
-            // Folder case
             if (item.children !== undefined) {
               return (
                 <FolderNode
@@ -90,7 +121,6 @@ function ProjectSidebar({
               );
             }
 
-            // Note case
             return (
               <Box
                 key={"note-" + item.id}
@@ -98,16 +128,30 @@ function ProjectSidebar({
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  px: 1,
-                  py: 0.5,
-                  borderRadius: 1,
+                  px: 1.5,
+                  py: 0.9,
+                  borderRadius: 2,
                   cursor: "pointer",
+                  transition: "all .18s ease",
                   "&:hover": {
-                    backgroundColor: "#f3f3f3",
+                    backgroundColor: "#eef2ff",
+                    transform: "translateX(4px)",
+                  },
+                  "&:active": {
+                    transform: "scale(.97)",
                   },
                 }}
               >
-                <Typography sx={{ ml: 1 }}>{item.name}</Typography>
+                <Typography
+                  sx={{
+                    ml: 1,
+                    fontSize: ".95rem",
+                    fontWeight: 500,
+                    color: "#334155",
+                  }}
+                >
+                  {item.name}
+                </Typography>
               </Box>
             );
           })}
