@@ -4,8 +4,8 @@ function ControlBar({ userEmail, setPage }) {
   return (
     <Box
       sx={{
-        width: 240,
-        bgcolor: "#FFFFFA",
+        width: 270,
+        bgcolor: "#F0DCCA",
         color: "#1a1a1a",
         display: "flex",
         flexDirection: "column",
