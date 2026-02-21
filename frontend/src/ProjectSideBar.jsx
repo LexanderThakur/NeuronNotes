@@ -25,8 +25,10 @@ function ProjectSidebar({
         justifyContent: "space-between",
         p: 2,
         flexShrink: 0,
-        boxShadow: "4px 0 20px rgba(0,0,0,0.08)",
+        // boxShadow: "4px 0 20px rgba(0,0,0,0.08)",
         overflowY: "auto",
+
+        height: "500vh",
       }}
     >
       {/* Top Section */}
