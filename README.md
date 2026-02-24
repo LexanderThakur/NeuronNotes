@@ -1,6 +1,6 @@
 # Neuron (beta)
 
-Use For Yourself! At : [Neuron](URL "https://neuronnotes.onrender.com")
+Use For Yourself! At : [Neuron](https://neuronnotes.onrender.com)
 
 Neuron is a full-stack knowledge management system built with Django REST Framework and React.
 
