@@ -21,8 +21,4 @@ urlpatterns=[
     path("notes/<int:note_id>/",note_views.note),
 
 
-
-
-
-
 ]

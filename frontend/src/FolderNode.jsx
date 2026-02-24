@@ -7,7 +7,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import AddIcon from "@mui/icons-material/Add";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import DeleteDialog from "./DeleteDialog";
-const api = "http://localhost:8000";
+const api = import.meta.env.VITE_API_URL;
 function FolderNode({
   folder,
   render_note,

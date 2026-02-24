@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Typography, Button, Paper } from "@mui/material";
 
-const api = "http://localhost:8000";
+const api = import.meta.env.VITE_API_URL;
 
 function FollowCard({ id, name, description, owner }) {
   const [isFollowing, setIsFollowing] = useState(false);

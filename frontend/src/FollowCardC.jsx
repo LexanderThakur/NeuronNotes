@@ -4,7 +4,7 @@ import FollowCard from "./FollowCard";
 import { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 
-const api = "http://localhost:8000";
+const api = import.meta.env.VITE_API_URL;
 function FollowCardC() {
   const [projects, setProjects] = useState([]);
 

@@ -1,7 +1,7 @@
 import { Box, Typography, Paper, Button, Divider } from "@mui/material";
 import { useEffect, useState } from "react";
 
-const api = "http://localhost:8000";
+const api = import.meta.env.VITE_API_URL;
 
 function VaultCard({
   id,

@@ -1,4 +1,4 @@
-const api = "http://localhost:8000";
+const api = import.meta.env.VITE_API_URL;
 import { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import Markdown from "react-markdown";

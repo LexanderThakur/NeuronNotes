@@ -8,7 +8,7 @@ import {
   MenuItem,
 } from "@mui/material";
 
-const api = "http://localhost:8000";
+const api = import.meta.env.VITE_API_URL;
 
 function CreateProject() {
   const [name, setName] = useState("");
