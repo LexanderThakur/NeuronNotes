@@ -25,6 +25,7 @@ function Auth({ setLogin, setUserEmail }) {
       console.log(data);
 
       if (!response.ok) {
+        alert(data.error);
         return;
       }
 
