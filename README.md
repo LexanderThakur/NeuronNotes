@@ -1,4 +1,6 @@
-# Neuron
+# Neuron (beta)
+
+Use For Yourself! At : [Neuron](URL "https://neuronnotes.onrender.com")
 
 Neuron is a full-stack knowledge management system built with Django REST Framework and React.
 
@@ -42,3 +44,9 @@ It allows users to create structured project-based vaults with nested folders, m
 - Public users: view-only (public projects)
 
 Access control is enforced at the project level.
+
+## More Features Coming Soon....
+
+1. Deep copy a project
+2. Graph view of your notes
+3. much more....
