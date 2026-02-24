@@ -28,8 +28,8 @@ from .models import (
 from rest_framework.permissions import IsAuthenticated,AllowAny
 
 
+
 def home(request):
-    def home(request):
     return redirect("https://neuron-rho.vercel.app/")
 
 
