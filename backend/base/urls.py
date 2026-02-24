@@ -1,6 +1,7 @@
 from django.urls import path 
 from . import project_views,folder_views,note_views
 urlpatterns=[
+    path("",project_views.home),
     ## project realted
     path("projects/",project_views.projects),
     path("projects/my/",project_views.my_projects),

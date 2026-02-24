@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404,redirect
 
 from .serializers import (
     UserSerializer,
@@ -28,6 +28,9 @@ from .models import (
 from rest_framework.permissions import IsAuthenticated,AllowAny
 
 
+def home(request):
+    def home(request):
+    return redirect("https://neuron-rho.vercel.app/")
 
 
 
