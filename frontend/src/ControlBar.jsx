@@ -22,16 +22,27 @@ function ControlBar({ userEmail, setPage }) {
       {/* Top Section */}
       <Box>
         {/* Logo */}
-        <Typography
-          variant="h6"
+        <Box
           sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1.5,
             mb: 5,
-            fontWeight: 600,
-            letterSpacing: 1,
           }}
         >
-          LOGO
-        </Typography>
+          <Box component="img" src="/logo.svg" alt="Logo" sx={{ height: 40 }} />
+
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 700,
+              letterSpacing: 1.2,
+              fontFamily: "sans-serif",
+            }}
+          >
+            Neuron
+          </Typography>
+        </Box>
 
         {/* Menu Buttons */}
         {["Create Project", "Browse", "Your Vault"].map((item) => (
