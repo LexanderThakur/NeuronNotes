@@ -1,146 +1,126 @@
+import { Box, Typography, Collapse } from "@mui/material";
 import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+import FolderIcon from "@mui/icons-material/Folder";
 import DescriptionIcon from "@mui/icons-material/Description";
-import AddIcon from "@mui/icons-material/Add";
-import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-import DeleteDialog from "./DeleteDialog";
-const api = import.meta.env.VITE_API_URL;
-function FolderNode({
-  folder,
-  render_note,
-  createNote,
-  show_create_dialog,
-  fetchProject,
-  view_only,
-}) {
-  const [open, setOpen] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
 
-  async function delete_folder(folder_id) {
-    try {
-      const response = await fetch(`${api}/folders/${folder_id}/`, {
-        method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        console.log(data);
-        return;
-      }
-      await fetchProject();
-    } catch (error) {
-      console.log("error");
-    }
-  }
-
-  function toggleFolder() {
-    setOpen(!open);
-  }
+export default function FolderNode({ folder }) {
+  const [open, setOpen] = useState(true);
 
   return (
     <Box sx={{ ml: 1 }}>
-      <DeleteDialog
-        open={openDelete}
-        setOpenDelete={setOpenDelete}
-        onSave={() => {
-          delete_folder(folder.id);
-          setOpenDelete(false);
-        }}
-      ></DeleteDialog>
-      {/* Folder header */}
+      {/* Folder Row */}
       <Box
-        onClick={toggleFolder}
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           px: 1,
-          py: 0.5,
+          py: 0.6,
           borderRadius: 1,
-          cursor: "pointer",
-          "&:hover": { backgroundColor: "#f3f3f3" },
+
+          transition: "all 0.2s ease",
+
+          "&:hover": {
+            cursor: "pointer",
+            backgroundColor: "#1a1a1a",
+          },
+        }}
+        onClick={() => {
+          setOpen(!open);
         }}
       >
         {/* Left side */}
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          {open ? (
-            <ExpandMoreIcon fontSize="small" />
-          ) : (
-            <ChevronRightIcon fontSize="small" />
-          )}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <FolderIcon
+            sx={{
+              fontSize: 18,
+              color: "#F8F8F8",
+            }}
+          />
 
-          <Typography variant="body2">{folder.name}</Typography>
+          <Typography
+            sx={{
+              color: "#ddd",
+              fontSize: 16,
+              letterSpacing: "0.2px",
+            }}
+          >
+            {folder.name}
+          </Typography>
         </Box>
 
-        {/* Action icons */}
-        {!view_only && (
-          <Box sx={{ display: "flex", gap: 0.5 }}>
-            <AddIcon
-              fontSize="small"
-              sx={{ cursor: "pointer" }}
-              onClick={(e) => {
-                e.stopPropagation();
-                createNote(folder.id);
-              }}
-            />
-
-            <CreateNewFolderIcon
-              fontSize="small"
-              sx={{ cursor: "pointer" }}
-              onClick={(e) => {
-                e.stopPropagation();
-                show_create_dialog(folder.id);
-              }}
-            />
-            <DeleteForeverRoundedIcon
-              fontSize="small"
-              sx={{ cursor: "pointer" }}
-              onClick={() => setOpenDelete(true)}
-            ></DeleteForeverRoundedIcon>
-          </Box>
-        )}
+        {/* Arrow with rotation */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            transition: "transform 0.2s ease",
+            transform: open ? "rotate(0deg)" : "rotate(-90deg)",
+            color: "#888",
+          }}
+        >
+          {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        </Box>
       </Box>
 
-      {/* Folder contents */}
-      {open && (
-        <Box sx={{ ml: 3 }}>
-          {folder.notes.map((note) => (
+      {/* Children (animated) */}
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <Box sx={{ ml: 2, mt: 0.5 }}>
+          {folder.children.map((fold) => (
+            <FolderNode folder={fold} key={fold.id} />
+          ))}
+
+          {folder.notes.map((note, i) => (
             <Box
-              key={"note-" + note.id}
-              onClick={() => render_note(note.id)}
+              key={i}
               sx={{
                 display: "flex",
                 alignItems: "center",
-                px: 1,
-                py: 0.5,
+                gap: 1,
+                pl: 0.5,
+                py: 1,
                 borderRadius: 1,
-                cursor: "pointer",
-                "&:hover": { backgroundColor: "#f5f5f5" },
+
+                transition: "all 0.2s ease",
+
+                "&:hover": {
+                  cursor: "pointer",
+                  backgroundColor: "#1a1a1a",
+                  color: "white",
+                  transform: "translateX(2px) ",
+                },
               }}
             >
-              <Typography variant="body2">{note.name}</Typography>
+              <DescriptionIcon
+                sx={{
+                  fontSize: 16,
+                  color: "#F8F8F8",
+                }}
+              />
+
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "#aaa",
+                  fontSize: 16,
+                  letterSpacing: "0.2px",
+                }}
+              >
+                {note}
+              </Typography>
             </Box>
           ))}
-
-          {folder.children.map((child) => (
-            <FolderNode
-              key={"folder-" + child.id}
-              folder={child}
-              render_note={render_note}
-              createNote={createNote}
-              show_create_dialog={show_create_dialog}
-            />
-          ))}
         </Box>
-      )}
+      </Collapse>
     </Box>
   );
 }
-
-export default FolderNode;

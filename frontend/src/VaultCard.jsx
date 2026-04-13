@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Typography,
@@ -9,15 +8,21 @@ import {
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useState } from "react";
-export default function FollowCard({
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import EastIcon from "@mui/icons-material/East";
+
+import { useNavigate } from "react-router-dom";
+
+export default function VaultCard({
   title = "Project Alpha",
   description = "This vault contains notes, references and structured knowledge.",
 }) {
-  const [isFollowing, setIsFollowing] = useState(false);
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
   return (
     <Box
       sx={{
-        width: 220,
+        width: 200,
         backgroundColor: "#FFFFFF",
         borderRadius: "12px",
         p: 3,
@@ -50,6 +55,19 @@ export default function FollowCard({
         >
           {title}
         </Typography>
+
+        <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
+          <MoreHorizIcon />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+        >
+          <MenuItem onClick={() => setAnchorEl(null)}>Rename</MenuItem>
+          <MenuItem onClick={() => setAnchorEl(null)}>Duplicate</MenuItem>
+          <MenuItem onClick={() => setAnchorEl(null)}>Delete</MenuItem>
+        </Menu>
       </Box>
 
       {/* Description */}
@@ -64,16 +82,9 @@ export default function FollowCard({
       </Typography>
 
       {/* Bottom Row */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mt: 1,
-        }}
-      >
-        {/* View Project */}
+      <Box>
         <Button
+          onClick={() => navigate("/manage/1")}
           variant="text"
           sx={{
             textTransform: "none",
@@ -86,28 +97,27 @@ export default function FollowCard({
             px: 0,
             minHeight: "auto",
             fontSize: "1rem",
-
+            transition: "color 0.25s ease",
             "&:hover": {
               backgroundColor: "transparent",
               color: "#1558C0",
             },
-
             "& .arrow-icon": {
-              transition: "transform 0.4s ease",
+              transition: "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
             },
-
             "&:hover .arrow-icon": {
-              transform: "translateX(8px)",
+              transform: "translateX(12px)",
             },
           }}
         >
-          View Project
+          Manage
           <svg
             className="arrow-icon"
-            width="20"
-            height="20"
+            width="22"
+            height="22"
             viewBox="0 0 30 30"
             fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M3 15H25"
@@ -122,32 +132,6 @@ export default function FollowCard({
               strokeLinecap="round"
             />
           </svg>
-        </Button>
-
-        {/* Follow */}
-        <Button
-          variant={isFollowing ? "contained" : "outlined"}
-          onClick={() => setIsFollowing(!isFollowing)}
-          sx={{
-            borderRadius: 9,
-            textTransform: "none",
-            px: 3,
-            fontWeight: 500,
-            width: "40%",
-            backgroundColor: isFollowing ? "#3EC300" : "transparent",
-            borderColor: isFollowing ? "#3EC300" : "#3EC300",
-            color: isFollowing ? "#fff" : "#3EC300",
-            transition: "all 0.2s ease",
-            "&:hover": {
-              backgroundColor: isFollowing
-                ? "#34a800"
-                : "rgba(25,118,210,0.04)",
-              borderColor: isFollowing ? "#34a800" : "#34a800",
-              transform: "scale(1.09)",
-            },
-          }}
-        >
-          {isFollowing ? "Following" : "Follow"}
         </Button>
       </Box>
     </Box>

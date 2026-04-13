@@ -4,6 +4,7 @@
     "@emotion/styled": "^11.14.1",
     "@milkdown/plugin-listener": "^7.18.0",
     "@mui/icons-material": "^7.3.8",
-    "@mui/material": "^7.3.8"
+    "@mui/material": "^7.3.8",
+    "react-router-dom": "^7.14.0"
   }
 }
