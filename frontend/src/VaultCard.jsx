@@ -14,7 +14,8 @@ import EastIcon from "@mui/icons-material/East";
 import { useNavigate } from "react-router-dom";
 
 export default function VaultCard({
-  title = "Project Alpha",
+  id,
+  name = "Project Alpha",
   description = "This vault contains notes, references and structured knowledge.",
 }) {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ export default function VaultCard({
             fontWeight: 600,
           }}
         >
-          {title}
+          {name}
         </Typography>
 
         <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
@@ -84,7 +85,7 @@ export default function VaultCard({
       {/* Bottom Row */}
       <Box>
         <Button
-          onClick={() => navigate("/manage/1")}
+          onClick={() => navigate(`/manage/${id}`)}
           variant="text"
           sx={{
             textTransform: "none",

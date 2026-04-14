@@ -2,10 +2,19 @@ import { Box, Typography, Divider } from "@mui/material";
 import VaultCard from "./VaultCard";
 import CreateVaultDialog from "./CreateVaultDialog";
 import AddIcon from "@mui/icons-material/Add";
+const api = import.meta.env.VITE_API_URL;
 
-import { useState } from "react";
+import { fetch_vault } from "./api/your_vault_api";
+
+import { useState, useEffect } from "react";
 function YourVault() {
   const [open, setOpen] = useState(false);
+  const [myProjects, setMyProject] = useState([]);
+
+  useEffect(() => {
+    fetch_vault().then(setMyProject).catch(console.error);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -53,8 +62,16 @@ function YourVault() {
               gap: 3,
             }}
           >
-            <VaultCard />
-            <VaultCard />
+            {myProjects.map((element, idx) => {
+              return (
+                <VaultCard
+                  key={idx}
+                  name={element.name}
+                  description={element.description}
+                  id={element.id}
+                ></VaultCard>
+              );
+            })}
           </Box>
         </Box>
 

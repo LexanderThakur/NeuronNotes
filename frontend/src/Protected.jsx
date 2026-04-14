@@ -5,7 +5,7 @@ const api = import.meta.env.VITE_API_URL;
 
 export default function Protected({ children }) {
   const [isAuth, setIsAuth] = useState(null); // null = loading
-  console.log(api);
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
