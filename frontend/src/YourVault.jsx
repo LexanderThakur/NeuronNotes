@@ -1,7 +1,11 @@
 import { Box, Typography, Divider } from "@mui/material";
 import VaultCard from "./VaultCard";
+import CreateVaultDialog from "./CreateVaultDialog";
+import AddIcon from "@mui/icons-material/Add";
 
+import { useState } from "react";
 function YourVault() {
+  const [open, setOpen] = useState(false);
   return (
     <Box
       sx={{
@@ -24,12 +28,23 @@ function YourVault() {
       >
         {/* Your Vaults */}
         <Box>
-          <Typography
-            level="h4"
-            sx={{ mb: 3, color: "#101110", fontWeight: 600 }}
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+            }}
           >
-            Your Vaults
-          </Typography>
+            <Typography
+              level="h4"
+              sx={{ mb: 3, color: "#101110", fontWeight: 600 }}
+            >
+              Your Vaults
+            </Typography>
+            <AddIcon
+              onClick={() => setOpen(true)}
+              sx={{ cursor: "pointer" }}
+            ></AddIcon>
+          </Box>
 
           <Box
             sx={{
@@ -65,6 +80,7 @@ function YourVault() {
           </Box>
         </Box>
       </Box>
+      <CreateVaultDialog open={open} setOpen={setOpen}></CreateVaultDialog>
     </Box>
   );
 }
