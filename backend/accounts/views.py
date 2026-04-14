@@ -41,10 +41,21 @@ def register(request):
     user.set_password(request.data.get("user_password"))
 
     user.save()
+    token=create_token(user)
+    res=Response({"token":token},status=200)
+    
+    res.set_cookie(
+        key='token',
+        value=token,
+        httponly=True,
+        samesite='Lax',
+        secure=False,
+        max_age=24*60*60
+    )
 
-    token = create_token(user)
 
-    return Response({"token":token},status=201)
+    
+    return res
 
 
 @api_view(["POST"])
@@ -60,7 +71,20 @@ def login(request):
         return Response({"error":"invalid credentials"},status=status.HTTP_401_UNAUTHORIZED)
 
     token=create_token(user)
-    return Response({"token":token},status=200)
+    res=Response({"token":token},status=200)
+    
+    res.set_cookie(
+        key='token',
+        value=token,
+        httponly=True,
+        samesite='Lax',
+        secure=False,
+        max_age=24*60*60
+    )
+
+
+    
+    return res
 
 @api_view(['GET'])
 @authentication_classes([customjwt])

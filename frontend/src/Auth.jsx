@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Box, TextField, Button, Typography, Paper } from "@mui/material";
+
+import { useNavigate } from "react-router-dom";
 const api = import.meta.env.VITE_API_URL;
-function Auth({ setLogin, setUserEmail }) {
+function Auth({}) {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function authenticate() {
     let endpoint = isLogin ? "/auth/login/" : "/auth/register/";
@@ -12,6 +15,7 @@ function Auth({ setLogin, setUserEmail }) {
     try {
       const response = await fetch(api + endpoint, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -21,7 +25,7 @@ function Auth({ setLogin, setUserEmail }) {
         }),
       });
       const data = await response.json();
-      localStorage.setItem("token", data.token);
+
       console.log(data);
 
       if (!response.ok) {
@@ -29,7 +33,6 @@ function Auth({ setLogin, setUserEmail }) {
         return;
       }
 
-      setUserEmail(email);
       setEmail("");
       setPassword("");
       me();
@@ -42,9 +45,7 @@ function Auth({ setLogin, setUserEmail }) {
     try {
       const response = await fetch(api + "/auth/me/", {
         method: "GET",
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
+        credentials: "include",
       });
       if (!response.ok) {
         console.log("response not ok in me");
@@ -52,7 +53,7 @@ function Auth({ setLogin, setUserEmail }) {
 
       const data = await response.json();
       console.log(data);
-      setLogin(true);
+      navigate("/");
     } catch (err) {
       alert(err);
     }

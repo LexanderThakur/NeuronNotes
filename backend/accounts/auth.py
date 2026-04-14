@@ -12,16 +12,18 @@ class customjwt(BaseAuthentication):
     def authenticate(self,request):
 
 
-        header = request.headers.get("Authorization")
-        if not header:
-            return None
+        # header = request.headers.get("Authorization")
+        # if not header:
+        #     return None
 
 
-        try:
-            token= header.split()[1]
+        
+        token= request.COOKIES.get('token')
+        if not token:
+            raise AuthenticationFailed("No token provided")
 
-        except Exception as e:
-            raise AuthenticationFailed("Invalid header")
+        # except Exception as e:
+        #     raise AuthenticationFailed("Invalid header")
 
         payload = decode_token(token)   
 

@@ -2,6 +2,8 @@ import Dashboard from "./Dashboard";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Manage from "./Manage";
 import { useState } from "react";
+import Protected from "./Protected";
+import Auth from "./Auth";
 function App() {
   const [login, setLogin] = useState(false);
   const [userEmail, setUserEmail] = useState("user@email.com");
@@ -15,8 +17,23 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Dashboard />}></Route>
-          <Route path="/manage/:id" element={<Manage />}></Route>
+          <Route
+            path="/"
+            element={
+              <Protected>
+                <Dashboard />
+              </Protected>
+            }
+          ></Route>
+          <Route
+            path="/manage/:id"
+            element={
+              <Protected>
+                <Manage />
+              </Protected>
+            }
+          ></Route>
+          <Route path="/login" element={<Auth />}></Route>
         </Routes>
       </BrowserRouter>
     </>
