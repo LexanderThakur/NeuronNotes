@@ -13,3 +13,20 @@ export const fetch_vault = async () => {
     throw err;
   }
 };
+
+export const fetch_following = async () => {
+  try {
+    const response = await fetch(api + "/projects/following/", {
+      credentials: "include",
+    });
+    const data = await response.json();
+    console.log(data);
+
+    if (response.ok) {
+      return data.message;
+    }
+    return [];
+  } catch (err) {
+    throw err;
+  }
+};

@@ -4,15 +4,17 @@ import CreateVaultDialog from "./CreateVaultDialog";
 import AddIcon from "@mui/icons-material/Add";
 const api = import.meta.env.VITE_API_URL;
 
-import { fetch_vault } from "./api/your_vault_api";
+import { fetch_vault, fetch_following } from "./api/your_vault_api";
 
 import { useState, useEffect } from "react";
 function YourVault() {
   const [open, setOpen] = useState(false);
   const [myProjects, setMyProject] = useState([]);
+  const [myFollowing, setMyFollowing] = useState([]);
 
   useEffect(() => {
     fetch_vault().then(setMyProject).catch(console.error);
+    fetch_following().then(setMyFollowing).catch(console.error);
   }, []);
 
   return (
@@ -93,7 +95,17 @@ function YourVault() {
               gap: 3,
             }}
           >
-            <VaultCard />
+            {myFollowing.map((element, idx) => {
+              return (
+                <VaultCard
+                  key={"f" + idx}
+                  name={element.project.name}
+                  id={element.project.id}
+                  description={element.project.description}
+                  isFollower={true}
+                ></VaultCard>
+              );
+            })}
           </Box>
         </Box>
       </Box>

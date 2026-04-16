@@ -17,6 +17,7 @@ export default function VaultCard({
   id,
   name = "Project Alpha",
   description = "This vault contains notes, references and structured knowledge.",
+  isFollower = false,
 }) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -111,7 +112,7 @@ export default function VaultCard({
             },
           }}
         >
-          Manage
+          {isFollower ? "View" : "Manage"}
           <svg
             className="arrow-icon"
             width="22"
