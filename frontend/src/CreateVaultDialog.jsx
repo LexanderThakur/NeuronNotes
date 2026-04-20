@@ -6,9 +6,11 @@ import {
   DialogContent,
   TextField,
   Button,
+  MenuItem,
 } from "@mui/material";
 import { useState } from "react";
 export default function CreateVaultDialog({ open, setOpen }) {
+  const [visibility, setVisibility] = useState("public");
   return (
     <Dialog
       onClose={() => {
@@ -27,6 +29,22 @@ export default function CreateVaultDialog({ open, setOpen }) {
         >
           <TextField variant="outlined" label="Project Name"></TextField>
           <TextField variant="outlined" label="Description"></TextField>
+          <TextField
+            select
+            label="Visibility"
+            fullWidth
+            value={visibility}
+            onChange={(e) => setVisibility(e.target.value)}
+            margin="normal"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 4,
+              },
+            }}
+          >
+            <MenuItem value="private">Private</MenuItem>
+            <MenuItem value="public">Public</MenuItem>
+          </TextField>
           <Button variant="outlined" onClick={() => setOpen(false)}>
             Create
           </Button>

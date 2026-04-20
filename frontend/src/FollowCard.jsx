@@ -9,11 +9,28 @@ import {
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useState } from "react";
+
+import { follow } from "./api/explore";
+
 export default function FollowCard({
   title = "Project Alpha",
   description = "This vault contains notes, references and structured knowledge.",
+  id,
 }) {
   const [isFollowing, setIsFollowing] = useState(false);
+
+  const handleFollow = async () => {
+    if (isFollowing) {
+      return;
+    }
+    const success = await follow(id);
+    if (success) {
+      setIsFollowing(true);
+    } else {
+      alert("Network Error");
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -127,7 +144,7 @@ export default function FollowCard({
         {/* Follow */}
         <Button
           variant={isFollowing ? "contained" : "outlined"}
-          onClick={() => setIsFollowing(!isFollowing)}
+          onClick={handleFollow}
           sx={{
             borderRadius: 9,
             textTransform: "none",

@@ -1,7 +1,17 @@
 import { Box, Typography, Button, IconButton, Menu } from "@mui/material";
 
 import FollowCard from "./FollowCard";
+
+import { get_to_follow } from "./api/explore";
+import { useState, useEffect } from "react";
+
 export default function Explore() {
+  const [arr, setArr] = useState([]);
+
+  useEffect(() => {
+    get_to_follow().then(setArr).catch(console.error);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -18,15 +28,16 @@ export default function Explore() {
           gap: 2,
         }}
       >
-        <FollowCard />
-        <FollowCard />
-        <FollowCard />
-        <FollowCard />
-        <FollowCard />
-        <FollowCard />
-        <FollowCard />
-        <FollowCard />
-        <FollowCard />
+        {arr.map((element, index) => {
+          return (
+            <FollowCard
+              key={index}
+              title={element.name}
+              description={element.description}
+              id={element.id}
+            ></FollowCard>
+          );
+        })}
       </Box>
     </Box>
   );
