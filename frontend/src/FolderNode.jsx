@@ -81,7 +81,7 @@ export default function FolderNode({ folder }) {
 
           {folder.notes.map((note, i) => (
             <Box
-              key={i}
+              key={note.id}
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -115,7 +115,7 @@ export default function FolderNode({ folder }) {
                   letterSpacing: "0.2px",
                 }}
               >
-                {note}
+                {note.name}
               </Typography>
             </Box>
           ))}

@@ -9,7 +9,7 @@ function authHeaders() {
 
 export async function fetch_project(projectId) {
   const response = await fetch(api + `/projects/manage/${projectId}/`, {
-    headers: authHeaders(),
+    credentials: "include",
   });
 
   const json = await response.json();

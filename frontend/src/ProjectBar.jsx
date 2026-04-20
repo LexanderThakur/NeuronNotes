@@ -2,35 +2,8 @@ import { Box, Typography, Divider, TextareaAutosize } from "@mui/material";
 import FolderNode from "./FolderNode";
 import { useNavigate } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-
-export default function ProjectBar() {
-  const folder = {
-    id: 1,
-    name: "My Folder",
-    children: [
-      {
-        id: 1,
-        name: "sub folder",
-        children: [],
-        notes: [],
-      },
-    ],
-    notes: ["note1", "note2"],
-  };
-
-  const folder2 = {
-    id: 1,
-    name: "My Folder 2 ",
-    children: [
-      {
-        id: 1,
-        name: "dom folder",
-        children: [],
-        notes: ["another one"],
-      },
-    ],
-    notes: ["note1", "note2", "note3"],
-  };
+import DescriptionIcon from "@mui/icons-material/Description";
+export default function ProjectBar({ name, treeData, getProject }) {
   const navigate = useNavigate();
   return (
     <Box
@@ -76,7 +49,7 @@ export default function ProjectBar() {
             letterSpacing: "0.3px",
           }}
         >
-          Project I
+          {name}
         </Typography>
       </Box>
 
@@ -98,8 +71,84 @@ export default function ProjectBar() {
 
       {/* Folder tree */}
       <Box sx={{ flex: 1 }}>
-        <FolderNode folder={folder} />
-        <FolderNode folder={folder2} />
+        {treeData.items.map(function (item) {
+          if (item.children !== undefined) {
+            return <FolderNode key={"folder-" + item.id} folder={item} />;
+          }
+
+          return (
+            <Box
+              key={"note-" + item.id}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                pl: 0.5,
+                py: 1,
+                borderRadius: 1,
+
+                transition: "all 0.2s ease",
+
+                "&:hover": {
+                  cursor: "pointer",
+                  backgroundColor: "#1a1a1a",
+                  color: "white",
+                  transform: "translateX(2px) ",
+                },
+              }}
+            >
+              <DescriptionIcon
+                sx={{
+                  fontSize: 16,
+                  color: "#F8F8F8",
+                }}
+              />
+
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "#aaa",
+                  fontSize: 16,
+                  letterSpacing: "0.2px",
+                }}
+              >
+                {item.name}
+              </Typography>
+            </Box>
+
+            // <Box
+            //   key={"note-" + item.id}
+            //   onClick={() => render_note(item.id)}
+            //   sx={{
+            //     display: "flex",
+            //     alignItems: "center",
+            //     px: 1.5,
+            //     py: 0.9,
+            //     borderRadius: 2,
+            //     cursor: "pointer",
+            //     transition: "all .18s ease",
+            //     "&:hover": {
+            //       backgroundColor: "#eef2ff",
+            //       transform: "translateX(4px)",
+            //     },
+            //     "&:active": {
+            //       transform: "scale(.97)",
+            //     },
+            //   }}
+            // >
+            //   <Typography
+            //     sx={{
+            //       ml: 1,
+            //       fontSize: ".95rem",
+            //       fontWeight: 500,
+            //       color: "#334155",
+            //     }}
+            //   >
+            //     {item.name}
+            //   </Typography>
+            // </Box>
+          );
+        })}
       </Box>
 
       {/* Footer */}

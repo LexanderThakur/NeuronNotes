@@ -1,10 +1,34 @@
 import { Box, Typography, Divider, TextareaAutosize } from "@mui/material";
 import FolderNode from "./FolderNode2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import ProjectBar from "./ProjectBar";
+
+import { fetch_project } from "./api/project_api";
+
+import { useState, useEffect } from "react";
+import build_tree from "./treeBuilder";
 export default function Manage() {
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [treeData, setTreeData] = useState({ items: [] });
+  const [data, setData] = useState(null);
+
+  async function getProject() {
+    try {
+      const projectData = await fetch_project(id);
+      console.log(projectData);
+      setData(projectData);
+      setTreeData(build_tree(projectData.folders, projectData.notes));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getProject();
+  }, [id]);
 
   return (
     <Box
@@ -17,7 +41,11 @@ export default function Manage() {
       }}
     >
       {/* SIDEBAR */}
-      <ProjectBar></ProjectBar>
+      <ProjectBar
+        name={data?.project?.name}
+        treeData={treeData}
+        getProject={getProject}
+      ></ProjectBar>
 
       {/* MAIN EDITOR */}
       <Box
