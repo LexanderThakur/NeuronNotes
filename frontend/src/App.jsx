@@ -26,7 +26,15 @@ function App() {
             }
           ></Route>
           <Route
-            path="/manage/:id"
+            path="/manage/:project_id"
+            element={
+              <Protected>
+                <Manage />
+              </Protected>
+            }
+          ></Route>
+          <Route
+            path="/manage/:project_id/note/:note_id"
             element={
               <Protected>
                 <Manage />

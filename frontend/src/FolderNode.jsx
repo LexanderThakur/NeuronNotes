@@ -5,9 +5,11 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FolderIcon from "@mui/icons-material/Folder";
 import DescriptionIcon from "@mui/icons-material/Description";
-
+import { useNavigate, useParams } from "react-router-dom";
 export default function FolderNode({ folder }) {
   const [open, setOpen] = useState(true);
+  const navigate = useNavigate();
+  const { project_id } = useParams();
 
   return (
     <Box sx={{ ml: 1 }}>
@@ -81,6 +83,9 @@ export default function FolderNode({ folder }) {
 
           {folder.notes.map((note, i) => (
             <Box
+              onClick={() => {
+                navigate(`/manage/${project_id}/note/${note.id}`);
+              }}
               key={note.id}
               sx={{
                 display: "flex",

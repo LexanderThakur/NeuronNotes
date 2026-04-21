@@ -1,10 +1,11 @@
 import { Box, Typography, Divider, TextareaAutosize } from "@mui/material";
 import FolderNode from "./FolderNode";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import DescriptionIcon from "@mui/icons-material/Description";
 export default function ProjectBar({ name, treeData, getProject }) {
   const navigate = useNavigate();
+  const { project_id } = useParams();
   return (
     <Box
       sx={{
@@ -78,6 +79,9 @@ export default function ProjectBar({ name, treeData, getProject }) {
 
           return (
             <Box
+              onClick={() => {
+                navigate(`/manage/${project_id}/note/${item.id}`);
+              }}
               key={"note-" + item.id}
               sx={{
                 display: "flex",
@@ -115,38 +119,6 @@ export default function ProjectBar({ name, treeData, getProject }) {
                 {item.name}
               </Typography>
             </Box>
-
-            // <Box
-            //   key={"note-" + item.id}
-            //   onClick={() => render_note(item.id)}
-            //   sx={{
-            //     display: "flex",
-            //     alignItems: "center",
-            //     px: 1.5,
-            //     py: 0.9,
-            //     borderRadius: 2,
-            //     cursor: "pointer",
-            //     transition: "all .18s ease",
-            //     "&:hover": {
-            //       backgroundColor: "#eef2ff",
-            //       transform: "translateX(4px)",
-            //     },
-            //     "&:active": {
-            //       transform: "scale(.97)",
-            //     },
-            //   }}
-            // >
-            //   <Typography
-            //     sx={{
-            //       ml: 1,
-            //       fontSize: ".95rem",
-            //       fontWeight: 500,
-            //       color: "#334155",
-            //     }}
-            //   >
-            //     {item.name}
-            //   </Typography>
-            // </Box>
           );
         })}
       </Box>
