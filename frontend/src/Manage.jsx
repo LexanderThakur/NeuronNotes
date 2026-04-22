@@ -1,10 +1,18 @@
-import { Box, Typography, Divider, TextareaAutosize } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Divider,
+  TextareaAutosize,
+  TextField,
+} from "@mui/material";
 import FolderNode from "./FolderNode2";
 import { useNavigate, useParams } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import ProjectBar from "./ProjectBar";
-
+import MilkdownEditor from "./MilkdownEditor";
 import { fetch_project } from "./api/project_api";
+
+import { get_note } from "./api/manage_api";
 
 import { useState, useEffect } from "react";
 import build_tree from "./treeBuilder";
@@ -14,6 +22,8 @@ export default function Manage() {
 
   const [treeData, setTreeData] = useState({ items: [] });
   const [data, setData] = useState(null);
+
+  const [content, setContent] = useState("# Hello");
 
   async function getProject() {
     try {
@@ -25,10 +35,21 @@ export default function Manage() {
       console.log(error);
     }
   }
+  async function render_note() {
+    try {
+      const fetched_content = await get_note(note_id);
+      setContent(fetched_content.content);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     getProject();
-  }, [project_id]);
+    if (note_id) {
+      render_note();
+    }
+  }, [project_id, note_id]);
 
   return (
     <Box
@@ -48,64 +69,90 @@ export default function Manage() {
       ></ProjectBar>
 
       {/* MAIN EDITOR */}
-
-      {!note_id && (
-        <Box
-          sx={{
-            flex: 1,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Typography>Select a note to start</Typography>
-        </Box>
-      )}
-      {note_id && (
-        <Box
-          sx={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            px: 6,
-            py: 4,
-          }}
-        >
-          {/* Title */}
-          <Typography
-            variant="h5"
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          bgcolor: "#ffffff",
+        }}
+      >
+        {!note_id && (
+          <Box
             sx={{
-              mb: 2,
-              fontWeight: 600,
-              color: "#101110",
-              letterSpacing: "0.2px",
+              flex: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            Untitled Note
-          </Typography>
+            <Typography>Select a note to start</Typography>
+          </Box>
+        )}
 
-          {/* Editor */}
-          <TextareaAutosize
-            placeholder="Start typing your thoughts..."
-            style={{
-              width: "100%",
-              height: "100%",
-              border: "none",
-              outline: "none",
-              resize: "none",
-              backgroundColor: "transparent",
+        {note_id && (
+          <>
+            <Box
+              sx={{
+                px: 2,
+                pt: 3,
+                pb: 1,
+              }}
+            >
+              <TextField
+                placeholder="Untitled note"
+                variant="standard"
+                fullWidth
+                value={"Project 1"}
+                InputProps={{
+                  disableUnderline: true,
+                }}
+                sx={{
+                  "& input": {
+                    fontSize: "28px",
+                    fontWeight: 600,
+                  },
+                }}
+              />
+            </Box>
+            <Box
+              sx={{
+                flex: 1,
+                px: 2,
+                // pb: 3,
+                display: "flex",
+                flexDirection: "column",
 
-              fontSize: "16px",
-              lineHeight: "1.7",
-              letterSpacing: "0.25px",
-              color: "#2a2a2a",
+                "& .milkdown": {
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                },
 
-              fontFamily:
-                "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-            }}
-          />
-        </Box>
-      )}
+                "& .milkdown .editor": {
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                },
+
+                "& .ProseMirror": {
+                  flex: 1,
+                  minHeight: "100vh",
+                  overflowY: "auto",
+                  bgcolor: "#ffffff",
+                },
+              }}
+            >
+              <MilkdownEditor
+                key={note_id}
+                value={content}
+                onChange={setContent}
+              />
+            </Box>
+          </>
+        )}
+      </Box>
     </Box>
   );
 }

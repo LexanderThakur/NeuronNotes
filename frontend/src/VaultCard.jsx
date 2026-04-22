@@ -84,7 +84,7 @@ export default function VaultCard({
       </Typography>
 
       {/* Bottom Row */}
-      <Box>
+      <Box sx={{ mt: "auto" }}>
         <Button
           onClick={() => navigate(`/manage/${id}`)}
           variant="text"
