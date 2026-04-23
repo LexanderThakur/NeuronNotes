@@ -30,3 +30,28 @@ export const fetch_following = async () => {
     throw err;
   }
 };
+
+export const create_vault = async (name, desc, is_public) => {
+  try {
+    const response = await fetch(api + "/projects/", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        description: desc,
+        is_public: is_public,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      console.log("Couldnt create Project");
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+};

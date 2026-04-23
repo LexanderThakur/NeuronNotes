@@ -8,9 +8,33 @@ import {
   Button,
   MenuItem,
 } from "@mui/material";
-import { useState } from "react";
-export default function CreateVaultDialog({ open, setOpen }) {
+import { use, useState } from "react";
+import { create_vault } from "./api/your_vault_api";
+export default function CreateVaultDialog({ open, setOpen, refresh }) {
   const [visibility, setVisibility] = useState("public");
+
+  const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
+  const [is_public, setPublic] = useState(true);
+
+  async function handleCreate() {
+    if (!name.trim()) {
+      alert("Project name required");
+      return;
+    }
+    if (!desc.trim()) {
+      alert("Please enter project description");
+      return;
+    }
+
+    try {
+      await create_vault(name, desc, is_public);
+      refresh();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <Dialog
       onClose={() => {
@@ -27,14 +51,30 @@ export default function CreateVaultDialog({ open, setOpen }) {
             gap: 1,
           }}
         >
-          <TextField variant="outlined" label="Project Name"></TextField>
-          <TextField variant="outlined" label="Description"></TextField>
+          <TextField
+            variant="outlined"
+            label="Project Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          ></TextField>
+          <TextField
+            variant="outlined"
+            label="Description"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+          ></TextField>
           <TextField
             select
             label="Visibility"
             fullWidth
             value={visibility}
-            onChange={(e) => setVisibility(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value === "public") {
+                setPublic(true);
+              } else {
+                setPublic(false);
+              }
+            }}
             margin="normal"
             sx={{
               "& .MuiOutlinedInput-root": {
@@ -45,7 +85,13 @@ export default function CreateVaultDialog({ open, setOpen }) {
             <MenuItem value="private">Private</MenuItem>
             <MenuItem value="public">Public</MenuItem>
           </TextField>
-          <Button variant="outlined" onClick={() => setOpen(false)}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              handleCreate();
+              setOpen(false);
+            }}
+          >
             Create
           </Button>
         </Box>

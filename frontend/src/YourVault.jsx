@@ -11,9 +11,12 @@ function YourVault() {
   const [open, setOpen] = useState(false);
   const [myProjects, setMyProject] = useState([]);
   const [myFollowing, setMyFollowing] = useState([]);
+  async function refresh() {
+    fetch_vault().then(setMyProject).catch(console.error);
+  }
 
   useEffect(() => {
-    fetch_vault().then(setMyProject).catch(console.error);
+    refresh();
     fetch_following().then(setMyFollowing).catch(console.error);
   }, []);
 
@@ -109,7 +112,11 @@ function YourVault() {
           </Box>
         </Box>
       </Box>
-      <CreateVaultDialog open={open} setOpen={setOpen}></CreateVaultDialog>
+      <CreateVaultDialog
+        open={open}
+        setOpen={setOpen}
+        getProject={refresh}
+      ></CreateVaultDialog>
     </Box>
   );
 }
