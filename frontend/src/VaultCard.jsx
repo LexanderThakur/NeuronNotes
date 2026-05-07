@@ -7,20 +7,23 @@ import {
   MenuItem,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { useState } from "react";
+import { use, useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import EastIcon from "@mui/icons-material/East";
-
+import DeleteVaultDialog from "./DeleteVaultDialog";
 import { useNavigate } from "react-router-dom";
-
+import { delete_project } from "./api/your_vault_api";
 export default function VaultCard({
   id,
   name = "Project Alpha",
   description = "This vault contains notes, references and structured knowledge.",
   isFollower = false,
+  refresh,
 }) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openDelete, setOpenDelete] = useState(false);
+
   return (
     <Box
       sx={{
@@ -68,7 +71,14 @@ export default function VaultCard({
         >
           <MenuItem onClick={() => setAnchorEl(null)}>Rename</MenuItem>
           <MenuItem onClick={() => setAnchorEl(null)}>Duplicate</MenuItem>
-          <MenuItem onClick={() => setAnchorEl(null)}>Delete</MenuItem>
+          <MenuItem
+            onClick={() => {
+              setAnchorEl(null);
+              setOpenDelete(true);
+            }}
+          >
+            Delete
+          </MenuItem>
         </Menu>
       </Box>
 
@@ -136,6 +146,12 @@ export default function VaultCard({
           </svg>
         </Button>
       </Box>
+      <DeleteVaultDialog
+        open={openDelete}
+        setOpen={setOpenDelete}
+        refresh={refresh}
+        id={id}
+      />
     </Box>
   );
 }

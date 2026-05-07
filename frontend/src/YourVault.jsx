@@ -74,6 +74,7 @@ function YourVault() {
                   name={element.name}
                   description={element.description}
                   id={element.id}
+                  refresh={refresh}
                 ></VaultCard>
               );
             })}
@@ -106,6 +107,7 @@ function YourVault() {
                   id={element.project.id}
                   description={element.project.description}
                   isFollower={true}
+                  refresh={refresh}
                 ></VaultCard>
               );
             })}
@@ -115,7 +117,7 @@ function YourVault() {
       <CreateVaultDialog
         open={open}
         setOpen={setOpen}
-        getProject={refresh}
+        refresh={refresh}
       ></CreateVaultDialog>
     </Box>
   );

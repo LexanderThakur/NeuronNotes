@@ -55,3 +55,18 @@ export const create_vault = async (name, desc, is_public) => {
     throw error;
   }
 };
+
+export const delete_project = async (project_id) => {
+  try {
+    const response = await fetch(api + `/projects/${project_id}/`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    if (!response.ok) {
+      console.log("response not ok");
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
