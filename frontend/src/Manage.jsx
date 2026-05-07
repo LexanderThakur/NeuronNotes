@@ -5,7 +5,7 @@ import {
   TextareaAutosize,
   TextField,
 } from "@mui/material";
-import FolderNode from "./FolderNode2";
+import FolderNode from "./FolderNode";
 import { useNavigate, useParams } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import ProjectBar from "./ProjectBar";

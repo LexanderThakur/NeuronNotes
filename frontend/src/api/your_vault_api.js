@@ -70,3 +70,24 @@ export const delete_project = async (project_id) => {
     throw error;
   }
 };
+
+export const rename_project = async (project_id, newName) => {
+  try {
+    const response = await fetch(api + `/projects/${project_id}/`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: newName,
+      }),
+    });
+    if (!response.ok) {
+      console.log("response not ok");
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+};

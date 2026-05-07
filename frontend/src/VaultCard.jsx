@@ -7,10 +7,11 @@ import {
   MenuItem,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { use, useState } from "react";
+import { useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import EastIcon from "@mui/icons-material/East";
 import DeleteVaultDialog from "./DeleteVaultDialog";
+import RenameDialog from "./RenameDialog";
 import { useNavigate } from "react-router-dom";
 import { delete_project } from "./api/your_vault_api";
 export default function VaultCard({
@@ -23,6 +24,7 @@ export default function VaultCard({
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openRename, setOpenRename] = useState(false);
 
   return (
     <Box
@@ -69,12 +71,28 @@ export default function VaultCard({
           open={Boolean(anchorEl)}
           onClose={() => setAnchorEl(null)}
         >
-          <MenuItem onClick={() => setAnchorEl(null)}>Rename</MenuItem>
-          <MenuItem onClick={() => setAnchorEl(null)}>Duplicate</MenuItem>
+          <MenuItem
+            onClick={() => {
+              setAnchorEl(null);
+              setOpenRename(true);
+            }}
+          >
+            Rename
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              setAnchorEl(null);
+            }}
+          >
+            Duplicate
+          </MenuItem>
           <MenuItem
             onClick={() => {
               setAnchorEl(null);
               setOpenDelete(true);
+            }}
+            sx={{
+              color: "#FF312E",
             }}
           >
             Delete
@@ -152,6 +170,13 @@ export default function VaultCard({
         refresh={refresh}
         id={id}
       />
+      <RenameDialog
+        open={openRename}
+        setOpen={setOpenRename}
+        refresh={refresh}
+        id={id}
+        current_name={name}
+      ></RenameDialog>
     </Box>
   );
 }

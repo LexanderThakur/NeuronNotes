@@ -65,6 +65,9 @@ def project(request,project_id):
         serializer= ProjectSerializer(Project.objects.get(id=project_id))
         return Response({"message":serializer.data})
     obj= Project.objects.get(id=project_id)
+    if not obj:
+        return Response({"message":"project does not exist"},status=404)
+
     if request.user!= obj.owner:
         return Response({"message":"unauthorized"},status=403)
     if request.method=="DELETE":
@@ -72,7 +75,12 @@ def project(request,project_id):
         if obj : obj.delete()
         return Response({"message":"success"},status=200)
 
-    pass
+    if request.method=="PATCH":
+        serializer=ProjectCreateSerializer(obj,data=request.data,partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"Message: Rename Success"} ,status=200)
+
 
 
 
