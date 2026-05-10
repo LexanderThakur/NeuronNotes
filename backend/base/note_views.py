@@ -14,8 +14,8 @@ from .serializers import (
     NoteLinkCreateSerializer,
     FollowLinkSerializer,
     FollowLinkCreateSerializer
-
 )
+
 from .models import ( 
     Project,
     Folder,
@@ -25,7 +25,6 @@ from .models import (
 )
 
 from rest_framework.permissions import IsAuthenticated,AllowAny
-
 
 
 from django.shortcuts import get_object_or_404

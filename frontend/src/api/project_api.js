@@ -20,23 +20,3 @@ export async function fetch_project(projectId) {
 
   return json.message;
 }
-
-export async function create_folder_api(projectId, name, parentId) {
-  const response = await fetch(api + `/projects/${projectId}/folders/`, {
-    method: "POST",
-    headers: authHeaders(),
-    body: JSON.stringify({
-      name,
-      project: projectId,
-      parent: parentId,
-    }),
-  });
-
-  const json = await response.json();
-
-  if (!response.ok) {
-    throw new Error("Folder creation failed");
-  }
-
-  return json;
-}

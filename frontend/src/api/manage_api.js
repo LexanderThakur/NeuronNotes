@@ -20,3 +20,51 @@ export const get_note = async (note_id) => {
     return { content: "null", name: "null" };
   }
 };
+
+export const create_note = async (id) => {
+  try {
+    const response = await fetch(api + `/projects/${id}/notes/`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: "Untitled",
+        content: "",
+        folder: null,
+      }),
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message);
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export async function create_folder_api(projectId, name, parentId) {
+  const response = await fetch(api + `/projects/${projectId}/folders/`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      project: projectId,
+      parent: parentId,
+    }),
+  });
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    throw new Error("Folder creation failed");
+  }
+
+  return json;
+}

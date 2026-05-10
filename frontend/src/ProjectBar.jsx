@@ -3,9 +3,27 @@ import FolderNode from "./FolderNode";
 import { useNavigate, useParams } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import DescriptionIcon from "@mui/icons-material/Description";
-export default function ProjectBar({ name, treeData, getProject }) {
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
+
+import AddIcon from "@mui/icons-material/Add";
+
+import { create_note, create_folder_api } from "./api/manage_api";
+
+import { useState } from "react";
+import CreateFolderDialog from "./CreateFolderDialog";
+export default function ProjectBar({ name, treeData, refresh }) {
   const navigate = useNavigate();
   const { project_id } = useParams();
+  const [openCreateFolder, setOpenCreateFolder] = useState(false);
+  async function handle_create_note() {
+    try {
+      await create_note(project_id);
+      refresh();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -57,18 +75,37 @@ export default function ProjectBar({ name, treeData, getProject }) {
       <Divider sx={{ backgroundColor: "#222", mb: 2 }} />
 
       {/* Section label */}
-      <Typography
+      <Box
         sx={{
-          fontSize: 11,
-          color: "#777",
-          textTransform: "uppercase",
-          letterSpacing: 1,
-          px: 1,
-          mb: 1,
+          display: "flex",
+          justifyContent: "end",
+          gap: 1,
+
+          "& .icon-btn": {
+            fontSize: 32,
+            cursor: "pointer",
+            transition: "transform 0.2s ease, background-color 0.2s ease",
+            borderRadius: "50%",
+            padding: "6px",
+
+            "&:hover": {
+              transform: "scale(1.15) translateY(-2px)",
+              backgroundColor: "rgba(255,255,255,0.08)",
+            },
+
+            "&:active": {
+              transform: "scale(0.95)",
+            },
+          },
         }}
       >
-        Folders
-      </Typography>
+        <AddIcon className="icon-btn" onClick={() => handle_create_note()} />
+
+        <CreateNewFolderIcon
+          className="icon-btn"
+          onClick={() => setOpenCreateFolder(true)}
+        />
+      </Box>
 
       {/* Folder tree */}
       <Box sx={{ flex: 1 }}>
@@ -134,6 +171,11 @@ export default function ProjectBar({ name, treeData, getProject }) {
       >
         Knowledge Vault
       </Box>
+      <CreateFolderDialog
+        open={openCreateFolder}
+        setOpen={setOpenCreateFolder}
+        refresh={refresh}
+      ></CreateFolderDialog>
     </Box>
   );
 }

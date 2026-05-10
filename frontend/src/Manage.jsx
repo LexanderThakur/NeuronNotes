@@ -23,7 +23,11 @@ export default function Manage() {
   const [treeData, setTreeData] = useState({ items: [] });
   const [data, setData] = useState(null);
 
-  const [content, setContent] = useState("# Hello");
+  const [content, setContent] = useState("");
+
+  async function refresh() {
+    getProject();
+  }
 
   async function getProject() {
     try {
@@ -35,6 +39,7 @@ export default function Manage() {
       console.log(error);
     }
   }
+
   async function render_note() {
     try {
       const fetched_content = await get_note(note_id);
@@ -45,7 +50,7 @@ export default function Manage() {
   }
 
   useEffect(() => {
-    getProject();
+    refresh();
     if (note_id) {
       render_note();
     }
@@ -65,7 +70,7 @@ export default function Manage() {
       <ProjectBar
         name={data?.project?.name}
         treeData={treeData}
-        getProject={getProject}
+        refresh={refresh}
       ></ProjectBar>
 
       {/* MAIN EDITOR */}
