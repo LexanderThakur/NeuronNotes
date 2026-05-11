@@ -7,7 +7,13 @@ import {
 } from "@mui/material";
 import { delete_project } from "./api/your_vault_api";
 
-export default function DeleteVaultDialog({ open, setOpen, refresh, id }) {
+export default function DeleteVaultDialog({
+  open,
+  setOpen,
+  refresh,
+  id,
+  des = "Delete vault and its contents permanently?",
+}) {
   async function handle_delete() {
     try {
       await delete_project(id);
@@ -22,9 +28,7 @@ export default function DeleteVaultDialog({ open, setOpen, refresh, id }) {
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>Confirm Delete</DialogTitle>
       <DialogContent>
-        <Typography variant="body2">
-          Delete vault and its contents permanently?
-        </Typography>
+        <Typography variant="body2">{des}</Typography>
         <Button onClick={() => setOpen(false)}>Cancel</Button>
         <Button
           variant="contained"

@@ -6,6 +6,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FolderIcon from "@mui/icons-material/Folder";
 import DescriptionIcon from "@mui/icons-material/Description";
 import { useNavigate, useParams } from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
+
 export default function FolderNode({ folder }) {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
@@ -42,13 +44,23 @@ export default function FolderNode({ folder }) {
             gap: 1,
           }}
         >
-          <FolderIcon
+          {/* <FolderIcon
             sx={{
               fontSize: 18,
               color: "#F8F8F8",
             }}
-          />
-
+          /> */}
+          <Box
+            sx={{
+              // display: "flex",
+              // alignItems: "center",
+              transition: "transform 0.2s ease",
+              transform: open ? "rotate(0deg)" : "rotate(-90deg)",
+              color: "#888",
+            }}
+          >
+            {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </Box>
           <Typography
             sx={{
               color: "#ddd",
@@ -61,7 +73,7 @@ export default function FolderNode({ folder }) {
         </Box>
 
         {/* Arrow with rotation */}
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             alignItems: "center",
@@ -71,7 +83,21 @@ export default function FolderNode({ folder }) {
           }}
         >
           {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        </Box>
+        </Box> */}
+
+        <AddIcon
+          onClick={(e) => e.stopPropagation()}
+          sx={{
+            fontSize: 18,
+            color: "#888",
+            transition: "0.2s",
+
+            "&:hover": {
+              color: "white",
+              transform: "scale(1.1)",
+            },
+          }}
+        />
       </Box>
 
       {/* Children (animated) */}

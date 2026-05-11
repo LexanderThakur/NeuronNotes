@@ -68,3 +68,20 @@ export async function create_folder_api(projectId, name, parentId) {
 
   return json;
 }
+
+export const delete_note_api = async (note_id) => {
+  try {
+    const response = await fetch(api + `/notes/${note_id}/`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      alert(data.message);
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+};

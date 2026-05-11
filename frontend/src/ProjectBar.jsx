@@ -6,18 +6,37 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 
 import AddIcon from "@mui/icons-material/Add";
-
-import { create_note, create_folder_api } from "./api/manage_api";
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  create_note,
+  create_folder_api,
+  delete_note_api,
+} from "./api/manage_api";
+import ConfirmDialog from "./ConfirmDialog";
 import { useState } from "react";
 import CreateFolderDialog from "./CreateFolderDialog";
 export default function ProjectBar({ name, treeData, refresh }) {
   const navigate = useNavigate();
   const { project_id } = useParams();
   const [openCreateFolder, setOpenCreateFolder] = useState(false);
+
+  const [deleteState, setDeleteState] = useState({
+    open: false,
+    noteID: null,
+  });
   async function handle_create_note() {
     try {
       await create_note(project_id);
+      refresh();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function handle_delete_note(note_id) {
+    try {
+      await delete_note_api(note_id);
+
       refresh();
     } catch (error) {
       console.log(error);
@@ -122,7 +141,8 @@ export default function ProjectBar({ name, treeData, refresh }) {
               key={"note-" + item.id}
               sx={{
                 display: "flex",
-                alignItems: "center",
+                justifyContent: "space-between",
+
                 gap: 1,
                 pl: 0.5,
                 py: 1,
@@ -138,12 +158,12 @@ export default function ProjectBar({ name, treeData, refresh }) {
                 },
               }}
             >
-              <DescriptionIcon
+              {/* <DescriptionIcon
                 sx={{
                   fontSize: 16,
                   color: "#F8F8F8",
                 }}
-              />
+              /> */}
 
               <Typography
                 variant="body2"
@@ -155,6 +175,26 @@ export default function ProjectBar({ name, treeData, refresh }) {
               >
                 {item.name}
               </Typography>
+              <DeleteIcon
+                onClick={(e) => {
+                  e.stopPropagation();
+
+                  setDeleteState({
+                    open: true,
+                    noteID: item.id,
+                  });
+                }}
+                sx={{
+                  fontSize: 18,
+                  color: "#888",
+                  transition: "0.2s",
+
+                  "&:hover": {
+                    color: "white",
+                    transform: "scale(1.1)",
+                  },
+                }}
+              ></DeleteIcon>
             </Box>
           );
         })}
@@ -176,6 +216,19 @@ export default function ProjectBar({ name, treeData, refresh }) {
         setOpen={setOpenCreateFolder}
         refresh={refresh}
       ></CreateFolderDialog>
+
+      <ConfirmDialog
+        open={deleteState.open}
+        onClose={() => {
+          setDeleteState({
+            open: false,
+            noteID: null,
+          });
+        }}
+        title="Delete Note?"
+        description="Note and it's contents will be permanently deleted"
+        onConfirm={() => handle_delete_note(deleteState.noteID)}
+      ></ConfirmDialog>
     </Box>
   );
 }
