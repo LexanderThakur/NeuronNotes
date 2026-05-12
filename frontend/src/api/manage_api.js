@@ -21,7 +21,7 @@ export const get_note = async (note_id) => {
   }
 };
 
-export const create_note = async (id) => {
+export const create_note = async (id, folder_id = null) => {
   try {
     const response = await fetch(api + `/projects/${id}/notes/`, {
       method: "POST",
@@ -32,7 +32,7 @@ export const create_note = async (id) => {
       body: JSON.stringify({
         name: "Untitled",
         content: "",
-        folder: null,
+        folder: folder_id,
       }),
     });
     const data = await response.json();

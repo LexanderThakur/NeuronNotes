@@ -7,8 +7,8 @@ import FolderIcon from "@mui/icons-material/Folder";
 import DescriptionIcon from "@mui/icons-material/Description";
 import { useNavigate, useParams } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
-
-export default function FolderNode({ folder }) {
+import DeleteIcon from "@mui/icons-material/Delete";
+export default function FolderNode({ folder, createNote, setDeleteState }) {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const { project_id } = useParams();
@@ -86,7 +86,10 @@ export default function FolderNode({ folder }) {
         </Box> */}
 
         <AddIcon
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            createNote(project_id, folder.id);
+          }}
           sx={{
             fontSize: 18,
             color: "#888",
@@ -107,15 +110,16 @@ export default function FolderNode({ folder }) {
             <FolderNode folder={fold} key={fold.id} />
           ))}
 
-          {folder.notes.map((note, i) => (
+          {folder.notes.map((item, i) => (
             <Box
               onClick={() => {
-                navigate(`/manage/${project_id}/note/${note.id}`);
+                navigate(`/manage/${project_id}/note/${item.id}`);
               }}
-              key={note.id}
+              key={"note-" + item.id}
               sx={{
                 display: "flex",
-                alignItems: "center",
+                justifyContent: "space-between",
+
                 gap: 1,
                 pl: 0.5,
                 py: 1,
@@ -131,12 +135,12 @@ export default function FolderNode({ folder }) {
                 },
               }}
             >
-              <DescriptionIcon
+              {/* <DescriptionIcon
                 sx={{
                   fontSize: 16,
                   color: "#F8F8F8",
                 }}
-              />
+              /> */}
 
               <Typography
                 variant="body2"
@@ -146,8 +150,28 @@ export default function FolderNode({ folder }) {
                   letterSpacing: "0.2px",
                 }}
               >
-                {note.name}
+                {item.name}
               </Typography>
+              <DeleteIcon
+                onClick={(e) => {
+                  e.stopPropagation();
+
+                  setDeleteState({
+                    open: true,
+                    noteID: item.id,
+                  });
+                }}
+                sx={{
+                  fontSize: 18,
+                  color: "#888",
+                  transition: "0.2s",
+
+                  "&:hover": {
+                    color: "white",
+                    transform: "scale(1.1)",
+                  },
+                }}
+              ></DeleteIcon>
             </Box>
           ))}
         </Box>

@@ -14,8 +14,11 @@ import { fetch_project } from "./api/project_api";
 
 import { get_note } from "./api/manage_api";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 import build_tree from "./treeBuilder";
+
+export const ManageContext = createContext();
+
 export default function Manage() {
   const navigate = useNavigate();
   const { project_id, note_id } = useParams();
@@ -24,7 +27,7 @@ export default function Manage() {
   const [data, setData] = useState(null);
 
   const [content, setContent] = useState("");
-
+  const [title, setTitle] = useState("");
   async function refresh() {
     getProject();
   }
@@ -44,6 +47,7 @@ export default function Manage() {
     try {
       const fetched_content = await get_note(note_id);
       setContent(fetched_content.content);
+      setTitle(fetched_content.name);
     } catch (error) {
       console.log(error);
     }
@@ -57,107 +61,110 @@ export default function Manage() {
   }, [project_id, note_id]);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        height: "100vh",
-        backgroundColor: "#F8F8F8",
-        fontFamily:
-          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-      }}
-    >
-      {/* SIDEBAR */}
-      <ProjectBar
-        name={data?.project?.name}
-        treeData={treeData}
-        refresh={refresh}
-      ></ProjectBar>
-
-      {/* MAIN EDITOR */}
+    <ManageContext.Provider value={{ refresh }}>
       <Box
         sx={{
-          flexGrow: 1,
           display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          bgcolor: "#ffffff",
+          height: "100vh",
+          backgroundColor: "#F8F8F8",
+          fontFamily:
+            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         }}
       >
-        {!note_id && (
-          <Box
-            sx={{
-              flex: 1,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Typography>Select a note to start</Typography>
-          </Box>
-        )}
+        {/* SIDEBAR */}
+        <ProjectBar name={data?.project?.name} treeData={treeData}></ProjectBar>
 
-        {note_id && (
-          <>
-            <Box
-              sx={{
-                px: 2,
-                pt: 3,
-                pb: 1,
-              }}
-            >
-              <TextField
-                placeholder="Untitled note"
-                variant="standard"
-                fullWidth
-                value={"Project 1"}
-                InputProps={{
-                  disableUnderline: true,
-                }}
-                sx={{
-                  "& input": {
-                    fontSize: "28px",
-                    fontWeight: 600,
-                  },
-                }}
-              />
-            </Box>
+        {/* MAIN EDITOR */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            bgcolor: "#ffffff",
+          }}
+        >
+          {!note_id && (
             <Box
               sx={{
                 flex: 1,
-                px: 2,
-                // pb: 3,
                 display: "flex",
-                flexDirection: "column",
-
-                "& .milkdown": {
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                },
-
-                "& .milkdown .editor": {
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                },
-
-                "& .ProseMirror": {
-                  flex: 1,
-                  minHeight: "100vh",
-                  overflowY: "auto",
-                  bgcolor: "#ffffff",
-                },
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <MilkdownEditor
-                key={note_id}
-                value={content}
-                onChange={setContent}
-              />
+              <Typography>Select a note to start</Typography>
             </Box>
-          </>
-        )}
+          )}
+
+          {note_id && (
+            <>
+              <Box
+                sx={{
+                  px: 2,
+                  pt: 3,
+                  pb: 1,
+                }}
+              >
+                <TextField
+                  placeholder="Untitled note"
+                  variant="standard"
+                  fullWidth
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
+                  sx={{
+                    "& input": {
+                      fontSize: "28px",
+                      fontWeight: 600,
+                      borderBottom: "2px solid black",
+                      width: "fit-content",
+                      display: "inline-block",
+                      paddingBottom: "4px",
+                    },
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  flex: 1,
+                  px: 2,
+                  // pb: 3,
+                  display: "flex",
+                  flexDirection: "column",
+
+                  "& .milkdown": {
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                  },
+
+                  "& .milkdown .editor": {
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                  },
+
+                  "& .ProseMirror": {
+                    flex: 1,
+                    minHeight: "100vh",
+                    overflowY: "auto",
+                    bgcolor: "#ffffff",
+                  },
+                }}
+              >
+                <MilkdownEditor
+                  key={note_id}
+                  value={content}
+                  onChange={setContent}
+                />
+              </Box>
+            </>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </ManageContext.Provider>
   );
 }

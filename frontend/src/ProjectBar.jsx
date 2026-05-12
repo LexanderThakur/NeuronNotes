@@ -2,20 +2,26 @@ import { Box, Typography, Divider, TextareaAutosize } from "@mui/material";
 import FolderNode from "./FolderNode";
 import { useNavigate, useParams } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+
 import DescriptionIcon from "@mui/icons-material/Description";
+
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 
 import AddIcon from "@mui/icons-material/Add";
+
 import DeleteIcon from "@mui/icons-material/Delete";
+import { ManageContext } from "./Manage";
 import {
   create_note,
   create_folder_api,
   delete_note_api,
 } from "./api/manage_api";
 import ConfirmDialog from "./ConfirmDialog";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import CreateFolderDialog from "./CreateFolderDialog";
-export default function ProjectBar({ name, treeData, refresh }) {
+export default function ProjectBar({ name, treeData }) {
+  const { refresh } = useContext(ManageContext);
+
   const navigate = useNavigate();
   const { project_id } = useParams();
   const [openCreateFolder, setOpenCreateFolder] = useState(false);
@@ -24,9 +30,10 @@ export default function ProjectBar({ name, treeData, refresh }) {
     open: false,
     noteID: null,
   });
-  async function handle_create_note() {
+
+  async function handle_create_note(project_id, folder_id = null) {
     try {
-      await create_note(project_id);
+      await create_note(project_id, folder_id);
       refresh();
     } catch (error) {
       console.log(error);
@@ -130,7 +137,14 @@ export default function ProjectBar({ name, treeData, refresh }) {
       <Box sx={{ flex: 1 }}>
         {treeData.items.map(function (item) {
           if (item.children !== undefined) {
-            return <FolderNode key={"folder-" + item.id} folder={item} />;
+            return (
+              <FolderNode
+                key={"folder-" + item.id}
+                folder={item}
+                createNote={handle_create_note}
+                setDeleteState={setDeleteState}
+              />
+            );
           }
 
           return (
