@@ -85,3 +85,41 @@ export const delete_note_api = async (note_id) => {
     throw error;
   }
 };
+
+export const rename_folder_api = async (folder_id, new_name) => {
+  try {
+    const response = await fetch(api + `/folders/${folder_id}/`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: new_name,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      alert(data.message);
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const delete_folder_api = async (folder_id) => {
+  try {
+    const response = await fetch(api + `/folders/${folder_id}/`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      alert(data.message);
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+};

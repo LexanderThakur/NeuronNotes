@@ -125,7 +125,10 @@ export default function ProjectBar({ name, treeData }) {
           },
         }}
       >
-        <AddIcon className="icon-btn" onClick={() => handle_create_note()} />
+        <AddIcon
+          className="icon-btn"
+          onClick={() => handle_create_note(project_id, null)}
+        />
 
         <CreateNewFolderIcon
           className="icon-btn"
@@ -229,6 +232,7 @@ export default function ProjectBar({ name, treeData }) {
         open={openCreateFolder}
         setOpen={setOpenCreateFolder}
         refresh={refresh}
+        parent_id={null}
       ></CreateFolderDialog>
 
       <ConfirmDialog

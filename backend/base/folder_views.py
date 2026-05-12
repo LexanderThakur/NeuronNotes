@@ -46,12 +46,16 @@ def folders(request,project_id):
 
 @api_view(['PATCH',"DELETE"])
 def folder(request,folder_id):
+    obj= Folder.objects.get(id=folder_id)
+    if request.user != obj.project.owner:
+        return Response({"message":"unauthorized"},status=403)
     if request.method=='DELETE':
-        obj= Folder.objects.get(id=folder_id)
-        if request.user != obj.project.owner:
-            return Response({"message":"unauthorized"},status=403)
+        
         if obj : obj.delete()
         return Response({"message":"deleted folder successfully"},status=200)
     
-    pass
+    serializer=FolderCreateSerializer(obj,data=request.data,partial=True)
 
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response({"message": "folder updated successfully"})

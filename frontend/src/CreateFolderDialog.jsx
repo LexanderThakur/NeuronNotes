@@ -12,7 +12,12 @@ import { useParams } from "react-router-dom";
 
 import { create_folder_api } from "./api/manage_api";
 
-export default function CreateFolderDialog({ open, setOpen, refresh }) {
+export default function CreateFolderDialog({
+  open,
+  setOpen,
+  refresh,
+  parent_id,
+}) {
   const [folderName, setFolderName] = useState("");
 
   const { project_id, note_id } = useParams();
@@ -23,7 +28,7 @@ export default function CreateFolderDialog({ open, setOpen, refresh }) {
       return;
     }
     try {
-      await create_folder_api(project_id, folderName, null);
+      await create_folder_api(project_id, folderName, parent_id);
     } catch (error) {
       console.log(error);
     }
