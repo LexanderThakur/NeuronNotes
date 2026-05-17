@@ -19,9 +19,10 @@ import {
 import ConfirmDialog from "./ConfirmDialog";
 import { useState, useContext } from "react";
 import CreateFolderDialog from "./CreateFolderDialog";
+import { useSnackbar } from "./SnackbarContext";
 export default function ProjectBar({ name, treeData }) {
   const { refresh } = useContext(ManageContext);
-
+  const { showSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const { project_id } = useParams();
   const [openCreateFolder, setOpenCreateFolder] = useState(false);
@@ -46,7 +47,21 @@ export default function ProjectBar({ name, treeData }) {
 
       refresh();
     } catch (error) {
-      console.log(error);
+      if (error.status === 403) {
+        showSnackbar({
+          title: "Permission Denied",
+          description:
+            "Can't edit following project. Duplicate it to make changes.",
+          success: false,
+        });
+
+        return;
+      }
+      showSnackbar({
+        title: "Network Error",
+        description: "Server is booting up please wait.",
+        success: false,
+      });
     }
   }
 

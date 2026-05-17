@@ -4,6 +4,8 @@ import Manage from "./Manage";
 import { useState } from "react";
 import Protected from "./Protected";
 import Auth from "./Auth";
+
+import { SnackbarProvider } from "./SnackBarContext";
 function App() {
   const [login, setLogin] = useState(false);
   const [userEmail, setUserEmail] = useState("user@email.com");
@@ -14,7 +16,7 @@ function App() {
     setMode("project");
   }
   return (
-    <>
+    <SnackbarProvider>
       <BrowserRouter>
         <Routes>
           <Route
@@ -44,7 +46,7 @@ function App() {
           <Route path="/login" element={<Auth />}></Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </SnackbarProvider>
   );
 }
 

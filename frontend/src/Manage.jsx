@@ -17,10 +17,11 @@ import { get_note, save_note } from "./api/manage_api";
 
 import { useState, useEffect, createContext } from "react";
 import build_tree from "./treeBuilder";
-
+import { useSnackbar } from "./SnackbarContext";
 export const ManageContext = createContext();
 
 export default function Manage() {
+  const { showSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const { project_id, note_id } = useParams();
 
@@ -63,7 +64,11 @@ export default function Manage() {
   async function handle_save_note() {
     try {
       await save_note(note_id, title, content);
-      alert("Save success");
+      showSnackbar({
+        title: "Saved Successfully",
+        description: "Your note has been updated.",
+        success: true,
+      });
       // await render_note();
     } catch (error) {
       console.log(error);

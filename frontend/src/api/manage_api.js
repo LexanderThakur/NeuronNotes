@@ -78,7 +78,12 @@ export const delete_note_api = async (note_id) => {
 
     if (!response.ok) {
       const data = await response.json();
-      alert(data.message);
+
+      throw {
+        status: response.status,
+        message: data.message,
+      };
+
       return;
     }
   } catch (error) {
