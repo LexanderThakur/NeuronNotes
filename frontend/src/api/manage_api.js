@@ -123,3 +123,26 @@ export const delete_folder_api = async (folder_id) => {
     throw error;
   }
 };
+
+export const save_note = async (note_id, title, content) => {
+  try {
+    const response = await fetch(`${api}/notes/${note_id}/`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: title,
+        content: content,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      console.log(data);
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+};

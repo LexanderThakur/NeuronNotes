@@ -12,7 +12,15 @@ function YourVault() {
   const [myProjects, setMyProject] = useState([]);
   const [myFollowing, setMyFollowing] = useState([]);
   async function refresh() {
-    fetch_vault().then(setMyProject).catch(console.error);
+    try {
+      const vaults = await fetch_vault();
+      const following = await fetch_following();
+
+      setMyProject(vaults);
+      setMyFollowing(following);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {

@@ -7,13 +7,17 @@ import {
   MenuItem,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { useState } from "react";
+import { use, useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import EastIcon from "@mui/icons-material/East";
 import DeleteVaultDialog from "./DeleteVaultDialog";
 import RenameDialog from "./RenameDialog";
 import { useNavigate } from "react-router-dom";
 import { delete_project } from "./api/your_vault_api";
+import { unfollow } from "./api/your_vault_api";
+
+import ConfirmDialog from "./ConfirmDialog";
+
 export default function VaultCard({
   id,
   name = "Project Alpha",
@@ -25,7 +29,7 @@ export default function VaultCard({
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [openRename, setOpenRename] = useState(false);
-
+  const [openUnfollow, setOpenUnfollow] = useState(false);
   return (
     <Box
       sx={{
@@ -71,31 +75,39 @@ export default function VaultCard({
           open={Boolean(anchorEl)}
           onClose={() => setAnchorEl(null)}
         >
+          {!isFollower && (
+            <MenuItem
+              onClick={() => {
+                setAnchorEl(null);
+                setOpenRename(true);
+              }}
+            >
+              Rename
+            </MenuItem>
+          )}
+          {isFollower && (
+            <MenuItem
+              onClick={() => {
+                setAnchorEl(null);
+              }}
+            >
+              Duplicate
+            </MenuItem>
+          )}
           <MenuItem
             onClick={() => {
               setAnchorEl(null);
-              setOpenRename(true);
-            }}
-          >
-            Rename
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              setAnchorEl(null);
-            }}
-          >
-            Duplicate
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              setAnchorEl(null);
-              setOpenDelete(true);
+              if (!isFollower) {
+                setOpenDelete(true);
+              } else {
+                setOpenUnfollow(true);
+              }
             }}
             sx={{
               color: "#FF312E",
             }}
           >
-            Delete
+            {isFollower ? "Unfollow" : "Delete"}
           </MenuItem>
         </Menu>
       </Box>
@@ -177,6 +189,20 @@ export default function VaultCard({
         id={id}
         current_name={name}
       ></RenameDialog>
+      <ConfirmDialog
+        open={openUnfollow}
+        onClose={() => setOpenUnfollow(false)}
+        title="Unfollow Project?"
+        description="You will no longer be able to view project from vault."
+        onConfirm={async () => {
+          try {
+            await unfollow(id);
+            await refresh();
+          } catch (error) {
+            console.log(error);
+          }
+        }}
+      ></ConfirmDialog>
     </Box>
   );
 }

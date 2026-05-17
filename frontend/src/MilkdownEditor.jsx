@@ -5,7 +5,15 @@ import { nord } from "@milkdown/theme-nord";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
 import "@milkdown/theme-nord/style.css";
 
-function InnerEditor({ value, onChange }) {
+import { useRef, useEffect } from "react";
+
+function InnerEditor({ value, onChange, noteId }) {
+  const activeNote = useRef(noteId);
+
+  useEffect(() => {
+    activeNote.current = noteId;
+  }, [noteId]);
+
   useEditor((root) =>
     Editor.make()
       .config((ctx) => {
@@ -15,7 +23,14 @@ function InnerEditor({ value, onChange }) {
         const listenerInstance = ctx.get(listenerCtx);
 
         listenerInstance.markdownUpdated((ctx, markdown) => {
-          if (onChange) onChange(markdown);
+          // Ignore stale editor updates
+          if (activeNote.current !== noteId) {
+            return;
+          }
+
+          if (onChange) {
+            onChange(markdown);
+          }
         });
       })
       .use(commonmark)
@@ -29,7 +44,7 @@ function InnerEditor({ value, onChange }) {
 export default function MilkdownEditor(props) {
   return (
     <MilkdownProvider>
-      <InnerEditor {...props} />
+      <InnerEditor key={props.noteId} {...props} />
     </MilkdownProvider>
   );
 }

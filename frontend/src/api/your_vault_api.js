@@ -91,3 +91,22 @@ export const rename_project = async (project_id, newName) => {
     throw error;
   }
 };
+
+export const unfollow = async (id) => {
+  try {
+    const response = await fetch(api + "/projects/" + id + "/follow/", {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.log(data);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    throw error;
+  }
+};

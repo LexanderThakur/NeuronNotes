@@ -4,6 +4,7 @@ import {
   Divider,
   TextareaAutosize,
   TextField,
+  Button,
 } from "@mui/material";
 import FolderNode from "./FolderNode";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,7 +13,7 @@ import ProjectBar from "./ProjectBar";
 import MilkdownEditor from "./MilkdownEditor";
 import { fetch_project } from "./api/project_api";
 
-import { get_note } from "./api/manage_api";
+import { get_note, save_note } from "./api/manage_api";
 
 import { useState, useEffect, createContext } from "react";
 import build_tree from "./treeBuilder";
@@ -28,8 +29,9 @@ export default function Manage() {
 
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
+  const [loadingNote, setLoadingNote] = useState(true);
   async function refresh() {
-    getProject();
+    await getProject();
   }
 
   async function getProject() {
@@ -45,9 +47,24 @@ export default function Manage() {
 
   async function render_note() {
     try {
+      setLoadingNote(true);
+
       const fetched_content = await get_note(note_id);
-      setContent(fetched_content.content);
-      setTitle(fetched_content.name);
+
+      setContent(fetched_content.content || "");
+      setTitle(fetched_content.name || "");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingNote(false);
+    }
+  }
+
+  async function handle_save_note() {
+    try {
+      await save_note(note_id, title, content);
+      alert("Save success");
+      // await render_note();
     } catch (error) {
       console.log(error);
     }
@@ -55,8 +72,12 @@ export default function Manage() {
 
   useEffect(() => {
     refresh();
+
     if (note_id) {
       render_note();
+    } else {
+      setContent("");
+      setTitle("");
     }
   }, [project_id, note_id]);
 
@@ -97,7 +118,7 @@ export default function Manage() {
             </Box>
           )}
 
-          {note_id && (
+          {note_id && !loadingNote && (
             <>
               <Box
                 sx={{
@@ -156,12 +177,33 @@ export default function Manage() {
                 }}
               >
                 <MilkdownEditor
-                  key={note_id}
+                  noteId={note_id}
                   value={content}
                   onChange={setContent}
                 />
               </Box>
             </>
+          )}
+          {note_id && !loadingNote && (
+            <Box
+              sx={{
+                position: "fixed",
+                bottom: 24,
+                right: 32,
+                display: "flex",
+                gap: 1.5,
+              }}
+            >
+              <Button
+                onClick={async () => {
+                  await handle_save_note();
+                }}
+                variant="contained"
+                sx={{ backgroundColor: "#3EC300" }}
+              >
+                Save
+              </Button>
+            </Box>
           )}
         </Box>
       </Box>
