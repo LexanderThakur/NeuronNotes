@@ -1,5 +1,5 @@
 from django.urls import path 
-from . import project_views,folder_views,note_views
+from . import project_views,folder_views,note_views,graph_views
 urlpatterns=[
     path("",project_views.home),
     ## project realted
@@ -20,6 +20,9 @@ urlpatterns=[
     # notes related
     path("projects/<int:project_id>/notes/",note_views.notes),
     path("notes/<int:note_id>/",note_views.note),
+
+
+    path("projects/<int:project_id>/graph/",graph_views.graph),
 
 
 ]

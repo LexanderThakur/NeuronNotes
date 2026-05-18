@@ -8,7 +8,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 
 import AddIcon from "@mui/icons-material/Add";
-
+import TimelineIcon from "@mui/icons-material/Timeline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ManageContext } from "./Manage";
 import {
@@ -20,7 +20,7 @@ import ConfirmDialog from "./ConfirmDialog";
 import { useState, useContext } from "react";
 import CreateFolderDialog from "./CreateFolderDialog";
 import { useSnackbar } from "./SnackbarContext";
-export default function ProjectBar({ name, treeData }) {
+export default function ProjectBar({ name, treeData, graph, setGraph }) {
   const { refresh } = useContext(ManageContext);
   const { showSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -140,6 +140,12 @@ export default function ProjectBar({ name, treeData }) {
           },
         }}
       >
+        <TimelineIcon
+          className="icon-btn"
+          onClick={() => {
+            setGraph(!graph);
+          }}
+        ></TimelineIcon>
         <AddIcon
           className="icon-btn"
           onClick={() => handle_create_note(project_id, null)}

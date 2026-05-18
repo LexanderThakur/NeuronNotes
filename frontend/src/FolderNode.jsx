@@ -149,7 +149,12 @@ export default function FolderNode({ folder, createNote, setDeleteState }) {
       <Collapse in={open} timeout="auto" unmountOnExit>
         <Box sx={{ ml: 2, mt: 0.5 }}>
           {folder.children.map((fold) => (
-            <FolderNode folder={fold} key={fold.id} />
+            <FolderNode
+              folder={fold}
+              key={fold.id}
+              createNote={createNote}
+              setDeleteState={setDeleteState}
+            />
           ))}
 
           {folder.notes.map((item, i) => (

@@ -118,7 +118,7 @@ export default function FollowCard({
             },
           }}
         >
-          View Project
+          View
           <svg
             className="arrow-icon"
             width="20"

@@ -1,3 +1,5 @@
+import Graph from "./Graph";
+
 import {
   Box,
   Typography,
@@ -31,6 +33,9 @@ export default function Manage() {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [loadingNote, setLoadingNote] = useState(true);
+
+  const [graph, setGraph] = useState(false);
+
   async function refresh() {
     await getProject();
   }
@@ -98,119 +103,140 @@ export default function Manage() {
         }}
       >
         {/* SIDEBAR */}
-        <ProjectBar name={data?.project?.name} treeData={treeData}></ProjectBar>
+        <ProjectBar
+          name={data?.project?.name}
+          treeData={treeData}
+          graph={graph}
+          setGraph={setGraph}
+        ></ProjectBar>
 
         {/* MAIN EDITOR */}
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: "column",
-            height: "100%",
-            bgcolor: "#ffffff",
-          }}
-        >
-          {!note_id && (
-            <Box
-              sx={{
-                flex: 1,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography>Select a note to start</Typography>
-            </Box>
-          )}
+        {graph && (
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: "flex",
 
-          {note_id && !loadingNote && (
-            <>
-              <Box
-                sx={{
-                  px: 2,
-                  pt: 3,
-                  pb: 1,
-                }}
-              >
-                <TextField
-                  placeholder="Untitled note"
-                  variant="standard"
-                  fullWidth
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  InputProps={{
-                    disableUnderline: true,
-                  }}
-                  sx={{
-                    "& input": {
-                      fontSize: "28px",
-                      fontWeight: 600,
-                      borderBottom: "2px solid black",
-                      width: "fit-content",
-                      display: "inline-block",
-                      paddingBottom: "4px",
-                    },
-                  }}
-                />
-              </Box>
+              height: "100%",
+              bgcolor: "#ffffff",
+            }}
+          >
+            <Graph></Graph>
+          </Box>
+        )}
+
+        {!graph && (
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+              bgcolor: "#ffffff",
+            }}
+          >
+            {!note_id && (
               <Box
                 sx={{
                   flex: 1,
-                  px: 2,
-                  // pb: 3,
                   display: "flex",
-                  flexDirection: "column",
-
-                  "& .milkdown": {
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                  },
-
-                  "& .milkdown .editor": {
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                  },
-
-                  "& .ProseMirror": {
-                    flex: 1,
-                    minHeight: "100vh",
-                    overflowY: "auto",
-                    bgcolor: "#ffffff",
-                  },
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                <MilkdownEditor
-                  noteId={note_id}
-                  value={content}
-                  onChange={setContent}
-                />
+                <Typography>Select a note to start</Typography>
               </Box>
-            </>
-          )}
-          {note_id && !loadingNote && (
-            <Box
-              sx={{
-                position: "fixed",
-                bottom: 24,
-                right: 32,
-                display: "flex",
-                gap: 1.5,
-              }}
-            >
-              <Button
-                onClick={async () => {
-                  await handle_save_note();
+            )}
+
+            {note_id && !loadingNote && (
+              <>
+                <Box
+                  sx={{
+                    px: 2,
+                    pt: 3,
+                    pb: 1,
+                  }}
+                >
+                  <TextField
+                    placeholder="Untitled note"
+                    variant="standard"
+                    fullWidth
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
+                    sx={{
+                      "& input": {
+                        fontSize: "28px",
+                        fontWeight: 600,
+                        borderBottom: "2px solid black",
+                        width: "fit-content",
+                        display: "inline-block",
+                        paddingBottom: "4px",
+                      },
+                    }}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    flex: 1,
+                    px: 2,
+                    // pb: 3,
+                    display: "flex",
+                    flexDirection: "column",
+
+                    "& .milkdown": {
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                    },
+
+                    "& .milkdown .editor": {
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                    },
+
+                    "& .ProseMirror": {
+                      flex: 1,
+                      minHeight: "100vh",
+                      overflowY: "auto",
+                      bgcolor: "#ffffff",
+                    },
+                  }}
+                >
+                  <MilkdownEditor
+                    noteId={note_id}
+                    value={content}
+                    onChange={setContent}
+                  />
+                </Box>
+              </>
+            )}
+            {note_id && !loadingNote && (
+              <Box
+                sx={{
+                  position: "fixed",
+                  bottom: 24,
+                  right: 32,
+                  display: "flex",
+                  gap: 1.5,
                 }}
-                variant="contained"
-                sx={{ backgroundColor: "#3EC300" }}
               >
-                Save
-              </Button>
-            </Box>
-          )}
-        </Box>
+                <Button
+                  onClick={async () => {
+                    await handle_save_note();
+                  }}
+                  variant="contained"
+                  sx={{ backgroundColor: "#3EC300" }}
+                >
+                  Save
+                </Button>
+              </Box>
+            )}
+          </Box>
+        )}
       </Box>
     </ManageContext.Provider>
   );
