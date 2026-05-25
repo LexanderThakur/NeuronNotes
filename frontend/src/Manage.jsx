@@ -41,15 +41,24 @@ export default function Manage() {
 
   const [loadingProject, setLoadingProject] = useState(true);
 
+  const [showNoteSkeleton, setShowNoteSkeleton] = useState(false);
+  const [showProjectSkeleton, setShowProjectSkeleton] = useState(false);
+
   async function refresh() {
     await getProject();
   }
 
   async function getProject() {
+    let timeout;
     try {
       setLoadingProject(true);
-      const projectData = await fetch_project(project_id);
 
+      setLoadingNote(true);
+      timeout = setTimeout(() => {
+        setShowProjectSkeleton(true);
+      }, 500);
+      const projectData = await fetch_project(project_id);
+      // await new Promise((resolve) => setTimeout(resolve, 5000));
       console.log(projectData);
       setData(projectData);
       setTreeData(build_tree(projectData.folders, projectData.notes));
@@ -57,12 +66,19 @@ export default function Manage() {
       console.log(error);
     } finally {
       setLoadingProject(false);
+      clearTimeout(timeout);
+
+      setShowProjectSkeleton(false);
     }
   }
 
   async function render_note() {
+    let timeout;
     try {
       setLoadingNote(true);
+      timeout = setTimeout(() => {
+        setShowNoteSkeleton(true);
+      }, 500);
 
       const fetched_content = await get_note(note_id);
 
@@ -71,13 +87,15 @@ export default function Manage() {
     } catch (error) {
       console.log(error);
     } finally {
+      clearTimeout(timeout);
+
       setLoadingNote(false);
+      setShowNoteSkeleton(false);
     }
   }
 
   async function handle_save_note() {
     try {
-      setLoadingNote(true);
       await save_note(note_id, title, content);
 
       showSnackbar({
@@ -89,7 +107,6 @@ export default function Manage() {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoadingNote(false);
     }
   }
 
@@ -116,7 +133,7 @@ export default function Manage() {
         }}
       >
         {/* SIDEBAR */}
-        {loadingProject ? (
+        {loadingProject && showProjectSkeleton ? (
           <Box
             sx={{
               width: 300,
@@ -210,7 +227,7 @@ export default function Manage() {
               bgcolor: "#ffffff",
             }}
           >
-            {loadingNote && (
+            {loadingNote && showNoteSkeleton && (
               <Box
                 sx={{
                   flexGrow: 1,

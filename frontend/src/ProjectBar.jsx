@@ -175,6 +175,7 @@ export default function ProjectBar({ name, treeData, graph, setGraph }) {
             <Box
               onClick={() => {
                 navigate(`/manage/${project_id}/note/${item.id}`);
+                setGraph(false);
               }}
               key={"note-" + item.id}
               sx={{

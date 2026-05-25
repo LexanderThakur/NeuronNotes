@@ -88,7 +88,7 @@ def graph(request, project_id):
             depth+=1
             temp=temp.parent
 
-        radius = 340 + depth * 20 if note.folder is not None else random.randint(500,800)
+        radius = 340 + depth * 20 if note.folder is not None else random.randint(1200,1500)
         jitter = max(0.02, 0.2 / (depth + 1))
         siblings = []
         for n in note_qs:
