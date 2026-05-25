@@ -8,6 +8,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+
 import FolderNode from "./FolderNode";
 import { useNavigate, useParams } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
@@ -21,6 +22,8 @@ import { useState, useEffect, createContext } from "react";
 import build_tree from "./treeBuilder";
 import { useSnackbar } from "./SnackbarContext";
 export const ManageContext = createContext();
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 
 export default function Manage() {
   const { showSnackbar } = useSnackbar();
@@ -32,9 +35,11 @@ export default function Manage() {
 
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-  const [loadingNote, setLoadingNote] = useState(true);
+  const [loadingNote, setLoadingNote] = useState(false);
 
   const [graph, setGraph] = useState(false);
+
+  const [loadingProject, setLoadingProject] = useState(true);
 
   async function refresh() {
     await getProject();
@@ -42,12 +47,16 @@ export default function Manage() {
 
   async function getProject() {
     try {
+      setLoadingProject(true);
       const projectData = await fetch_project(project_id);
+
       console.log(projectData);
       setData(projectData);
       setTreeData(build_tree(projectData.folders, projectData.notes));
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingProject(false);
     }
   }
 
@@ -68,7 +77,9 @@ export default function Manage() {
 
   async function handle_save_note() {
     try {
+      setLoadingNote(true);
       await save_note(note_id, title, content);
+
       showSnackbar({
         title: "Saved Successfully",
         description: "Your note has been updated.",
@@ -77,6 +88,8 @@ export default function Manage() {
       // await render_note();
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingNote(false);
     }
   }
 
@@ -103,12 +116,74 @@ export default function Manage() {
         }}
       >
         {/* SIDEBAR */}
-        <ProjectBar
-          name={data?.project?.name}
-          treeData={treeData}
-          graph={graph}
-          setGraph={setGraph}
-        ></ProjectBar>
+        {loadingProject ? (
+          <Box
+            sx={{
+              width: 300,
+              height: "100vh",
+              bgcolor: "#0B0B0B",
+              color: "white",
+              p: 2,
+              borderRight: "1px solid #1E1E1E",
+            }}
+          >
+            <Stack spacing={2}>
+              {/* Project title */}
+              <Skeleton
+                variant="text"
+                width="70%"
+                height={50}
+                sx={{ bgcolor: "grey.800" }}
+              />
+
+              {/* Divider */}
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={1}
+                sx={{ bgcolor: "grey.900" }}
+              />
+
+              {/* Notes/folders */}
+              <Stack spacing={1}>
+                <Skeleton
+                  variant="rounded"
+                  width="100%"
+                  height={40}
+                  sx={{ bgcolor: "grey.800" }}
+                />
+
+                <Skeleton
+                  variant="rounded"
+                  width="85%"
+                  height={40}
+                  sx={{ bgcolor: "grey.800" }}
+                />
+
+                <Skeleton
+                  variant="rounded"
+                  width="92%"
+                  height={40}
+                  sx={{ bgcolor: "grey.800" }}
+                />
+
+                <Skeleton
+                  variant="rounded"
+                  width="75%"
+                  height={40}
+                  sx={{ bgcolor: "grey.800" }}
+                />
+              </Stack>
+            </Stack>
+          </Box>
+        ) : (
+          <ProjectBar
+            name={data?.project?.name}
+            treeData={treeData}
+            graph={graph}
+            setGraph={setGraph}
+          />
+        )}
 
         {/* MAIN EDITOR */}
         {graph && (
@@ -135,6 +210,54 @@ export default function Manage() {
               bgcolor: "#ffffff",
             }}
           >
+            {loadingNote && (
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "100%",
+                  bgcolor: "#ffffff",
+                }}
+              >
+                <Stack
+                  spacing={2}
+                  sx={{
+                    width: "100%",
+                    p: 3,
+                  }}
+                >
+                  {/* Title */}
+                  <Skeleton variant="text" width="30%" height={70} />
+
+                  {/* Underline */}
+                  <Skeleton variant="rectangular" width="35%" height={4} />
+
+                  {/* Content lines */}
+                  <Stack spacing={1}>
+                    <Skeleton variant="text" width="45%" height={40} />
+                    <Skeleton variant="text" width="35%" height={40} />
+                    <Skeleton variant="text" width="42%" height={40} />
+                    <Skeleton variant="text" width="55%" height={40} />
+                    <Skeleton variant="text" width="48%" height={40} />
+                    <Skeleton variant="text" width="38%" height={40} />
+                    <Skeleton variant="text" width="52%" height={40} />
+                    <Skeleton variant="text" width="44%" height={40} />
+                  </Stack>
+
+                  {/* Fake save button */}
+                  <Box
+                    sx={{
+                      position: "fixed",
+                      bottom: 24,
+                      right: 32,
+                    }}
+                  >
+                    <Skeleton variant="rounded" width={90} height={42} />
+                  </Box>
+                </Stack>
+              </Box>
+            )}
             {!note_id && (
               <Box
                 sx={{

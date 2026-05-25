@@ -11,7 +11,7 @@ export default function Graph() {
   const [folders, setFolders] = useState([]);
   const [links, setLinks] = useState([]);
   const [hovered, setHovered] = useState(null);
-
+  const [notes, setNotes] = useState([]);
   async function get_graph() {
     try {
       const response = await fetch(`${api}/projects/${project_id}/graph/`, {
@@ -23,6 +23,7 @@ export default function Graph() {
 
       setFolders(data.message);
       setLinks(data.links);
+      setNotes(data.note_data);
     } catch (error) {
       console.log(error);
     }
@@ -66,6 +67,64 @@ export default function Graph() {
         ))}
 
         {/* NODES */}
+
+        {notes.map((note) => {
+          const isHovered = hovered === note.id;
+
+          return (
+            <g
+              key={note.id}
+              onMouseEnter={() => setHovered(note.id)}
+              onMouseLeave={() => setHovered(null)}
+              style={{
+                cursor: "pointer",
+              }}
+            >
+              {/* GLOW */}
+              <circle
+                cx={note.x}
+                cy={note.y}
+                r={isHovered ? "68" : "58"}
+                fill="rgba(0,0,0,0.04)"
+                style={{
+                  transition: "all 0.2s ease",
+                }}
+              />
+
+              {/* MAIN NODE */}
+              <circle
+                cx={note.x}
+                cy={note.y}
+                r={isHovered ? "42" : "34"}
+                fill={isHovered ? "#8A9BA8" : "#B8C4CC"}
+                style={{
+                  transition: "all 0.2s ease",
+                  filter: isHovered
+                    ? "drop-shadow(0px 10px 18px rgba(0,0,0,0.18))"
+                    : "none",
+                }}
+              />
+
+              {/* LABEL */}
+              <text
+                x={note.x}
+                y={note.y + 82}
+                textAnchor="middle"
+                fontSize="34"
+                fill={isHovered ? "#4E5B66" : "#7D8A94"}
+                fontWeight="500"
+                style={{
+                  userSelect: "none",
+                  pointerEvents: "none",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                {note.name}
+              </text>
+            </g>
+          );
+        })}
+
         {folders.map((folder) => {
           const isHovered = hovered === folder.id;
 
