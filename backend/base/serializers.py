@@ -3,8 +3,9 @@ from .models import (
     Project,
     Folder,
     Note,
-    NoteLink,
-    FollowLink
+ 
+    FollowLink,
+    Bookmark
 
 )
 
@@ -54,18 +55,7 @@ class NoteCreateSerializer(serializers.ModelSerializer):
         model=Note 
         fields=['name','content','folder']
 
-class NoteLinkSerializer(serializers.ModelSerializer):
-    owner = UserSerializer(read_only=True)
-    note = NoteSerializer(read_only=True)
-    folder= FolderSerializer(read_only=True)
-    class Meta:
-        model = NoteLink
-        fields="__all__"
 
-class NoteLinkCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NoteLink
-        fields =['note','folder']
 
 class FollowLinkSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -94,3 +84,9 @@ class NoteMetaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = ["id", "name", "folder", "created_at"]
+
+
+class BookmarkCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Bookmark
+        fields=["id",'name','link']

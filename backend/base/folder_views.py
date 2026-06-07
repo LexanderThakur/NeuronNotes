@@ -10,8 +10,7 @@ from .serializers import (
     FolderCreateSerializer,
     NoteSerializer,
     NoteCreateSerializer,
-    NoteLinkSerializer,
-    NoteLinkCreateSerializer,
+  
     FollowLinkSerializer,
     FollowLinkCreateSerializer
 
@@ -20,7 +19,7 @@ from .models import (
     Project,
     Folder,
     Note,
-    NoteLink,
+   
     FollowLink,
 )
 

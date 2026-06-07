@@ -1,5 +1,5 @@
 from django.urls import path 
-from . import project_views,folder_views,note_views,graph_views
+from . import project_views,folder_views,note_views,graph_views,home_views
 urlpatterns=[
     path("",project_views.home),
     ## project realted
@@ -10,7 +10,8 @@ urlpatterns=[
     path("projects/<int:project_id>/followers/",project_views.followers),
     path("projects/following/",project_views.following),
     path("projects/manage/<int:project_id>/",project_views.manage_project),
-
+    path("projects/totalProjects/",project_views.number_of_projects),
+    path("projects/totalFollowing/",project_views.number_of_following),
 
     # folder related
     path('projects/<int:project_id>/folders/',folder_views.folders),
@@ -24,5 +25,6 @@ urlpatterns=[
 
     path("projects/<int:project_id>/graph/",graph_views.graph),
 
-
+   path("home/bookmarks/", home_views.bookmarks),
+   path("home/bookmarks/<int:bookmark_id>/", home_views.bookmark),
 ]

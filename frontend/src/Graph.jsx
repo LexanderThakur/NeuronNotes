@@ -114,7 +114,7 @@ export default function Graph({ setGraph }) {
                 x={note.x}
                 y={note.y + 82}
                 textAnchor="middle"
-                fontSize="34"
+                fontSize="40"
                 fill={isHovered ? "#4E5B66" : "#7D8A94"}
                 fontWeight="500"
                 style={{
@@ -171,7 +171,7 @@ export default function Graph({ setGraph }) {
                 x={folder.x}
                 y={folder.y + 82}
                 textAnchor="middle"
-                fontSize="34"
+                fontSize="38"
                 fill={isHovered ? "#444444" : "#8A8A8A"}
                 fontWeight="500"
                 style={{

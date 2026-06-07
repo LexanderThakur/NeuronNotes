@@ -11,10 +11,9 @@ import { ThemeContext } from "./Dashboard";
 export default function ControlBar() {
   const { open, setOpen, page, setPage } = useContext(ThemeContext);
   const items = [
-    { label: "Your Vault", icon: <ChromeReaderModeIcon /> },
+    { label: "Home", icon: <TimelineIcon /> },
     { label: "Explore", icon: <ExploreIcon /> },
-    { label: "Graph View", icon: <TimelineIcon /> },
-    { label: "Quick Note", icon: <NoteAddIcon /> },
+    { label: "Your Vault", icon: <ChromeReaderModeIcon /> },
   ];
   return (
     <Box

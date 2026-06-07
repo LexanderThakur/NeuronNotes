@@ -10,8 +10,7 @@ from .serializers import (
     FolderCreateSerializer,
     NoteSerializer,
     NoteCreateSerializer,
-    NoteLinkSerializer,
-    NoteLinkCreateSerializer,
+
     FollowLinkSerializer,
     FollowLinkCreateSerializer,
     NoteMetaSerializer,
@@ -21,7 +20,7 @@ from .models import (
     Project,
     Folder,
     Note,
-    NoteLink,
+  
     FollowLink,
 )
 
@@ -137,3 +136,12 @@ def manage_project(request, project_id):
     }
 
     return Response({"message": data})
+
+
+@api_view(["GET"])
+def number_of_projects(request):
+    return Response({"message":len(Project.objects.filter(owner=request.user))})
+
+@api_view(["GET"])
+def number_of_following(request):
+    return Response({"message":len(FollowLink.objects.filter(user=request.user))})

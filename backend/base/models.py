@@ -23,11 +23,6 @@ class Note(models.Model):
     folder = models.ForeignKey(Folder,null=True,blank=True,on_delete=models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-class NoteLink(models.Model):
-    owner= models.ForeignKey(User,on_delete=models.CASCADE)
-    note= models.ForeignKey(Note,on_delete=models.CASCADE)
-    folder = models.ForeignKey(Folder,on_delete= models.CASCADE)
-
 
 class FollowLink(models.Model):
     user= models.ForeignKey(User,on_delete=models.CASCADE)
@@ -35,3 +30,9 @@ class FollowLink(models.Model):
     class Meta:
         unique_together = ('user', 'project')
         
+
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    name=models.TextField(blank=False)
+    link=models.TextField(blank=False)
