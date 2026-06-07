@@ -5,7 +5,8 @@ from .models import (
     Note,
  
     FollowLink,
-    Bookmark
+    Bookmark,
+    BacklogTask
 
 )
 
@@ -90,3 +91,14 @@ class BookmarkCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model=Bookmark
         fields=["id",'name','link']
+
+class BacklogTaskSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BacklogTask
+        fields = "__all__"
+        read_only_fields = [
+            "id",
+            "user",
+            "created_at",
+        ]

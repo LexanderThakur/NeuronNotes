@@ -17,9 +17,16 @@ import NorthEastIcon from "@mui/icons-material/NorthEast";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-
+import TaskDialog from "../home_components/TaskDialog";
 import { total_projects, total_following } from "./api/project_api";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { save_bookmark, get_bookmarks, delete_bookmark } from "./api/home_api";
+import {
+  get_tasks,
+  create_task,
+  toggle_task,
+  delete_task,
+} from "./api/home_api";
 import BookmarkCard from "../home_components/BookmarkCard";
 
 import BookmarkDialog from "../home_components/BookmarkDialog";
@@ -573,7 +580,7 @@ function TimeTracker() {
   );
 }
 
-function RightPanel() {
+function RightPanel({ tasks, onToggle, onDelete, onOpenDialog }) {
   return (
     <Box
       sx={{
@@ -612,25 +619,61 @@ function RightPanel() {
             Backlog Tasks
           </Typography>
           <Chip
-            icon={<AddIcon sx={{ fontSize: "0.85rem !important" }} />}
+            icon={<AddIcon />}
             label="New"
             size="small"
+            onClick={onOpenDialog}
             sx={{
               borderRadius: 99,
               border: "1px solid rgba(16,17,16,0.15)",
               bgcolor: "transparent",
-              fontSize: "0.78rem",
-              fontWeight: 600,
-              height: 28,
               cursor: "pointer",
-              "& .MuiChip-label": { px: 1 },
             }}
           />
         </Box>
         <Divider sx={{ mb: 1, borderColor: "rgba(16,17,16,0.06)" }} />
-        <Box sx={{ flex: 1, overflowY: "auto" }}>
-          {PROJECTS.map((p) => (
-            <ProjectRow key={p.id} project={p} />
+        <Box
+          sx={{
+            flex: 1,
+            overflowY: "auto",
+          }}
+        >
+          {tasks.map((task) => (
+            <Box
+              key={task.id}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                py: 1,
+              }}
+            >
+              <Typography
+                onClick={() => onToggle(task.id)}
+                sx={{
+                  fontSize: "0.8rem",
+                  flex: 1,
+                  cursor: "pointer",
+                  userSelect: "none",
+
+                  textDecoration: task.completed ? "line-through" : "none",
+
+                  color: task.completed ? "#888" : "#101110",
+
+                  transition: "0.2s",
+                }}
+              >
+                {task.title}
+              </Typography>
+
+              <DeleteIcon
+                onClick={() => onDelete(task.id)}
+                sx={{
+                  fontSize: 18,
+                  cursor: "pointer",
+                }}
+              />
+            </Box>
           ))}
         </Box>
       </Box>
@@ -646,7 +689,72 @@ export default function Home() {
   const { showSnackbar } = useSnackbar();
   const [bookmarkDialogOpen, setBookmarkDialogOpen] = useState(false);
   const [bookmarks, setBookmarks] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [taskDialogOpen, setTaskDialogOpen] = useState(false);
+  async function fetchTasks() {
+    try {
+      const data = await get_tasks();
+      setTasks(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function handleCreateTask(title) {
+    try {
+      await create_task(title);
 
+      await fetchTasks();
+
+      showSnackbar({
+        title: "Success",
+        description: "Task created",
+        success: true,
+      });
+    } catch (error) {
+      showSnackbar({
+        title: "Error",
+        description: error.message,
+        success: false,
+      });
+    }
+  }
+  async function handleToggleTask(id) {
+    try {
+      await toggle_task(id);
+
+      setTasks((prev) =>
+        prev.map((task) =>
+          task.id === id
+            ? {
+                ...task,
+                completed: !task.completed,
+              }
+            : task,
+        ),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function handleDeleteTask(id) {
+    try {
+      await delete_task(id);
+
+      setTasks((prev) => prev.filter((task) => task.id !== id));
+
+      showSnackbar({
+        title: "Success",
+        description: "Task deleted",
+        success: true,
+      });
+    } catch (error) {
+      showSnackbar({
+        title: "Error",
+        description: error.message,
+        success: false,
+      });
+    }
+  }
   async function handleBookmarkSave(bookmark) {
     try {
       await save_bookmark(bookmark.name, bookmark.link);
@@ -715,12 +823,8 @@ export default function Home() {
     handle_total_projects();
     handle_total_following();
     fetchBookmarks();
+    fetchTasks();
   }, []);
-  // useEffect(() => {
-  //   async function refresh() {
-  //     await handle_total_projects;
-  //   }
-  // });
 
   return (
     <Box
@@ -830,13 +934,23 @@ export default function Home() {
           </Box>
 
           {/* Right Panel */}
-          <RightPanel />
+          <RightPanel
+            tasks={tasks}
+            onToggle={handleToggleTask}
+            onDelete={handleDeleteTask}
+            onOpenDialog={() => setTaskDialogOpen(true)}
+          />
         </Box>
       </Box>
       <BookmarkDialog
         open={bookmarkDialogOpen}
         onClose={() => setBookmarkDialogOpen(false)}
         onSave={handleBookmarkSave}
+      />
+      <TaskDialog
+        open={taskDialogOpen}
+        onClose={() => setTaskDialogOpen(false)}
+        onSave={handleCreateTask}
       />
     </Box>
   );

@@ -27,4 +27,13 @@ urlpatterns=[
 
    path("home/bookmarks/", home_views.bookmarks),
    path("home/bookmarks/<int:bookmark_id>/", home_views.bookmark),
+   path(
+    "home/tasks/",
+    home_views.backlog_tasks
+),
+
+path(
+    "home/tasks/<int:task_id>/",
+    home_views.backlog_task
+),
 ]
