@@ -15,7 +15,12 @@ import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 
 import { rename_folder_api, delete_folder_api } from "./api/manage_api";
 import CreateFolderDialog from "./CreateFolderDialog";
-export default function FolderNode({ folder, createNote, setDeleteState }) {
+export default function FolderNode({
+  folder,
+  createNote,
+  setDeleteState,
+  setGraph,
+}) {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const { project_id } = useParams();
@@ -154,12 +159,14 @@ export default function FolderNode({ folder, createNote, setDeleteState }) {
               key={fold.id}
               createNote={createNote}
               setDeleteState={setDeleteState}
+              setGraph={setGraph}
             />
           ))}
 
           {folder.notes.map((item, i) => (
             <Box
               onClick={() => {
+                setGraph(false);
                 navigate(`/manage/${project_id}/note/${item.id}`);
               }}
               key={"note-" + item.id}

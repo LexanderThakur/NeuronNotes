@@ -2,12 +2,12 @@ import { Box } from "@mui/material";
 
 const api = import.meta.env.VITE_API_URL;
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 export default function Graph() {
   const { project_id } = useParams();
-
+  const navigate = useNavigate();
   const [folders, setFolders] = useState([]);
   const [links, setLinks] = useState([]);
   const [hovered, setHovered] = useState(null);

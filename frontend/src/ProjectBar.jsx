@@ -167,6 +167,7 @@ export default function ProjectBar({ name, treeData, graph, setGraph }) {
                 folder={item}
                 createNote={handle_create_note}
                 setDeleteState={setDeleteState}
+                setGraph={setGraph}
               />
             );
           }

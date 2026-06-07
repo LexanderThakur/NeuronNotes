@@ -105,6 +105,11 @@ export default function Manage() {
       });
       // await render_note();
     } catch (error) {
+      showSnackbar({
+        title: error.status,
+        description: error.message,
+        success: false,
+      });
       console.log(error);
     } finally {
     }

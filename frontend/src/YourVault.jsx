@@ -3,7 +3,8 @@ import VaultCard from "./VaultCard";
 import CreateVaultDialog from "./CreateVaultDialog";
 import AddIcon from "@mui/icons-material/Add";
 const api = import.meta.env.VITE_API_URL;
-
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 import { fetch_vault, fetch_following } from "./api/your_vault_api";
 
 import { useState, useEffect } from "react";
@@ -11,8 +12,16 @@ function YourVault() {
   const [open, setOpen] = useState(false);
   const [myProjects, setMyProject] = useState([]);
   const [myFollowing, setMyFollowing] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+
   async function refresh() {
+    let timeout;
     try {
+      timeout = setTimeout(() => {
+        setLoading(true);
+      }, 500);
+      // await new Promise((resolve) => setTimeout(resolve, 5000));
       const vaults = await fetch_vault();
       const following = await fetch_following();
 
@@ -20,6 +29,9 @@ function YourVault() {
       setMyFollowing(following);
     } catch (error) {
       console.error(error);
+    } finally {
+      clearTimeout(timeout);
+      setLoading(false);
     }
   }
 
@@ -86,6 +98,24 @@ function YourVault() {
                 ></VaultCard>
               );
             })}
+            {loading && (
+              <>
+                <Stack spacing={1}>
+                  {/* For variant="text", adjust the height via font-size */}
+                  <Skeleton variant="text" sx={{ fontSize: "2rem" }} />
+
+                  <Skeleton variant="rectangular" width={210} height={60} />
+                  <Skeleton variant="rounded" width={210} height={60} />
+                </Stack>
+                <Stack spacing={1}>
+                  {/* For variant="text", adjust the height via font-size */}
+                  <Skeleton variant="text" sx={{ fontSize: "2rem" }} />
+
+                  <Skeleton variant="rectangular" width={210} height={60} />
+                  <Skeleton variant="rounded" width={210} height={60} />
+                </Stack>
+              </>
+            )}
           </Box>
         </Box>
 
@@ -119,6 +149,31 @@ function YourVault() {
                 ></VaultCard>
               );
             })}
+            {loading && (
+              <>
+                <Stack spacing={1}>
+                  {/* For variant="text", adjust the height via font-size */}
+                  <Skeleton variant="text" sx={{ fontSize: "2rem" }} />
+
+                  <Skeleton variant="rectangular" width={210} height={60} />
+                  <Skeleton variant="rounded" width={210} height={60} />
+                </Stack>
+                <Stack spacing={1}>
+                  {/* For variant="text", adjust the height via font-size */}
+                  <Skeleton variant="text" sx={{ fontSize: "2rem" }} />
+
+                  <Skeleton variant="rectangular" width={210} height={60} />
+                  <Skeleton variant="rounded" width={210} height={60} />
+                </Stack>
+                <Stack spacing={1}>
+                  {/* For variant="text", adjust the height via font-size */}
+                  <Skeleton variant="text" sx={{ fontSize: "2rem" }} />
+
+                  <Skeleton variant="rectangular" width={210} height={60} />
+                  <Skeleton variant="rounded" width={210} height={60} />
+                </Stack>
+              </>
+            )}
           </Box>
         </Box>
       </Box>

@@ -143,9 +143,13 @@ export const save_note = async (note_id, title, content) => {
       }),
     });
     const data = await response.json();
+
     if (!response.ok) {
       console.log(data);
-      return;
+      throw {
+        status: response.status,
+        message: data.message,
+      };
     }
   } catch (error) {
     throw error;
