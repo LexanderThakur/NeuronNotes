@@ -218,7 +218,7 @@ export default function Manage() {
               bgcolor: "#ffffff",
             }}
           >
-            <Graph></Graph>
+            <Graph setGraph={setGraph}></Graph>
           </Box>
         )}
 

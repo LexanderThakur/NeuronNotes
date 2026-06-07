@@ -5,7 +5,7 @@ const api = import.meta.env.VITE_API_URL;
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-export default function Graph() {
+export default function Graph({ setGraph }) {
   const { project_id } = useParams();
   const navigate = useNavigate();
   const [folders, setFolders] = useState([]);
@@ -93,9 +93,13 @@ export default function Graph() {
 
               {/* MAIN NODE */}
               <circle
+                onClick={() => {
+                  navigate(`/manage/${project_id}/note/${note.id}`);
+                  setGraph(false);
+                }}
                 cx={note.x}
                 cy={note.y}
-                r={isHovered ? "42" : "34"}
+                r={isHovered ? "52" : "44"}
                 fill={isHovered ? "#8A9BA8" : "#B8C4CC"}
                 style={{
                   transition: "all 0.2s ease",
