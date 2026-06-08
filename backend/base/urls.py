@@ -36,4 +36,7 @@ path(
     "home/tasks/<int:task_id>/",
     home_views.backlog_task
 ),
+
+path("home/connectionProjects/",home_views.connection_projects),
+path("home/connection/<int:project_id>/",home_views.connection_percentage),
 ]

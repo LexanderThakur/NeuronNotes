@@ -11,7 +11,7 @@ import {
 import { use, useState } from "react";
 import { create_vault } from "./api/your_vault_api";
 export default function CreateVaultDialog({ open, setOpen, refresh }) {
-  const [visibility, setVisibility] = useState("public");
+  const [visibility, setVisibility] = useState("private");
 
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
@@ -69,6 +69,8 @@ export default function CreateVaultDialog({ open, setOpen, refresh }) {
             fullWidth
             value={visibility}
             onChange={(e) => {
+              setVisibility(e.target.value);
+
               if (e.target.value === "public") {
                 setPublic(true);
               } else {

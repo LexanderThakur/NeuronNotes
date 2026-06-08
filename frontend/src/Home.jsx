@@ -33,6 +33,7 @@ import TaskPanel from "../home_components/TaskPanel";
 import BookmarkDialog from "../home_components/BookmarkDialog";
 import Connection from "../home_components/Connection";
 import StatCard from "../home_components/StatCard";
+import PomodoroTimer from "../home_components/PomodoroTimer";
 import { useSnackbar } from "./SnackbarContext";
 // ── Data ─────────────────────────────────────────────────────
 
@@ -45,8 +46,6 @@ const ANALYTICS_BARS = [
   { day: "F", height: 45, filled: false },
   { day: "S", height: 40, filled: false },
 ];
-
-// ── Stat Card ─────────────────────────────────────────────────
 
 // ── Analytics Bar Chart ───────────────────────────────────────
 function AnalyticsChart() {
@@ -121,102 +120,6 @@ function AnalyticsChart() {
   );
 }
 
-function TimeTracker() {
-  const [seconds, setSeconds] = useState(5048);
-  const [running, setRunning] = useState(true);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (running)
-      ref.current = setInterval(() => setSeconds((s) => s + 1), 1000);
-    else clearInterval(ref.current);
-    return () => clearInterval(ref.current);
-  }, [running]);
-
-  const fmt = (n) => String(n).padStart(2, "0");
-  const h = fmt(Math.floor(seconds / 3600));
-  const m = fmt(Math.floor((seconds % 3600) / 60));
-  const s = fmt(seconds % 60);
-
-  return (
-    <Box
-      sx={{
-        borderRadius: 4,
-        background: "linear-gradient(135deg, #101110 0%, #1b2e1b 100%)",
-        p: 3,
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        position: "relative",
-        overflow: "hidden",
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          top: -40,
-          right: -40,
-          width: 140,
-          height: 140,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(50,120,50,0.4) 0%, transparent 70%)",
-          pointerEvents: "none",
-        },
-      }}
-    >
-      <Typography
-        sx={{ color: "#fff", fontWeight: 600, fontSize: "1rem", zIndex: 1 }}
-      >
-        Time Tracker
-      </Typography>
-      <Typography
-        sx={{
-          color: "#fff",
-          fontWeight: 700,
-          fontSize: "2.4rem",
-          letterSpacing: 3,
-          fontVariantNumeric: "tabular-nums",
-          zIndex: 1,
-        }}
-      >
-        {h}:{m}:{s}
-      </Typography>
-      <Box sx={{ display: "flex", gap: 1.5, zIndex: 1 }}>
-        <IconButton
-          onClick={() => setRunning((r) => !r)}
-          sx={{
-            bgcolor: "rgba(255,255,255,0.15)",
-            color: "#fff",
-            width: 40,
-            height: 40,
-            "&:hover": { bgcolor: "rgba(255,255,255,0.25)" },
-          }}
-        >
-          {running ? (
-            <PauseIcon fontSize="small" />
-          ) : (
-            <PlayArrowIcon fontSize="small" />
-          )}
-        </IconButton>
-        <IconButton
-          onClick={() => {
-            setRunning(false);
-            setSeconds(0);
-          }}
-          sx={{
-            bgcolor: "#E85D75",
-            color: "#fff",
-            width: 40,
-            height: 40,
-            "&:hover": { bgcolor: "#c94d63" },
-          }}
-        >
-          <StopIcon fontSize="small" />
-        </IconButton>
-      </Box>
-    </Box>
-  );
-}
-
 function RightPanel() {
   return (
     <Box
@@ -231,7 +134,7 @@ function RightPanel() {
       }}
     >
       <TaskPanel></TaskPanel>
-      <TimeTracker />
+      <PomodoroTimer></PomodoroTimer>
     </Box>
   );
 }

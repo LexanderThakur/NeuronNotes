@@ -6,7 +6,7 @@ from .models import Bookmark
 from .serializers import BookmarkCreateSerializer
 
 
-from .models import BacklogTask
+from .models import BacklogTask,Project,Note
 from .serializers import BacklogTaskSerializer
 @api_view(["GET", "POST"])
 def bookmarks(request):
@@ -108,3 +108,38 @@ def backlog_task(request, task_id):
     return Response({
         "message": "Deleted"
     })
+
+
+
+
+@api_view(["GET"])
+def connection_projects(request):
+
+    Projects_qs = Project.objects.filter(owner = request.user)
+
+    data=[]
+    for q in Projects_qs:
+        data.append({
+            "id":q.id,
+            "name":q.name
+        })
+    return Response({"message":data})
+
+
+
+@api_view(["GET"])
+def connection_percentage(request,project_id):
+    obj = get_object_or_404(Project,id=project_id,owner=request.user)
+
+    notes_qs = Note.objects.filter(project=obj)
+    total= len(notes_qs)
+    if total == 0:
+        return Response({"message": 0,"total":0})
+    
+
+    connected =0
+    for note in notes_qs:
+        if note.folder!=None:
+            connected+=1
+    percentage = round((connected / total) * 100)
+    return Response({"message":percentage,"total":total})

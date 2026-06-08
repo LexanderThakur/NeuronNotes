@@ -102,3 +102,36 @@ export async function delete_task(id) {
 
   return await response.json();
 }
+
+export async function get_connection_projects() {
+  try {
+    const response = await fetch(api + `/home/connectionProjects/`, {
+      credentials: "include",
+    });
+    if (!response.ok) {
+      console.log("Error in getting conection projects");
+    }
+    const data = await response.json();
+    return data.message;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function get_connection_percentage(projectId) {
+  try {
+    const response = await fetch(api + `/home/connection/${projectId}`, {
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to get connection percentage");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}

@@ -21,6 +21,26 @@ export default function Explore() {
         overflow: "hidden", // prevents outer overflow
       }}
     >
+      <Typography
+        sx={{
+          fontSize: "2rem",
+          fontWeight: 800,
+          color: "#101110",
+          marginTop: "1rem",
+        }}
+      >
+        Explore
+      </Typography>
+      <Typography
+        sx={{
+          fontSize: "0.85rem",
+          color: "#888",
+          mt: 0.25,
+          marginBottom: "1rem",
+        }}
+      >
+        View, Follow, Duplicate other's vaults.
+      </Typography>
       <Box
         sx={{
           display: "flex",
