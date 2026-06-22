@@ -12,6 +12,7 @@ urlpatterns=[
     path("projects/manage/<int:project_id>/",project_views.manage_project),
     path("projects/totalProjects/",project_views.number_of_projects),
     path("projects/totalFollowing/",project_views.number_of_following),
+    path("projects/explore/",project_views.paginated_explore),
 
     # folder related
     path('projects/<int:project_id>/folders/',folder_views.folders),

@@ -1,16 +1,22 @@
 import { Box, Typography, Button, IconButton, Menu } from "@mui/material";
 
 import FollowCard from "./FollowCard";
-
+import Pagination from "@mui/material/Pagination";
 import { get_to_follow } from "./api/explore";
 import { useState, useEffect } from "react";
 
 export default function Explore() {
   const [arr, setArr] = useState([]);
 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   useEffect(() => {
-    get_to_follow().then(setArr).catch(console.error);
-  }, []);
+    get_to_follow(page).then((data) => {
+      setArr(data.results);
+      setTotalPages(data.total_pages);
+    });
+  }, [page]);
 
   return (
     <Box
@@ -20,6 +26,11 @@ export default function Explore() {
         flexDirection: "column",
         overflow: "hidden", // prevents outer overflow
       }}
+      // sx={{
+      //   mt: 4,
+      //   display: "flex",
+      //   justifyContent: "center",
+      // }}
     >
       <Typography
         sx={{
@@ -58,6 +69,25 @@ export default function Explore() {
             ></FollowCard>
           );
         })}
+      </Box>
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 20,
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 1000,
+        }}
+      >
+        <Pagination
+          page={page}
+          count={totalPages}
+          onChange={(event, value) => {
+            setPage(value);
+          }}
+          color="primary"
+          size="large"
+        />
       </Box>
     </Box>
   );

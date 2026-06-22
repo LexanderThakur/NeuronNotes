@@ -52,6 +52,21 @@ def projects(request):
     serializer.save(owner = request.user)
     return Response({"message" : "successfully created"}, status =201)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @api_view(["GET"])
 def my_projects(request):
     qs = Project.objects.filter(owner=request.user)
@@ -145,3 +160,33 @@ def number_of_projects(request):
 @api_view(["GET"])
 def number_of_following(request):
     return Response({"message":len(FollowLink.objects.filter(user=request.user))})
+
+
+import math
+@api_view(["GET"])
+def paginated_explore(request):
+    page = int(request.GET.get("page",1))
+    page_size = 15 
+
+    start = (page-1) * page_size
+    end = start+page_size
+    projects = Project.objects.filter(is_public=True)\
+            .exclude(followlink__user=request.user)\
+            .exclude(owner=request.user)\
+            .distinct()
+    projects=projects[start:end]
+    total_count = projects.count() 
+    data = [
+        {
+            "id": p.id,
+            "name": p.name,
+            "description": p.description,
+        }
+        for p in projects
+    ]
+    return Response({
+        "results": data,
+        "total_count": total_count,
+        "page": page,
+        "total_pages": math.ceil(total_count / page_size),
+    })
