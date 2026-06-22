@@ -43,6 +43,22 @@ function App() {
               </Protected>
             }
           ></Route>
+          <Route
+            path="/view/:project_id"
+            element={
+              <Protected>
+                <Manage view_only={true}></Manage>
+              </Protected>
+            }
+          ></Route>
+          <Route
+            path="/manage/:project_id/note/:note_id"
+            element={
+              <Protected>
+                <Manage view_only={true} />
+              </Protected>
+            }
+          ></Route>
           <Route path="/login" element={<Auth />}></Route>
         </Routes>
       </BrowserRouter>

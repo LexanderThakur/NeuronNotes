@@ -21,7 +21,7 @@ function YourVault() {
       timeout = setTimeout(() => {
         setLoading(true);
       }, 500);
-      // await new Promise((resolve) => setTimeout(resolve, 5000));
+      //await new Promise((resolve) => setTimeout(resolve, 5000));
       const vaults = await fetch_vault();
       const following = await fetch_following();
 

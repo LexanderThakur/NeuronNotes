@@ -11,13 +11,14 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useState } from "react";
 
 import { follow } from "./api/explore";
-
+import { useNavigate } from "react-router-dom";
 export default function FollowCard({
   title = "Project Alpha",
   description = "This vault contains notes, references and structured knowledge.",
   id,
 }) {
   const [isFollowing, setIsFollowing] = useState(false);
+  const navigate = useNavigate();
 
   const handleFollow = async () => {
     if (isFollowing) {
@@ -91,6 +92,7 @@ export default function FollowCard({
       >
         {/* View Project */}
         <Button
+          onClick={() => navigate(`/view/${id}`)}
           variant="text"
           sx={{
             textTransform: "none",

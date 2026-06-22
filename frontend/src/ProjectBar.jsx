@@ -20,7 +20,11 @@ import ConfirmDialog from "./ConfirmDialog";
 import { useState, useContext } from "react";
 import CreateFolderDialog from "./CreateFolderDialog";
 import { useSnackbar } from "./SnackbarContext";
+
+import { ViewOnlyContext } from "./Manage";
+
 export default function ProjectBar({ name, treeData, graph, setGraph }) {
+  const { view_only } = useContext(ViewOnlyContext);
   const { refresh } = useContext(ManageContext);
   const { showSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -215,26 +219,28 @@ export default function ProjectBar({ name, treeData, graph, setGraph }) {
               >
                 {item.name}
               </Typography>
-              <DeleteIcon
-                onClick={(e) => {
-                  e.stopPropagation();
+              {!view_only && (
+                <DeleteIcon
+                  onClick={(e) => {
+                    e.stopPropagation();
 
-                  setDeleteState({
-                    open: true,
-                    noteID: item.id,
-                  });
-                }}
-                sx={{
-                  fontSize: 18,
-                  color: "#888",
-                  transition: "0.2s",
+                    setDeleteState({
+                      open: true,
+                      noteID: item.id,
+                    });
+                  }}
+                  sx={{
+                    fontSize: 18,
+                    color: "#888",
+                    transition: "0.2s",
 
-                  "&:hover": {
-                    color: "white",
-                    transform: "scale(1.1)",
-                  },
-                }}
-              ></DeleteIcon>
+                    "&:hover": {
+                      color: "white",
+                      transform: "scale(1.1)",
+                    },
+                  }}
+                ></DeleteIcon>
+              )}
             </Box>
           );
         })}

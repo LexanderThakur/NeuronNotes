@@ -21,11 +21,15 @@ import { get_note, save_note } from "./api/manage_api";
 import { useState, useEffect, createContext } from "react";
 import build_tree from "./treeBuilder";
 import { useSnackbar } from "./SnackbarContext";
+
 export const ManageContext = createContext();
+
+export const ViewOnlyContext = createContext();
+
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 
-export default function Manage() {
+export default function Manage({ view_only = false }) {
   const { showSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const { project_id, note_id } = useParams();
@@ -127,262 +131,264 @@ export default function Manage() {
   }, [project_id, note_id]);
 
   return (
-    <ManageContext.Provider value={{ refresh }}>
-      <Box
-        sx={{
-          display: "flex",
-          height: "100vh",
-          backgroundColor: "#F8F8F8",
-          fontFamily:
-            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-        }}
-      >
-        {/* SIDEBAR */}
-        {loadingProject && showProjectSkeleton ? (
-          <Box
-            sx={{
-              width: 300,
-              height: "100vh",
-              bgcolor: "#0B0B0B",
-              color: "white",
-              p: 2,
-              borderRight: "1px solid #1E1E1E",
-            }}
-          >
-            <Stack spacing={2}>
-              {/* Project title */}
-              <Skeleton
-                variant="text"
-                width="70%"
-                height={50}
-                sx={{ bgcolor: "grey.800" }}
-              />
-
-              {/* Divider */}
-              <Skeleton
-                variant="rectangular"
-                width="100%"
-                height={1}
-                sx={{ bgcolor: "grey.900" }}
-              />
-
-              {/* Notes/folders */}
-              <Stack spacing={1}>
+    <ViewOnlyContext.Provider value={{ view_only }}>
+      <ManageContext.Provider value={{ refresh }}>
+        <Box
+          sx={{
+            display: "flex",
+            height: "100vh",
+            backgroundColor: "#F8F8F8",
+            fontFamily:
+              "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          }}
+        >
+          {/* SIDEBAR */}
+          {loadingProject && showProjectSkeleton ? (
+            <Box
+              sx={{
+                width: 300,
+                height: "100vh",
+                bgcolor: "#0B0B0B",
+                color: "white",
+                p: 2,
+                borderRight: "1px solid #1E1E1E",
+              }}
+            >
+              <Stack spacing={2}>
+                {/* Project title */}
                 <Skeleton
-                  variant="rounded"
+                  variant="text"
+                  width="70%"
+                  height={50}
+                  sx={{ bgcolor: "grey.800" }}
+                />
+
+                {/* Divider */}
+                <Skeleton
+                  variant="rectangular"
                   width="100%"
-                  height={40}
-                  sx={{ bgcolor: "grey.800" }}
+                  height={1}
+                  sx={{ bgcolor: "grey.900" }}
                 />
 
-                <Skeleton
-                  variant="rounded"
-                  width="85%"
-                  height={40}
-                  sx={{ bgcolor: "grey.800" }}
-                />
+                {/* Notes/folders */}
+                <Stack spacing={1}>
+                  <Skeleton
+                    variant="rounded"
+                    width="100%"
+                    height={40}
+                    sx={{ bgcolor: "grey.800" }}
+                  />
 
-                <Skeleton
-                  variant="rounded"
-                  width="92%"
-                  height={40}
-                  sx={{ bgcolor: "grey.800" }}
-                />
+                  <Skeleton
+                    variant="rounded"
+                    width="85%"
+                    height={40}
+                    sx={{ bgcolor: "grey.800" }}
+                  />
 
-                <Skeleton
-                  variant="rounded"
-                  width="75%"
-                  height={40}
-                  sx={{ bgcolor: "grey.800" }}
-                />
-              </Stack>
-            </Stack>
-          </Box>
-        ) : (
-          <ProjectBar
-            name={data?.project?.name}
-            treeData={treeData}
-            graph={graph}
-            setGraph={setGraph}
-          />
-        )}
+                  <Skeleton
+                    variant="rounded"
+                    width="92%"
+                    height={40}
+                    sx={{ bgcolor: "grey.800" }}
+                  />
 
-        {/* MAIN EDITOR */}
-        {graph && (
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: "flex",
-
-              height: "100%",
-              bgcolor: "#ffffff",
-            }}
-          >
-            <Graph setGraph={setGraph}></Graph>
-          </Box>
-        )}
-
-        {!graph && (
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: "flex",
-              flexDirection: "column",
-              height: "100%",
-              bgcolor: "#ffffff",
-            }}
-          >
-            {loadingNote && showNoteSkeleton && (
-              <Box
-                sx={{
-                  flexGrow: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                  bgcolor: "#ffffff",
-                }}
-              >
-                <Stack
-                  spacing={2}
-                  sx={{
-                    width: "100%",
-                    p: 3,
-                  }}
-                >
-                  {/* Title */}
-                  <Skeleton variant="text" width="30%" height={70} />
-
-                  {/* Underline */}
-                  <Skeleton variant="rectangular" width="35%" height={4} />
-
-                  {/* Content lines */}
-                  <Stack spacing={1}>
-                    <Skeleton variant="text" width="45%" height={40} />
-                    <Skeleton variant="text" width="35%" height={40} />
-                    <Skeleton variant="text" width="42%" height={40} />
-                    <Skeleton variant="text" width="55%" height={40} />
-                    <Skeleton variant="text" width="48%" height={40} />
-                    <Skeleton variant="text" width="38%" height={40} />
-                    <Skeleton variant="text" width="52%" height={40} />
-                    <Skeleton variant="text" width="44%" height={40} />
-                  </Stack>
-
-                  {/* Fake save button */}
-                  <Box
-                    sx={{
-                      position: "fixed",
-                      bottom: 24,
-                      right: 32,
-                    }}
-                  >
-                    <Skeleton variant="rounded" width={90} height={42} />
-                  </Box>
+                  <Skeleton
+                    variant="rounded"
+                    width="75%"
+                    height={40}
+                    sx={{ bgcolor: "grey.800" }}
+                  />
                 </Stack>
-              </Box>
-            )}
-            {!note_id && (
-              <Box
-                sx={{
-                  flex: 1,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Typography>Select a note to start</Typography>
-              </Box>
-            )}
+              </Stack>
+            </Box>
+          ) : (
+            <ProjectBar
+              name={data?.project?.name}
+              treeData={treeData}
+              graph={graph}
+              setGraph={setGraph}
+            />
+          )}
 
-            {note_id && !loadingNote && (
-              <>
+          {/* MAIN EDITOR */}
+          {graph && (
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: "flex",
+
+                height: "100%",
+                bgcolor: "#ffffff",
+              }}
+            >
+              <Graph setGraph={setGraph}></Graph>
+            </Box>
+          )}
+
+          {!graph && (
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                bgcolor: "#ffffff",
+              }}
+            >
+              {loadingNote && showNoteSkeleton && (
                 <Box
                   sx={{
-                    px: 2,
-                    pt: 3,
-                    pb: 1,
+                    flexGrow: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    bgcolor: "#ffffff",
                   }}
                 >
-                  <TextField
-                    placeholder="Untitled note"
-                    variant="standard"
-                    fullWidth
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
+                  <Stack
+                    spacing={2}
                     sx={{
-                      "& input": {
-                        fontSize: "28px",
-                        fontWeight: 600,
-                        borderBottom: "2px solid black",
-                        width: "fit-content",
-                        display: "inline-block",
-                        paddingBottom: "4px",
-                      },
+                      width: "100%",
+                      p: 3,
                     }}
-                  />
+                  >
+                    {/* Title */}
+                    <Skeleton variant="text" width="30%" height={70} />
+
+                    {/* Underline */}
+                    <Skeleton variant="rectangular" width="35%" height={4} />
+
+                    {/* Content lines */}
+                    <Stack spacing={1}>
+                      <Skeleton variant="text" width="45%" height={40} />
+                      <Skeleton variant="text" width="35%" height={40} />
+                      <Skeleton variant="text" width="42%" height={40} />
+                      <Skeleton variant="text" width="55%" height={40} />
+                      <Skeleton variant="text" width="48%" height={40} />
+                      <Skeleton variant="text" width="38%" height={40} />
+                      <Skeleton variant="text" width="52%" height={40} />
+                      <Skeleton variant="text" width="44%" height={40} />
+                    </Stack>
+
+                    {/* Fake save button */}
+                    <Box
+                      sx={{
+                        position: "fixed",
+                        bottom: 24,
+                        right: 32,
+                      }}
+                    >
+                      <Skeleton variant="rounded" width={90} height={42} />
+                    </Box>
+                  </Stack>
                 </Box>
+              )}
+              {!note_id && (
                 <Box
                   sx={{
                     flex: 1,
-                    px: 2,
-                    // pb: 3,
                     display: "flex",
-                    flexDirection: "column",
-
-                    "& .milkdown": {
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                    },
-
-                    "& .milkdown .editor": {
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                    },
-
-                    "& .ProseMirror": {
-                      flex: 1,
-                      minHeight: "100vh",
-                      overflowY: "auto",
-                      bgcolor: "#ffffff",
-                    },
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
-                  <MilkdownEditor
-                    noteId={note_id}
-                    value={content}
-                    onChange={setContent}
-                  />
+                  <Typography>Select a note to start</Typography>
                 </Box>
-              </>
-            )}
-            {note_id && !loadingNote && (
-              <Box
-                sx={{
-                  position: "fixed",
-                  bottom: 24,
-                  right: 32,
-                  display: "flex",
-                  gap: 1.5,
-                }}
-              >
-                <Button
-                  onClick={async () => {
-                    await handle_save_note();
+              )}
+
+              {note_id && !loadingNote && (
+                <>
+                  <Box
+                    sx={{
+                      px: 2,
+                      pt: 3,
+                      pb: 1,
+                    }}
+                  >
+                    <TextField
+                      placeholder="Untitled note"
+                      variant="standard"
+                      fullWidth
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                      sx={{
+                        "& input": {
+                          fontSize: "28px",
+                          fontWeight: 600,
+                          borderBottom: "2px solid black",
+                          width: "fit-content",
+                          display: "inline-block",
+                          paddingBottom: "4px",
+                        },
+                      }}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      flex: 1,
+                      px: 2,
+                      // pb: 3,
+                      display: "flex",
+                      flexDirection: "column",
+
+                      "& .milkdown": {
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                      },
+
+                      "& .milkdown .editor": {
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                      },
+
+                      "& .ProseMirror": {
+                        flex: 1,
+                        minHeight: "100vh",
+                        overflowY: "auto",
+                        bgcolor: "#ffffff",
+                      },
+                    }}
+                  >
+                    <MilkdownEditor
+                      noteId={note_id}
+                      value={content}
+                      onChange={setContent}
+                    />
+                  </Box>
+                </>
+              )}
+              {note_id && !loadingNote && !view_only && (
+                <Box
+                  sx={{
+                    position: "fixed",
+                    bottom: 24,
+                    right: 32,
+                    display: "flex",
+                    gap: 1.5,
                   }}
-                  variant="contained"
-                  sx={{ backgroundColor: "#3EC300" }}
                 >
-                  Save
-                </Button>
-              </Box>
-            )}
-          </Box>
-        )}
-      </Box>
-    </ManageContext.Provider>
+                  <Button
+                    onClick={async () => {
+                      await handle_save_note();
+                    }}
+                    variant="contained"
+                    sx={{ backgroundColor: "#3EC300" }}
+                  >
+                    Save
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          )}
+        </Box>
+      </ManageContext.Provider>
+    </ViewOnlyContext.Provider>
   );
 }

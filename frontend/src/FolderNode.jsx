@@ -9,7 +9,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+
 import { ManageContext } from "./Manage";
+
+import { ViewOnlyContext } from "./Manage";
+
 import FolderManageDialog from "./FolderManageDialog";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 
@@ -27,7 +31,7 @@ export default function FolderNode({
   const [openManage, setOpenManage] = useState(false);
   const { refresh } = useContext(ManageContext);
   const [openCreateFolder, setOpenCreateFolder] = useState(false);
-
+  const { view_only } = useContext(ViewOnlyContext);
   async function handle_rename(folder_id, new_name) {
     try {
       await rename_folder_api(folder_id, new_name);
@@ -98,55 +102,59 @@ export default function FolderNode({
           >
             {folder.name}
           </Typography>
-          <AddIcon
-            onClick={(e) => {
-              e.stopPropagation();
-              createNote(project_id, folder.id);
-              setOpen(true);
-            }}
-            sx={{
-              fontSize: 18,
-              color: "#888",
-              transition: "0.2s",
+          {!view_only && (
+            <>
+              <AddIcon
+                onClick={(e) => {
+                  e.stopPropagation();
+                  createNote(project_id, folder.id);
+                  setOpen(true);
+                }}
+                sx={{
+                  fontSize: 18,
+                  color: "#888",
+                  transition: "0.2s",
 
-              "&:hover": {
-                color: "white",
-                transform: "scale(1.1)",
-              },
-            }}
-          />
-          <CreateNewFolderIcon
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenCreateFolder(true);
-            }}
-            sx={{
-              fontSize: 18,
-              color: "#888",
-              transition: "0.2s",
+                  "&:hover": {
+                    color: "white",
+                    transform: "scale(1.1)",
+                  },
+                }}
+              />
+              <CreateNewFolderIcon
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenCreateFolder(true);
+                }}
+                sx={{
+                  fontSize: 18,
+                  color: "#888",
+                  transition: "0.2s",
 
-              "&:hover": {
-                color: "white",
-                transform: "scale(1.1)",
-              },
-            }}
-          ></CreateNewFolderIcon>
-          <DashboardIcon
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenManage(true);
-            }}
-            sx={{
-              fontSize: 18,
-              color: "#888",
-              transition: "0.2s",
+                  "&:hover": {
+                    color: "white",
+                    transform: "scale(1.1)",
+                  },
+                }}
+              ></CreateNewFolderIcon>
+              <DashboardIcon
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenManage(true);
+                }}
+                sx={{
+                  fontSize: 18,
+                  color: "#888",
+                  transition: "0.2s",
 
-              "&:hover": {
-                color: "white",
-                transform: "scale(1.1)",
-              },
-            }}
-          />
+                  "&:hover": {
+                    color: "white",
+                    transform: "scale(1.1)",
+                  },
+                }}
+              />
+            </>
+          )}
         </Box>
       </Box>
 
@@ -206,26 +214,28 @@ export default function FolderNode({
               >
                 {item.name}
               </Typography>
-              <DeleteIcon
-                onClick={(e) => {
-                  e.stopPropagation();
+              {!view_only && (
+                <DeleteIcon
+                  onClick={(e) => {
+                    e.stopPropagation();
 
-                  setDeleteState({
-                    open: true,
-                    noteID: item.id,
-                  });
-                }}
-                sx={{
-                  fontSize: 18,
-                  color: "#888",
-                  transition: "0.2s",
+                    setDeleteState({
+                      open: true,
+                      noteID: item.id,
+                    });
+                  }}
+                  sx={{
+                    fontSize: 18,
+                    color: "#888",
+                    transition: "0.2s",
 
-                  "&:hover": {
-                    color: "white",
-                    transform: "scale(1.1)",
-                  },
-                }}
-              ></DeleteIcon>
+                    "&:hover": {
+                      color: "white",
+                      transform: "scale(1.1)",
+                    },
+                  }}
+                ></DeleteIcon>
+              )}
             </Box>
           ))}
         </Box>

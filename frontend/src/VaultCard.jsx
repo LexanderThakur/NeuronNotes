@@ -126,7 +126,9 @@ export default function VaultCard({
       {/* Bottom Row */}
       <Box sx={{ mt: "auto" }}>
         <Button
-          onClick={() => navigate(`/manage/${id}`)}
+          onClick={() => {
+            isFollower ? navigate(`/view/${id}`) : navigate(`/manage/${id}`);
+          }}
           variant="text"
           sx={{
             textTransform: "none",
