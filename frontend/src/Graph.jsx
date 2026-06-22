@@ -4,7 +4,8 @@ const api = import.meta.env.VITE_API_URL;
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-
+import { useContext } from "react";
+import { ViewOnlyContext } from "./Manage";
 export default function Graph({ setGraph }) {
   const { project_id } = useParams();
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function Graph({ setGraph }) {
   const [links, setLinks] = useState([]);
   const [hovered, setHovered] = useState(null);
   const [notes, setNotes] = useState([]);
+  const { view_only } = useContext(ViewOnlyContext);
   async function get_graph() {
     try {
       const response = await fetch(`${api}/projects/${project_id}/graph/`, {
@@ -94,7 +96,11 @@ export default function Graph({ setGraph }) {
               {/* MAIN NODE */}
               <circle
                 onClick={() => {
-                  navigate(`/manage/${project_id}/note/${note.id}`);
+                  if (!view_only) {
+                    navigate(`/manage/${project_id}/note/${note.id}`);
+                  } else {
+                    navigate(`/view/${project_id}/note/${note.id}`);
+                  }
                   setGraph(false);
                 }}
                 cx={note.x}

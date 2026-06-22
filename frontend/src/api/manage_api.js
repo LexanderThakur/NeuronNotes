@@ -38,7 +38,7 @@ export const create_note = async (id, folder_id = null) => {
     const data = await response.json();
 
     if (!response.ok) {
-      alert(data.message);
+      throw new Error(data.message);
       return;
     }
   } catch (error) {

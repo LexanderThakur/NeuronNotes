@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { create_folder_api } from "./api/manage_api";
-
+import { useSnackbar } from "./SnackbarContext";
 export default function CreateFolderDialog({
   open,
   setOpen,
@@ -21,7 +21,7 @@ export default function CreateFolderDialog({
   const [folderName, setFolderName] = useState("");
 
   const { project_id, note_id } = useParams();
-
+  const { showSnackbar } = useSnackbar();
   async function handleCreate() {
     if (!folderName.trim()) {
       alert("Folder name required");
@@ -30,6 +30,12 @@ export default function CreateFolderDialog({
     try {
       await create_folder_api(project_id, folderName, parent_id);
     } catch (error) {
+      showSnackbar({
+        title: "Permission Denied",
+        description:
+          "Can't edit following project. Duplicate it to make changes.",
+        success: false,
+      });
       console.log(error);
     }
 

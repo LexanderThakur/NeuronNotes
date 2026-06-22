@@ -52,7 +52,7 @@ function App() {
             }
           ></Route>
           <Route
-            path="/manage/:project_id/note/:note_id"
+            path="/view/:project_id/note/:note_id"
             element={
               <Protected>
                 <Manage view_only={true} />

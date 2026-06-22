@@ -41,6 +41,12 @@ export default function ProjectBar({ name, treeData, graph, setGraph }) {
       await create_note(project_id, folder_id);
       refresh();
     } catch (error) {
+      showSnackbar({
+        title: "Permission Denied",
+        description:
+          "Can't edit following project. Duplicate it to make changes.",
+        success: false,
+      });
       console.log(error);
     }
   }
@@ -179,7 +185,11 @@ export default function ProjectBar({ name, treeData, graph, setGraph }) {
           return (
             <Box
               onClick={() => {
-                navigate(`/manage/${project_id}/note/${item.id}`);
+                if (!view_only) {
+                  navigate(`/manage/${project_id}/note/${item.id}`);
+                } else {
+                  navigate(`/view/${project_id}/note/${item.id}`);
+                }
                 setGraph(false);
               }}
               key={"note-" + item.id}

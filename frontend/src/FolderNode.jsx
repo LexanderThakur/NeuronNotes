@@ -175,7 +175,11 @@ export default function FolderNode({
             <Box
               onClick={() => {
                 setGraph(false);
-                navigate(`/manage/${project_id}/note/${item.id}`);
+                if (!view_only) {
+                  navigate(`/manage/${project_id}/note/${item.id}`);
+                } else {
+                  navigate(`/view/${project_id}/note/${item.id}`);
+                }
               }}
               key={"note-" + item.id}
               sx={{
