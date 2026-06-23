@@ -152,11 +152,24 @@ def manage_project(request, project_id):
 
     return Response({"message": data})
 
+from django.utils import timezone
 
 @api_view(["GET"])
 def number_of_projects(request):
-    return Response({"message":len(Project.objects.filter(owner=request.user))})
+    total = Project.objects.filter(
+        owner=request.user
+    ).count()
 
+    this_month = Project.objects.filter(
+        owner=request.user,
+        created_at__month=timezone.now().month,
+        created_at__year=timezone.now().year,
+    ).count()
+
+    return Response({
+        "total": total,
+        "this_month": this_month,
+    })
 @api_view(["GET"])
 def number_of_following(request):
     return Response({"message":len(FollowLink.objects.filter(user=request.user))})

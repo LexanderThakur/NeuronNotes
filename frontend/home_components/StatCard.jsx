@@ -1,26 +1,11 @@
-import {
-  Box,
-  Typography,
-  Avatar,
-  IconButton,
-  Chip,
-  Divider,
-  LinearProgress,
-  Button,
-} from "@mui/material";
-import { FormControl, Select, MenuItem } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import PauseIcon from "@mui/icons-material/Pause";
-import StopIcon from "@mui/icons-material/Stop";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { Box, Typography, IconButton } from "@mui/material";
 import NorthEastIcon from "@mui/icons-material/NorthEast";
-import VideocamIcon from "@mui/icons-material/Videocam";
-import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+
 export default function StatCard({
   label,
   value,
-  badge = "5+ Increased from last month",
+  badge = "",
+  highlight = false,
   dark = false,
 }) {
   return (
@@ -37,6 +22,7 @@ export default function StatCard({
         border: dark ? "none" : "1px solid rgba(16,17,16,0.07)",
         position: "relative",
         overflow: "hidden",
+
         ...(dark && {
           "&::after": {
             content: '""',
@@ -52,6 +38,7 @@ export default function StatCard({
         }),
       }}
     >
+      {/* Header */}
       <Box
         sx={{
           display: "flex",
@@ -68,19 +55,27 @@ export default function StatCard({
         >
           {label}
         </Typography>
+
         <IconButton
           size="small"
           sx={{
-            border: `1px solid ${dark ? "rgba(255,255,255,0.2)" : "rgba(16,17,16,0.15)"}`,
+            border: `1px solid ${
+              dark ? "rgba(255,255,255,0.2)" : "rgba(16,17,16,0.15)"
+            }`,
             width: 28,
             height: 28,
           }}
         >
           <NorthEastIcon
-            sx={{ fontSize: "0.8rem", color: dark ? "#fff" : "#101110" }}
+            sx={{
+              fontSize: "0.8rem",
+              color: dark ? "#fff" : "#101110",
+            }}
           />
         </IconButton>
       </Box>
+
+      {/* Main Value */}
       <Typography
         sx={{
           fontSize: "2.2rem",
@@ -91,27 +86,20 @@ export default function StatCard({
       >
         {value}
       </Typography>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-        {badge.includes("Increased") && (
+
+      {/* Badge */}
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        {highlight ? (
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              bgcolor: dark
-                ? "rgba(90,173,110,0.25)"
-                : "rgba(152, 183, 227, 0.08)",
+              bgcolor: dark ? "rgba(90,173,110,0.25)" : "rgba(31,111,235,0.08)",
               borderRadius: 99,
               px: 1,
               py: 0.25,
             }}
           >
-            <TrendingUpIcon
-              sx={{
-                fontSize: "0.75rem",
-                color: dark ? "#5aad6e" : "#1F6FEB",
-                mr: 0.5,
-              }}
-            />
             <Typography
               sx={{
                 fontSize: "0.8rem",
@@ -122,8 +110,7 @@ export default function StatCard({
               {badge}
             </Typography>
           </Box>
-        )}
-        {!badge.includes("Increased") && (
+        ) : (
           <Typography
             sx={{
               fontSize: "0.75rem",

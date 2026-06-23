@@ -39,17 +39,6 @@ import { useSnackbar } from "./SnackbarContext";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import NoteIcon from "@mui/icons-material/Note";
-// ── Data ─────────────────────────────────────────────────────
-
-const ANALYTICS_BARS = [
-  { day: "S", height: 55, filled: false },
-  { day: "M", height: 70, filled: true, color: "#1e3a1e" },
-  { day: "T", height: 85, filled: true, color: "#5aad6e", label: "74%" },
-  { day: "W", height: 90, filled: true, color: "#101110" },
-  { day: "T", height: 50, filled: false },
-  { day: "F", height: 45, filled: false },
-  { day: "S", height: 40, filled: false },
-];
 
 function RightPanel() {
   return (
@@ -75,14 +64,16 @@ export default function Home() {
   const [total_Projects, setTotalProjects] = useState(0);
   const [following, setFollowing] = useState(0);
   const { showSnackbar } = useSnackbar();
-
+  const [projectsThisMonth, setProjectsThisMonth] = useState(0);
   const [tasks, setTasks] = useState([]);
   const [taskDialogOpen, setTaskDialogOpen] = useState(false);
 
   async function handle_total_projects() {
     try {
       const temp = await total_projects();
-      setTotalProjects(temp);
+
+      setTotalProjects(temp.total);
+      setProjectsThisMonth(temp.this_month);
     } catch (error) {
       console.log(error);
     }
@@ -185,10 +176,16 @@ export default function Home() {
             {/* Stat Cards Row */}
             <Box sx={{ display: "flex", gap: 2 }}>
               <StatCard
-                label={"Your Projects"}
+                label="Your Projects"
                 value={total_Projects}
-              ></StatCard>
-              <StatCard label={"Following"} value={following}></StatCard>
+                badge={`+${projectsThisMonth} this month`}
+                highlight={true}
+              />
+              <StatCard
+                label="Following"
+                value={following}
+                badge="Knowledge network"
+              />
             </Box>
 
             {/* Analytics + Reminder Row */}

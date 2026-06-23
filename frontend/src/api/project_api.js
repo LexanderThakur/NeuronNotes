@@ -30,7 +30,7 @@ export async function total_projects() {
       throw new Error("Failed to get total projects");
     }
     const data = await response.json();
-    return data.message;
+    return data;
   } catch (error) {
     throw error;
   }
