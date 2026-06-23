@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, use } from "react";
 import {
   Box,
   Typography,
@@ -40,6 +40,9 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import NoteIcon from "@mui/icons-material/Note";
 
+import CreateVaultDialog from "./CreateVaultDialog";
+import { useContext } from "react";
+import { ThemeContext } from "./Dashboard";
 function RightPanel() {
   return (
     <Box
@@ -67,6 +70,8 @@ export default function Home() {
   const [projectsThisMonth, setProjectsThisMonth] = useState(0);
   const [tasks, setTasks] = useState([]);
   const [taskDialogOpen, setTaskDialogOpen] = useState(false);
+  const { setPage } = useContext(ThemeContext);
+  const [open, setOpen] = useState(false);
 
   async function handle_total_projects() {
     try {
@@ -134,6 +139,7 @@ export default function Home() {
           </Box>
           <Box sx={{ display: "flex", gap: 1.5 }}>
             <Button
+              onClick={() => setOpen(true)}
               startIcon={<AddIcon />}
               variant="contained"
               sx={{
@@ -203,6 +209,13 @@ export default function Home() {
           <RightPanel />
         </Box>
       </Box>
+      <CreateVaultDialog
+        open={open}
+        setOpen={setOpen}
+        refresh={() => {
+          setPage("Your Vault");
+        }}
+      ></CreateVaultDialog>
     </Box>
   );
 }
