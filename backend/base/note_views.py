@@ -64,3 +64,17 @@ def note(request,note_id):
     return Response({"message": "note updated successfully"})
 
     
+
+
+
+@api_view(["GET"])
+def get_recent_notes(request):
+    notes= (
+        Note.objects.filter(project__owner=request.user)
+        .order_by("-created_at").values("id","name","created_at","project")[:3]
+    )
+    # use serializers or what ?
+    return Response({"notes":list(notes)})
+
+
+

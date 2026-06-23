@@ -30,11 +30,15 @@ import {
 } from "./api/home_api";
 import BookmarkCard from "../home_components/BookmarkCard";
 import TaskPanel from "../home_components/TaskPanel";
+import RecentNotes from "../home_components/RecentNotes";
 import BookmarkDialog from "../home_components/BookmarkDialog";
 import Connection from "../home_components/Connection";
 import StatCard from "../home_components/StatCard";
 import PomodoroTimer from "../home_components/PomodoroTimer";
 import { useSnackbar } from "./SnackbarContext";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import NoteIcon from "@mui/icons-material/Note";
 // ── Data ─────────────────────────────────────────────────────
 
 const ANALYTICS_BARS = [
@@ -46,79 +50,6 @@ const ANALYTICS_BARS = [
   { day: "F", height: 45, filled: false },
   { day: "S", height: 40, filled: false },
 ];
-
-// ── Analytics Bar Chart ───────────────────────────────────────
-function AnalyticsChart() {
-  return (
-    <Box
-      sx={{
-        bgcolor: "#fff",
-        borderRadius: 4,
-        p: 3,
-        border: "1px solid rgba(16,17,16,0.07)",
-        flex: 1,
-      }}
-    >
-      <Typography
-        sx={{ fontWeight: 700, fontSize: "1rem", color: "#101110", mb: 3 }}
-      >
-        Project Analytics
-      </Typography>
-      <Box
-        sx={{ display: "flex", alignItems: "flex-end", gap: 1.5, height: 120 }}
-      >
-        {ANALYTICS_BARS.map((bar, i) => (
-          <Box
-            key={i}
-            sx={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 1,
-            }}
-          >
-            {bar.label && (
-              <Typography sx={{ fontSize: "0.65rem", color: "#666", mb: 0.5 }}>
-                {bar.label}
-              </Typography>
-            )}
-            <Box
-              sx={{
-                width: "100%",
-                height: bar.height,
-                borderRadius: 99,
-                bgcolor: bar.filled ? bar.color : "transparent",
-                border: bar.filled ? "none" : "2px dashed rgba(16,17,16,0.15)",
-                backgroundImage: !bar.filled
-                  ? "repeating-linear-gradient(45deg, rgba(16,17,16,0.08) 0px, rgba(16,17,16,0.08) 2px, transparent 2px, transparent 8px)"
-                  : "none",
-                position: "relative",
-                ...(bar.label && {
-                  "&::after": {
-                    content: '""',
-                    position: "absolute",
-                    top: -4,
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    bgcolor: "#fff",
-                    border: "2px solid #5aad6e",
-                  },
-                }),
-              }}
-            />
-            <Typography sx={{ fontSize: "0.72rem", color: "#888" }}>
-              {bar.day}
-            </Typography>
-          </Box>
-        ))}
-      </Box>
-    </Box>
-  );
-}
 
 function RightPanel() {
   return (
@@ -215,7 +146,7 @@ export default function Home() {
               startIcon={<AddIcon />}
               variant="contained"
               sx={{
-                bgcolor: "#3EC300",
+                bgcolor: "#000000",
                 color: "#fff",
                 borderRadius: 3,
                 textTransform: "none",
@@ -262,7 +193,7 @@ export default function Home() {
 
             {/* Analytics + Reminder Row */}
             <Box sx={{ display: "flex", gap: 2 }}>
-              <AnalyticsChart />
+              <RecentNotes></RecentNotes>
               <BookmarkCard />
             </Box>
 

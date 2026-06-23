@@ -22,6 +22,7 @@ urlpatterns=[
     # notes related
     path("projects/<int:project_id>/notes/",note_views.notes),
     path("notes/<int:note_id>/",note_views.note),
+    path("notes/recents/",note_views.get_recent_notes),
 
 
     path("projects/<int:project_id>/graph/",graph_views.graph),

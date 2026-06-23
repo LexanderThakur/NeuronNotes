@@ -135,3 +135,20 @@ export async function get_connection_percentage(projectId) {
     throw error;
   }
 }
+export async function get_recents() {
+  try {
+    const response = await fetch(api + `/notes/recents/`, {
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to get recents");
+    }
+
+    const data = await response.json();
+
+    return data.notes;
+  } catch (error) {
+    throw error;
+  }
+}

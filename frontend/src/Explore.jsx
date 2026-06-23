@@ -4,20 +4,25 @@ import FollowCard from "./FollowCard";
 import Pagination from "@mui/material/Pagination";
 import { get_to_follow } from "./api/explore";
 import { useState, useEffect } from "react";
-
+import Skeleton from "@mui/material/Skeleton";
 export default function Explore() {
   const [arr, setArr] = useState([]);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    get_to_follow(page).then((data) => {
-      setArr(data.results);
-      setTotalPages(data.total_pages);
-    });
-  }, [page]);
+    setLoading(true);
 
+    get_to_follow(page)
+      .then((data) => {
+        setArr(data.results);
+        setTotalPages(data.total_pages);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [page]);
   return (
     <Box
       sx={{
@@ -59,16 +64,27 @@ export default function Explore() {
           gap: 2,
         }}
       >
-        {arr.map((element, index) => {
-          return (
+        {loading ? (
+          <>
+            <Skeleton variant="rounded" width={300} height={180} />
+            <Skeleton variant="rounded" width={300} height={180} />
+            <Skeleton variant="rounded" width={300} height={180} />
+            <Skeleton variant="rounded" width={300} height={180} />
+            <Skeleton variant="rounded" width={300} height={180} />
+            <Skeleton variant="rounded" width={300} height={180} />
+            <Skeleton variant="rounded" width={300} height={180} />
+            <Skeleton variant="rounded" width={300} height={180} />
+          </>
+        ) : (
+          arr.map((element) => (
             <FollowCard
-              key={index}
+              key={element.id}
               title={element.name}
               description={element.description}
               id={element.id}
-            ></FollowCard>
-          );
-        })}
+            />
+          ))
+        )}
       </Box>
       <Box
         sx={{
