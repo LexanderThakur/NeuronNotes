@@ -112,7 +112,7 @@ export default function PomodoroTimer() {
           fontSize: "1rem",
         }}
       >
-        Focus Session
+        Pomodoro Timer
       </Typography>
 
       <Box
