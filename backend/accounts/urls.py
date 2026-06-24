@@ -6,4 +6,5 @@ urlpatterns=[
     path("login/",views.login),
     path("me/",views.me),
     path("logout/",views.logout),
+    path("google-login/",views.google_login),
 ]
