@@ -1,6 +1,8 @@
 import { Box, Typography, IconButton } from "@mui/material";
 import NorthEastIcon from "@mui/icons-material/NorthEast";
+import { ThemeContext } from "../src/Dashboard";
 
+import { useContext } from "react";
 export default function StatCard({
   label,
   value,
@@ -8,6 +10,7 @@ export default function StatCard({
   highlight = false,
   dark = false,
 }) {
+  const { open, setOpen, page, setPage } = useContext(ThemeContext);
   return (
     <Box
       sx={{
@@ -57,6 +60,7 @@ export default function StatCard({
         </Typography>
 
         <IconButton
+          onClick={() => setPage("Your Vault")}
           size="small"
           sx={{
             border: `1px solid ${

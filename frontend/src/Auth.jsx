@@ -39,7 +39,7 @@ function Auth() {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          user_email: "demo@neuron.app",
+          user_email: "demo@email.com",
           user_password: "demo1234",
         }),
       });
