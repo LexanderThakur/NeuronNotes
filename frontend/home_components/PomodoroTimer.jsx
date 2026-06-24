@@ -3,12 +3,12 @@ import { Box, Typography, Chip, IconButton } from "@mui/material";
 
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
-
+import { useSnackbar } from "../src/SnackbarContext";
 export default function PomodoroTimer() {
   const [duration, setDuration] = useState(15);
   const [timeLeft, setTimeLeft] = useState(15 * 60);
   const [running, setRunning] = useState(false);
-
+  const { showSnackbar } = useSnackbar();
   const intervalRef = useRef(null);
 
   useEffect(() => {
@@ -36,7 +36,11 @@ export default function PomodoroTimer() {
           intervalRef.current = null;
           setRunning(false);
 
-          alert("Focus session complete!");
+          showSnackbar({
+            title: "Pomodoro Session Compelete",
+            description: "Time to take a break :)",
+            success: true,
+          });
 
           return duration * 60;
         }

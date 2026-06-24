@@ -8,7 +8,8 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-
+import Tooltip from "@mui/material/Tooltip";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import FolderNode from "./FolderNode";
 import { useNavigate, useParams } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
@@ -371,9 +372,55 @@ export default function Manage({ view_only = false }) {
                     bottom: 24,
                     right: 32,
                     display: "flex",
-                    gap: 1.5,
+                    alignItems: "center",
+                    gap: 1,
                   }}
                 >
+                  <Tooltip
+                    arrow
+                    placement="top"
+                    slotProps={{
+                      tooltip: {
+                        sx: {
+                          bgcolor: "#101110",
+                          p: 2,
+                          maxWidth: 320,
+                          "& .MuiTypography-root": {
+                            fontSize: "0.95rem",
+                          },
+                        },
+                      },
+                    }}
+                    title={
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontWeight: 700,
+                            fontSize: "1.05rem",
+                            mb: 1,
+                          }}
+                        >
+                          Markdown Shortcuts
+                        </Typography>
+
+                        <Typography># Heading</Typography>
+                        <Typography>## Subheading</Typography>
+                        <Typography>**Bold**</Typography>
+                        <Typography>*Italic*</Typography>
+                        <Typography>- Bullet List</Typography>
+                        <Typography>1. Numbered List</Typography>
+                        <Typography>[Link](url)</Typography>
+                      </Box>
+                    }
+                  >
+                    <HelpOutlineIcon
+                      sx={{
+                        fontSize: 24,
+                        color: "#666",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </Tooltip>
                   <Button
                     onClick={async () => {
                       await handle_save_note();

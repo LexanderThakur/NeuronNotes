@@ -5,11 +5,40 @@ import ChromeReaderModeIcon from "@mui/icons-material/ChromeReaderMode";
 import ExploreIcon from "@mui/icons-material/Explore";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
-
-import { useState, useContext } from "react";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "./Dashboard";
+import { get_me, logout } from "./api/home_api";
 export default function ControlBar() {
   const { open, setOpen, page, setPage } = useContext(ThemeContext);
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const [user, setUser] = useState("user@email.com");
+
+  async function handle_logout() {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function handle_me() {
+    try {
+      const email = await get_me();
+      setUser(email);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    handle_me();
+  }, []);
+
   const items = [
     { label: "Home", icon: <TimelineIcon /> },
     { label: "Explore", icon: <ExploreIcon /> },
@@ -136,12 +165,69 @@ export default function ControlBar() {
             U
           </Box>
 
-          <Box>
+          <Box
+            onClick={(e) => setAnchorEl(e.currentTarget)}
+            sx={{
+              cursor: "pointer",
+              flex: 1,
+              p: 1,
+              borderRadius: "10px",
+              transition: "background 0.2s ease",
+
+              "&:hover": {
+                backgroundColor: "rgba(255,255,255,0.05)",
+              },
+            }}
+          >
             <Typography sx={{ color: "#ddd", fontSize: 14 }}>User</Typography>
-            <Typography sx={{ color: "#777", fontSize: 12 }}>
-              user@email.com
-            </Typography>
+            <Typography sx={{ color: "#777", fontSize: 12 }}>{user}</Typography>
           </Box>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={() => setAnchorEl(null)}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            slotProps={{
+              paper: {
+                sx: {
+                  mt: -1,
+                  minWidth: 180,
+                  bgcolor: "#1a1a1a",
+                  color: "#fff",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderRadius: "12px",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
+
+                  "& .MuiMenuItem-root": {
+                    borderRadius: "8px",
+                    mx: 1,
+                    my: 0.5,
+                    transition: "all 0.2s ease",
+                  },
+
+                  "& .MuiMenuItem-root:hover": {
+                    bgcolor: "rgba(255,255,255,0.08)",
+                  },
+                },
+              },
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+                setAnchorEl(null);
+                handle_logout();
+              }}
+            >
+              Logout
+            </MenuItem>
+          </Menu>
         </Box>
       </Box>
     </Box>

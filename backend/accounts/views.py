@@ -95,3 +95,17 @@ def me(request):
             "username": request.user.username,
             "email": request.user.email,
         })
+
+
+
+@api_view(["POST"])
+@authentication_classes([customjwt])
+@permission_classes([IsAuthenticated])
+def logout(request):
+
+
+    res = Response({"message":"logout success"})
+
+    res.delete_cookie("token")
+    return res
+

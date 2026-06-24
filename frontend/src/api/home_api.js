@@ -152,3 +152,35 @@ export async function get_recents() {
     throw error;
   }
 }
+export async function get_me() {
+  try {
+    const response = await fetch(api + `/auth/me/`, {
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to get me");
+    }
+
+    const data = await response.json();
+
+    return data.email;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function logout() {
+  try {
+    const response = await fetch(api + `/auth/logout/`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to logout");
+    }
+  } catch (error) {
+    throw error;
+  }
+}
