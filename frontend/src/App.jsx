@@ -1,4 +1,4 @@
-import Dashboard from "./Dashboard";
+import DashBoard from "./DashBoard";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Manage from "./Manage";
 import { useState } from "react";
@@ -23,7 +23,7 @@ function App() {
             path="/"
             element={
               <Protected>
-                <Dashboard />
+                <DashBoard />
               </Protected>
             }
           ></Route>

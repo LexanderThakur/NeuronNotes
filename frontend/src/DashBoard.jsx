@@ -11,7 +11,7 @@ import ControlBar from "./ControlBar";
 import Explore from "./Explore";
 import Home from "./Home";
 export const ThemeContext = createContext();
-export default function Dashboard() {
+export default function DashBoard() {
   const [open, setOpen] = useState(true);
   const [page, setPage] = useState("Home");
 
