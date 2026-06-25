@@ -9,7 +9,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ThemeContext } from "./Dashboard";
+import { ThemeContext } from "./DashBoard";
 import { get_me, logout } from "./api/home_api";
 export default function ControlBar() {
   const { open, setOpen, page, setPage } = useContext(ThemeContext);

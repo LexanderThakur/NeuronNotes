@@ -42,7 +42,7 @@ import NoteIcon from "@mui/icons-material/Note";
 
 import CreateVaultDialog from "./CreateVaultDialog";
 import { useContext } from "react";
-import { ThemeContext } from "./Dashboard";
+import { ThemeContext } from "./DashBoard";
 function RightPanel() {
   return (
     <Box
