@@ -1,6 +1,6 @@
 import { Box, Typography, IconButton } from "@mui/material";
 import NorthEastIcon from "@mui/icons-material/NorthEast";
-import { ThemeContext } from "../src/Dashboard";
+import { ThemeContext } from "../src/DashBoard";
 
 import { useContext } from "react";
 export default function StatCard({
