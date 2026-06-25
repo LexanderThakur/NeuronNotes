@@ -54,8 +54,8 @@ def register(request):
         key='token',
         value=token,
         httponly=True,
-        samesite='Lax',
-        secure=False,
+        samesite="None",
+    secure=True,
         max_age=24*60*60
     )
 
@@ -83,8 +83,8 @@ def login(request):
         key='token',
         value=token,
         httponly=True,
-        samesite='Lax',
-        secure=False,
+        samesite="None",
+    secure=True,
         max_age=24*60*60
     )
 
@@ -153,8 +153,8 @@ def google_login(request):
     key="token",
     value=jwt_token,
     httponly=True,
-    samesite="Lax",
-    secure=False,
+    samesite="None",
+    secure=True,
     max_age=24*60*60
 )
 
