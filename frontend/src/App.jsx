@@ -5,7 +5,7 @@ import { useState } from "react";
 import Protected from "./Protected";
 import Auth from "./Auth";
 
-import { SnackbarProvider } from "./SnackBarContext";
+import { SnackbarProvider } from "./SnackbarContext";
 function App() {
   const [login, setLogin] = useState(false);
   const [userEmail, setUserEmail] = useState("user@email.com");

@@ -415,7 +415,7 @@ export default function Manage({ view_only = false }) {
                   >
                     <HelpOutlineIcon
                       sx={{
-                        fontSize: 24,
+                        fontSize: 25,
                         color: "#666",
                         cursor: "pointer",
                       }}
