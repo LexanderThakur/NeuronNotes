@@ -57,7 +57,7 @@ function Auth() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_email: "demo@email.com",
-          user_password: "demo1234",
+          user_password: "emo1234",
         }),
       });
 
