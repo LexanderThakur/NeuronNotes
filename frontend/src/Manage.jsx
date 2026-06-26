@@ -414,7 +414,6 @@ export default function Manage({ view_only = false }) {
                         <Typography>*Italic*</Typography>
                         <Typography>- Bullet List</Typography>
                         <Typography>1. Numbered List</Typography>
-                        <Typography>[Link](url)</Typography>
                       </Box>
                     }
                   >
