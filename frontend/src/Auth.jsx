@@ -3,36 +3,53 @@ import { Box, TextField, Button, Typography, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import GraphBackground from "./GraphBackground";
 const api = import.meta.env.VITE_API_URL;
+import { CircularProgress } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
 function Auth() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
+  const isLoading = loading || googleLoading || demoLoading;
   async function authenticate() {
-    const endpoint = isLogin ? "/auth/login/" : "/auth/register/";
+    setLoading(true);
+
     try {
+      const endpoint = isLogin ? "/auth/login/" : "/auth/register/";
+
       const response = await fetch(api + endpoint, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_email: email, user_password: password }),
+        body: JSON.stringify({
+          user_email: email,
+          user_password: password,
+        }),
       });
+
       const data = await response.json();
+
       if (!response.ok) {
         alert(data.error);
         return;
       }
+
       setEmail("");
       setPassword("");
-      me();
+      await me();
     } catch (error) {
       alert(error);
+    } finally {
+      setLoading(false);
     }
   }
 
   async function loginAsDemo() {
+    setDemoLoading(true);
+
     try {
       const response = await fetch(api + "/auth/login/", {
         method: "POST",
@@ -43,14 +60,19 @@ function Auth() {
           user_password: "demo1234",
         }),
       });
+
       const data = await response.json();
+
       if (!response.ok) {
         alert(data.error);
         return;
       }
-      me();
+
+      await me();
     } catch (error) {
       alert(error);
+    } finally {
+      setDemoLoading(false);
     }
   }
 
@@ -165,8 +187,42 @@ function Auth() {
           borderLeft: "1px solid",
           borderColor: "grey.200",
           px: 5,
+          position: "relative",
         }}
       >
+        {isLoading && (
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              bgcolor: "rgba(255,255,255,0.75)",
+              backdropFilter: "blur(3px)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 2,
+              zIndex: 1000,
+            }}
+          >
+            <CircularProgress />
+
+            <Typography
+              sx={{
+                fontSize: "13px",
+                color: "text.secondary",
+              }}
+            >
+              {googleLoading
+                ? "Signing in with Google..."
+                : demoLoading
+                  ? "Loading demo account..."
+                  : isLogin
+                    ? "Signing in..."
+                    : "Creating account..."}
+            </Typography>
+          </Box>
+        )}
         <Box sx={{ width: "100%" }}>
           {/* Tabs */}
           <Box
@@ -229,45 +285,53 @@ function Auth() {
           <Button
             fullWidth
             onClick={authenticate}
+            disabled={loading || googleLoading || demoLoading}
             sx={{
               mt: 2,
               height: 40,
               bgcolor: "#190B28",
               color: "#fff",
-              borderRadius: 2,
-              fontSize: "13.5px",
-              fontWeight: 500,
-              textTransform: "none",
-              boxShadow: "none",
-              "&:hover": { bgcolor: "#2d1648", boxShadow: "none" },
-              "&:active": { transform: "scale(0.99)", boxShadow: "none" },
             }}
           >
-            {isLogin ? "Sign in" : "Create account"}
+            {loading ? (
+              <>
+                <CircularProgress size={16} color="inherit" sx={{ mr: 1 }} />
+                Signing In...
+              </>
+            ) : isLogin ? (
+              "Sign in"
+            ) : (
+              "Create account"
+            )}
           </Button>
 
           {/* Divider */}
           <Divider sx={{ my: 2, fontSize: "11px", color: "text.disabled" }}>
             or
           </Divider>
+
           <GoogleLogin
             onSuccess={async (credentialResponse) => {
-              const response = await fetch(`${api}/auth/google-login/`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                  token: credentialResponse.credential,
-                }),
-              });
+              try {
+                setGoogleLoading(true);
 
-              const data = await response.json();
+                const response = await fetch(`${api}/auth/google-login/`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  credentials: "include",
+                  body: JSON.stringify({
+                    token: credentialResponse.credential,
+                  }),
+                });
 
-              console.log(data);
+                await response.json();
 
-              await me();
+                await me();
+              } finally {
+                setGoogleLoading(false);
+              }
             }}
             onError={() => {
               console.log("failed");
