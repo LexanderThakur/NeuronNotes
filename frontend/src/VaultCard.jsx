@@ -15,7 +15,7 @@ import RenameDialog from "./RenameDialog";
 import { useNavigate } from "react-router-dom";
 import { delete_project } from "./api/your_vault_api";
 import { unfollow } from "./api/your_vault_api";
-
+import { useSnackbar } from "./SnackbarContext";
 import ConfirmDialog from "./ConfirmDialog";
 
 export default function VaultCard({
@@ -30,6 +30,7 @@ export default function VaultCard({
   const [openDelete, setOpenDelete] = useState(false);
   const [openRename, setOpenRename] = useState(false);
   const [openUnfollow, setOpenUnfollow] = useState(false);
+  const { showSnackbar } = useSnackbar();
   return (
     <Box
       sx={{
@@ -89,6 +90,11 @@ export default function VaultCard({
             <MenuItem
               onClick={() => {
                 setAnchorEl(null);
+                showSnackbar({
+                  title: "Coming Soon...",
+                  description: "Feature comming soon.",
+                  success: true,
+                });
               }}
             >
               Duplicate

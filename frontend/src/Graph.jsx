@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 
 const api = import.meta.env.VITE_API_URL;
-
+import { CircularProgress } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useContext } from "react";
@@ -14,8 +14,11 @@ export default function Graph({ setGraph }) {
   const [hovered, setHovered] = useState(null);
   const [notes, setNotes] = useState([]);
   const { view_only } = useContext(ViewOnlyContext);
+  const [loading, setLoading] = useState(true);
   async function get_graph() {
     try {
+      setLoading(true);
+
       const response = await fetch(`${api}/projects/${project_id}/graph/`, {
         method: "GET",
         credentials: "include",
@@ -28,9 +31,10 @@ export default function Graph({ setGraph }) {
       setNotes(data.note_data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
-
   useEffect(() => {
     get_graph();
   }, []);
@@ -42,8 +46,42 @@ export default function Graph({ setGraph }) {
         height: "100%",
         flex: 1,
         overflow: "hidden",
+        position: "relative",
       }}
     >
+      {loading && (
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 100,
+            bgcolor: "rgba(245,243,234,0.75)",
+            backdropFilter: "blur(4px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 2,
+          }}
+        >
+          <CircularProgress
+            size={32}
+            sx={{
+              color: "#666666",
+            }}
+          />
+
+          <Box
+            sx={{
+              fontSize: "14px",
+              color: "#666666",
+              letterSpacing: "0.04em",
+            }}
+          >
+            Building graph...
+          </Box>
+        </Box>
+      )}
       <svg
         width="100%"
         height="100%"

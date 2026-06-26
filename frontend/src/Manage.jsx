@@ -147,7 +147,7 @@ export default function Manage({ view_only = false }) {
           {loadingProject && showProjectSkeleton ? (
             <Box
               sx={{
-                width: 300,
+                width: 270,
                 height: "100vh",
                 bgcolor: "#0B0B0B",
                 color: "white",
