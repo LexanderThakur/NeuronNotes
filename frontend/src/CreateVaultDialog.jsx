@@ -15,7 +15,7 @@ export default function CreateVaultDialog({ open, setOpen, refresh }) {
 
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
-  const [is_public, setPublic] = useState(true);
+  const [is_public, setPublic] = useState(false);
 
   async function handleCreate() {
     if (!name.trim()) {
