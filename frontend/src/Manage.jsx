@@ -87,6 +87,10 @@ export default function Manage({ view_only = false }) {
 
       const fetched_content = await get_note(note_id);
 
+      let content = fetched_content.content || "";
+
+      content = content.replace(/\s*$/, "\n\n\n");
+
       setContent(fetched_content.content || "");
       setTitle(fetched_content.name || "");
     } catch (error) {
@@ -405,6 +409,7 @@ export default function Manage({ view_only = false }) {
 
                         <Typography># Heading</Typography>
                         <Typography>## Subheading</Typography>
+                        <Typography>``` CodeBlock</Typography>
                         <Typography>**Bold**</Typography>
                         <Typography>*Italic*</Typography>
                         <Typography>- Bullet List</Typography>

@@ -1,0 +1,18 @@
+/* .milkdown .code-fence {
+  background: #973333 !important;
+}
+
+.milkdown .code-fence .cm-editor {
+  background: #a43434 !important;
+}
+
+.milkdown pre {
+  background: #8d1616 !important;
+} */
+
+.milkdown .code-fence,
+.milkdown pre {
+  background: #f8f9fb !important;
+  border: 1px solid #dfe3e8;
+  border-radius: 12px;
+}

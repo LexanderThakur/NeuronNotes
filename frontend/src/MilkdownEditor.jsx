@@ -4,7 +4,7 @@ import { commonmark } from "@milkdown/preset-commonmark";
 import { nord } from "@milkdown/theme-nord";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
 import "@milkdown/theme-nord/style.css";
-
+import "./MilkdownEditor.css";
 import { useRef, useEffect } from "react";
 
 function InnerEditor({ value, onChange, noteId }) {
