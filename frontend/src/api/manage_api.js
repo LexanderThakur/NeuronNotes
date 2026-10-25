@@ -1,4 +1,4 @@
-const api = import.meta.env.VITE_API_URL;
+import { api } from "./api";
 
 export const get_note = async (note_id) => {
   try {

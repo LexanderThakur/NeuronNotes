@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Box, TextField, Button, Typography, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import GraphBackground from "../components/common/GraphBackground";
-const api = import.meta.env.VITE_API_URL;
+import { api } from "./api";
+
 import { CircularProgress } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
 function Auth() {

@@ -1,24 +1,4 @@
-const api = import.meta.env.VITE_API_URL;
-
-// export const get_to_follow = async () => {
-//   try {
-//     const response = await fetch(api + "/projects/", {
-//       method: "GET",
-//       credentials: "include",
-//     });
-
-//     const data = await response.json();
-//     console.log(data);
-//     if (!response.ok) {
-//       console.log(data);
-//       return [];
-//     }
-//     return data.message;
-//   } catch (err) {
-//     console.log(err);
-//     throw err;
-//   }
-// };
+import { api } from "./api";
 
 export const follow = async (id) => {
   try {
