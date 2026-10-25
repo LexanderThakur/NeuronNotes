@@ -1,11 +1,11 @@
-import DashBoard from "./DashBoard";
+import DashBoard from "./pages/DashBoard";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Manage from "./Manage";
+import Manage from "./pages/Manage";
 import { useState } from "react";
-import Protected from "./Protected";
-import Auth from "./Auth";
+import Protected from "./routes/Protected";
+import Auth from "./pages/Auth";
 
-import { SnackbarProvider } from "./SnackbarContext";
+import { SnackbarProvider } from "./context/SnackbarContext";
 function App() {
   const [login, setLogin] = useState(false);
   const [userEmail, setUserEmail] = useState("user@email.com");
