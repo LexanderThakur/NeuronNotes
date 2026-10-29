@@ -23,6 +23,7 @@ from .models import (
   
     FollowLink,
 )
+from rest_framework import status
 
 from rest_framework.permissions import IsAuthenticated,AllowAny
 
@@ -31,6 +32,15 @@ from rest_framework.permissions import IsAuthenticated,AllowAny
 def home(request):
     return redirect("https://neuron-rho.vercel.app/")
 
+
+@api_view(["GET"])
+@authentication_classes([])
+@permission_classes([])
+def health_check(request):
+    return Response(
+        {"status": "ok"},
+        status=status.HTTP_200_OK,
+    )
 
 
 

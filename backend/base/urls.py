@@ -3,6 +3,7 @@ from . import project_views,folder_views,note_views,graph_views,home_views
 urlpatterns=[
     path("",project_views.home),
     ## project realted
+    path("health/",project_views.health_check),
     path("projects/",project_views.projects),
     path("projects/my/",project_views.my_projects),
     path("projects/<int:project_id>/",project_views.project),
