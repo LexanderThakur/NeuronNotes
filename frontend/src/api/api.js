@@ -13,6 +13,8 @@ try {
   }
 } catch {
   api = BACKUP_URL;
+} finally {
+  console.log(api);
 }
 
 export { api };
