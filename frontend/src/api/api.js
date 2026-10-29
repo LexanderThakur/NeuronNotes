@@ -1,24 +1,18 @@
 const PRIMARY_URL = import.meta.env.VITE_API_URL;
 const BACKUP_URL = import.meta.env.VITE_BACKUP_URL;
 
-let api = PRIMARY_URL;
-
-const timeout_id = setTimeout(() => {
-  api = BACKUP_URL;
-}, 2000);
+let api = BACKUP_URL;
 
 try {
-  const response = await fetch(`${PRIMARY_URL}/health/`);
+  const response = await fetch(`${PRIMARY_URL}/health/`, {
+    signal: AbortSignal.timeout(2000),
+  });
 
   if (response.ok) {
-    clearTimeout(timeout_id);
-  } else {
-    api = BACKUP_URL;
-    clearTimeout(timeout_id);
+    api = PRIMARY_URL;
   }
 } catch {
   api = BACKUP_URL;
-  clearTimeout(timeout_id);
 }
 
 export { api };
