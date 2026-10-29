@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import BackendWakingScreen from "../components/common/BackendWakingScreen";
 
-const api = import.meta.env.VITE_API_URL;
+import { api } from "./api";
 
 export default function Protected({ children }) {
   const [isAuth, setIsAuth] = useState(null); // null = loading

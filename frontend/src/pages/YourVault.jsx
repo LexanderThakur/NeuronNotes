@@ -2,7 +2,8 @@ import { Box, Typography, Divider } from "@mui/material";
 import VaultCard from "../components/vault/VaultCard";
 import CreateVaultDialog from "../components/vault/CreateVaultDialog";
 import AddIcon from "@mui/icons-material/Add";
-const api = import.meta.env.VITE_API_URL;
+import { api } from "./api";
+
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import { fetch_vault, fetch_following } from "../api/your_vault_api";

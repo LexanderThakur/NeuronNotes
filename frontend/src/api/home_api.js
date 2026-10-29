@@ -1,4 +1,4 @@
-const api = import.meta.env.VITE_API_URL;
+import { api } from "./api";
 
 export async function save_bookmark(name, link) {
   const response = await fetch(api + "/home/bookmarks/", {
