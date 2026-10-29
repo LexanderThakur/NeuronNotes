@@ -2,7 +2,7 @@ import { Box, Typography, Divider } from "@mui/material";
 import VaultCard from "../components/vault/VaultCard";
 import CreateVaultDialog from "../components/vault/CreateVaultDialog";
 import AddIcon from "@mui/icons-material/Add";
-import { api } from "./api";
+import { api } from "../api/api.js";
 
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";

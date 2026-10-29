@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, TextField, Button, Typography, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import GraphBackground from "../components/common/GraphBackground";
-import { api } from "./api";
+import { api } from "../api/api.js";
 
 import { CircularProgress } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
