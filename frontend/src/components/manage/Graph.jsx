@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-import api from "../../api/api.js";
+import { api } from "../../api/api.js";
 import { CircularProgress } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
